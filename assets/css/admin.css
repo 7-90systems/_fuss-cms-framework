@@ -1,0 +1,50 @@
+/**
+ *  Set up the administration styles.
+ */
+
+/*  **********  Layouts  **********  */
+
+.layout-parts-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.layout-parts-table tr {
+    vertical-align: top;
+}
+.layout-parts-table td {
+    text-align: center;
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #CCD0D4;
+    background: #FFFFFF;
+}
+.layout-parts-table td.show {
+    background: rgba(0, 255, 0, 0.2);
+}
+
+
+
+
+/*  **********  Shared Common Styles  **********  */
+
+.admin-grey,
+.admin-light {
+    color: #999999;
+}
+.admin-red {
+    color: #CC0000;
+}
+.admin-green {
+    color: #00CC00;
+}
+.admin-blud {
+    color: #0000CC;
+}
+
+.admin-bold {
+    font-weight: bold;
+}
+
+.admin-italic {
+    font-style: italic;
+}
