@@ -114,10 +114,10 @@
                 wp_register_style ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/example1.css');
             
             if (defined ('WP_DEBUG') && WP_DEBUG === true) {
-                wp_register_style ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4.4.2.12/dist/jquery.bxslider.css');
+                wp_register_style ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.css');
             } // if ()
             else {
-                wp_register_style ('bxslider', FUSE_BASE_URL.'/assets/extrenal/bxslider-4.4.2.12/dist/jquery.bxslider.min.css');
+                wp_register_style ('bxslider', FUSE_BASE_URL.'/assets/extrenal/bxslider-4-4.2.12/dist/jquery.bxslider.min.css');
             } // else
             
             $theme_base = trailingslashit (get_stylesheet_directory_uri ());
@@ -168,12 +168,12 @@
             wp_register_script ('hoverintent', FUSE_BASE_URL.'/assets/external/superfish-master/dist/js/hoverIntent.js', array ('jquery'));
             
             if (defined ('WP_DEBUG') && WP_DEBUG === true) {
-                wp_register_script ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4.4.2.12/dist/jquery.bxslider.js', array ('jquery'));
+                wp_register_script ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.js', array ('jquery'));
                 wp_register_script ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/dist/js/superfish.js', array ('jquery', 'hoverintent'));
                 wp_register_script ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox/jquery.colorbox.js', array ('jquery'));
             } // if ()
             else {
-                wp_register_script ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4.4.2.12/dist/jquery.bxslider.min.js', array ('jquery'));
+                wp_register_script ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.min.js', array ('jquery'));
                 wp_register_script ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/dist/js/superfish.min.js', array ('jquery', 'hoverintent'));
                 wp_register_script ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox/jquery.colorbox.min.js', array ('jquery'));
             } // else

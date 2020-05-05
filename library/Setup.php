@@ -42,8 +42,6 @@
              */
             $setup_theme = new Setup\Theme ();
             
-            $posttype_block = new PostType\Block ();
-            
             $posttype_layout = new PostType\Layout ();
             $email_sender = new Setup\EmailSender ();
             
