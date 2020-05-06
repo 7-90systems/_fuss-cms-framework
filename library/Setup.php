@@ -44,8 +44,6 @@
             
             $posttype_layout = new PostType\Layout ();
             $email_sender = new Setup\EmailSender ();
-            
-            add_action ('after_setup_theme', array ($this, 'blocksInit'));
         } // __construct ()
         
         
@@ -75,22 +73,6 @@
             
             do_action ('fuse_after_load_actions');
         } // loadFunctions ()
-        
-        
-        
-        
-        /**
-         *  Initialise our Gutenberg blocks.
-         */
-        public function blocksInit () {
-            $block_list = apply_filters ('fuse_register_blocks', array ());
-            
-            $blocks = array ();
-            
-            foreach ($block_list as $class) {
-                $blocks [] = new $class ();
-            } // foreach ()
-        } // blocksInit ()
 
         
         
