@@ -64,7 +64,8 @@
             global $args;
             global $content;
             
-            $args = shortcode_atts ($this->_defaults, $args);
+            $args = shortcode_atts ($this->_defaults, $shortcode_args);
+            $content = $shortcode_content;
             
             ob_start ();
             get_template_part ('templates/shortcodes/'.$this->_template);
@@ -81,7 +82,7 @@
                 foreach ($template_locations as $loc) {
                     if ($template_found === false && file_exists ($loc)) {
                         ob_start ();
-                        load_template ($loc);
+                        load_template ($loc, false);
                         $html = ob_get_contents ();
                         ob_end_clean ();
                         
@@ -90,7 +91,7 @@
                 } // foreach ()
             } // if ()
             
-            return $html;
+            return trim ($html);
         } // render ()
         
         

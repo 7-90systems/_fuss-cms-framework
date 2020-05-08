@@ -63,6 +63,9 @@
             
             // Register assets
             $assets = new Assets ();
+            
+            // Remove extraneous <p> tags from shortcodes
+            add_filter ('the_content', array ($this, 'removeShortcodeP'), PHP_INT_MAX);
         } // __construct ()
         
         
@@ -111,7 +114,7 @@
             // Set up our assets
             wp_register_style ('mmenulight', FUSE_BASE_URL.'/assets/external/mmenu-light-master/dist/mmenu-light.css');
             wp_register_style ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/dist/css/superfish.css');
-                wp_register_style ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/example1.css');
+                wp_register_style ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/example1/colorbox.css');
             
             if (defined ('WP_DEBUG') && WP_DEBUG === true) {
                 wp_register_style ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.css');
@@ -170,12 +173,12 @@
             if (defined ('WP_DEBUG') && WP_DEBUG === true) {
                 wp_register_script ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.js', array ('jquery'));
                 wp_register_script ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/dist/js/superfish.js', array ('jquery', 'hoverintent'));
-                wp_register_script ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox/jquery.colorbox.js', array ('jquery'));
+                wp_register_script ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/jquery.colorbox.js', array ('jquery'));
             } // if ()
             else {
                 wp_register_script ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.min.js', array ('jquery'));
                 wp_register_script ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/dist/js/superfish.min.js', array ('jquery', 'hoverintent'));
-                wp_register_script ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox/jquery.colorbox.min.js', array ('jquery'));
+                wp_register_script ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/jquery.colorbox.min.js', array ('jquery'));
             } // else
             
             $deps = array (
@@ -394,7 +397,7 @@
             ));
             
             foreach ($shortcodes as $shortcode) {
-                add_shortcode ($shortcode->getShortcode (), $shortcode->render ());
+                add_shortcode ($shortcode->getShortcode (), array ($shortcode, 'render'));
             } // foreach ()
         } // registerShortcodes ()
         
@@ -496,5 +499,36 @@
             
             return $classes;
         } // bodyClasses ()
+        
+        
+        
+        
+        /**
+         *  Remove extra <p> tags from shortcodes. WordPress adds these in
+         *  and there's no fix in core for it.
+         *
+         *  @param string $content The content.
+         *
+         *  @return string The formatted content.
+         */
+        public function removeShortcodeP ($content) {
+            $array = array (
+				'<p>[' => '[', 
+				']</p>' => ']', 
+				']<br />' => ']'
+			);
+			
+			$content = strtr ($content, $array);
+			
+			if (substr ($content, 0, 4) == '</p>') {
+				$content = substr ($content, 4);
+			} // if ()
+			
+			if (substr ($content, -3, 3) == '<p>') {
+				$content = substr ($content, 0, strlen ($content) - 3);
+			} // if ()
+			
+			return trim ($content);
+        } // removeShortcodeP ()
         
     } // class Theme

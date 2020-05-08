@@ -175,17 +175,18 @@
                 if ($image_id > 0) {
                     $image = wp_get_attachment_image_url ($image_id, $size);
                 } // if ()
-                elseif ($fallback !== false) {
-                    $fallback_image = apply_filters ('fuse_fallback_image_url', 'assets/images/fallback/'.esc_attr ($size).'.jpg', $size);
+            } // if ()
+            
+            if (is_null ($image) && $fallback !== false) {
+                $fallback_image = apply_filters ('fuse_fallback_image_url', 'assets/images/fallback/'.esc_attr ($size).'.jpg', $size);
                     
-                    if (is_child_theme () && file_exists (trailingslashit (get_stylesheet_directory_uri ()).$fallback_image)) {
-                        $image = trailingslashit (get_stylesheet_directory_uri ()).$fallback_image;
-                    } // if ()
+                if (is_child_theme () && file_exists (trailingslashit (get_stylesheet_directory ()).$fallback_image)) {
+                    $image = trailingslashit (get_stylesheet_directory_uri ()).$fallback_image;
+                } // if ()
                     
-                    if (empty ($image) && file_exists (trailingslashit (get_template_directory_uri ()).$fallback_image)) {
-                        $image = trailingslashit (get_template_directory_uri ()).$fallback_image;
-                    } // if ()
-                } // elseif ()
+                if (empty ($image) && file_exists (trailingslashit (get_template_directory ()).$fallback_image)) {
+                     $image = trailingslashit (get_template_directory_uri ()).$fallback_image;
+                } // if ()
             } // if ()
             
             return $image;
