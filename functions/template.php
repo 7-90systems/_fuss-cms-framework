@@ -15,7 +15,7 @@
             $args = array_merge (array (
                 'prev_text' => __ ('Previous', 'fuse'),
 				'next_text' => __ ('Next', 'fuse'),
-				'before_page_number' => __ ('Page', 'fuse')
+				'before_page_number' => __ ('Page ', 'fuse')
             ), $args);
             
             the_posts_pagination ($args);
@@ -183,7 +183,7 @@
                 if (is_child_theme () && file_exists (trailingslashit (get_stylesheet_directory ()).$fallback_image)) {
                     $image = trailingslashit (get_stylesheet_directory_uri ()).$fallback_image;
                 } // if ()
-                    
+                
                 if (empty ($image) && file_exists (trailingslashit (get_template_directory ()).$fallback_image)) {
                      $image = trailingslashit (get_template_directory_uri ()).$fallback_image;
                 } // if ()

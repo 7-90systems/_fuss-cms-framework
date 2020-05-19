@@ -61,6 +61,9 @@
             // Set up our body class for the layout
             add_filter ('body_class', array ($this, 'bodyClass'));
             
+            // Set up the admin orm tags
+            add_action ('post_edit_form_tag', array ($this, 'postEditFormTag'));
+            
             // Register assets
             $assets = new Assets ();
             
@@ -499,6 +502,16 @@
             
             return $classes;
         } // bodyClasses ()
+        
+        
+        
+        
+        /**
+         *  Add the enctype setiting for admin forms to allow file uploads.
+         */
+        public function postEditFormTag () {
+            echo ' enctype="multipart/form-data"';
+        } // postEditFormTag ()
         
         
         
