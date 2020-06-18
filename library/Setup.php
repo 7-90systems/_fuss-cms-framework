@@ -60,7 +60,7 @@
             $functions_dirs = apply_filters ('fuse_load_functions_from', array (
                 FUSE_BASE_URI.DIRECTORY_SEPARATOR.'functions'
             ));
-            
+                       
             foreach ($functions_dirs as $dir) {
                 $files = glob (trailingslashit ($dir).'*.php');
                 
