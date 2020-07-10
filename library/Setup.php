@@ -30,8 +30,6 @@
          *  Object constructor.
          */
         private function __construct () {
-            
-            
             /**
              *  Load our functions
              */
