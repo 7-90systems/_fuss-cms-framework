@@ -280,7 +280,7 @@
          *  Enqueue our CSS files.
          */
         protected function _adminEnqueueCss () {
-            $deps = array ();
+            $deps = apply_filters ('fuse_css_admin_dependencies', array ());
             
             $theme_base = trailingslashit (get_stylesheet_directory_uri ());
             
@@ -299,8 +299,8 @@
             
             // Do we have an admin stylesheet?
             $editor_url = $theme_base.'assets/css/admin.css';
+            
             if (file_exists (get_template_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'admin.css')) {
-                $deps = apply_filters ('fuse_css_admin_dependencies', $deps);
                 wp_register_style ('fuse_theme_login_stylesheet', $editor_url);
             } // if ()
             
@@ -311,9 +311,9 @@
          *  Enqueue our JavaScript files for the admin area.
          */
         protected function _adminEnqueueJavaScript () {
-            $deps = array (
+            $deps = apply_filters ('fuse_javascript_admin_dependencies', array (
                 'jquery'
-            );
+            ));
             
             // Are we using a child theme?
             if (is_child_theme ()) {
@@ -323,9 +323,16 @@
             } // if ()
             
             if (file_exists (get_template_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'javascript'.DIRECTORY_SEPARATOR.'admin.js')) {
-                $deps = apply_filters ('fuse_javascript_admin_dependencies', $deps);
                 wp_enqueue_script ('fuse_login_functions', trailingslashit (get_template_directory_uri ()).'assets/javascript/admin.js', $deps);
             } // if ()
+            
+            wp_enqueue_script ('fuse-core-admin', FUSE_BASE_URL.'/assets/javascript/admin.js', $deps);
+            
+            wp_localize_script ('fuse-core-admin', 'fuse_admin', array (
+                'fuse_url_button_message' => __ ('Do you really want to enable this option? This may break your site if you are not sure of what you are setting here.', 'fuse'),
+                'fuse_url_button_enabled' => __ ('Click to disable', 'fuse'),
+                'fuse_url_button_disabled' => __ ('Click to enable', 'fuse')
+            ));
         } // _adminEnqueueJavaScript ()
         
         
