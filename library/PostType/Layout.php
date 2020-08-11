@@ -41,6 +41,9 @@
                     'title'
                 )
             ));
+            
+            // Add thea ction to save the post layuout values.
+            add_action ('save_post', array ($this, 'savePostLayout'));
         } // __construct ()
         
         
@@ -449,9 +452,26 @@
                             update_option ('fuse_layout_defaults_other_'.$key, 0);
                         } // if ()
                     } // else
-                } // foreach ()   
+                } // foreach ()
+                
+                
             } // if ()
         } // savePost ()
+        
+        /**
+         *  Save the post layout option.
+         */
+        public function savePostLayout ($post_id) {
+            if (defined ('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+                return;
+            } // if ()
+            else {
+                // Post layout
+                if (array_key_exists ('fuse_post_layout', $_POST)) {
+                    update_post_meta ($post_id, 'fuse_post_layout', $_POST ['fuse_post_layout']);
+                } // if ()s
+            } // else
+        } // savePostLayout ()
         
         
         

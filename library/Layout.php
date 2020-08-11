@@ -111,13 +111,13 @@
             if (is_singular () === true) {
                 global $post;
 
-                $layout_id = 0;
+                $layout = 0;
 
                 if (!empty ($post)) {
                     $layout = intval (get_post_meta ($post->ID, 'fuse_post_layout', true));
                 } // if ()
 
-                if ($layout_id == 0) {
+                if ($layout == 0) {
                     $layout = $this->_getPostTypeLayout ();
                 } // if ()
             } // if ()
