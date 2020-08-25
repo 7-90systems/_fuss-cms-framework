@@ -23,7 +23,7 @@
             } // if ()
             else {
                 // Load minified versions
-                wp_register_script ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/jquery.colorbox.min.js', array ('jquery'));
+                wp_register_script ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/jquery.colorbox-min.js', array ('jquery'));
             } // else
             
             wp_register_style ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/example1/colorbox.css');
