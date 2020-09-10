@@ -121,6 +121,16 @@
                     $layout = $this->_getPostTypeLayout ();
                 } // if ()
             } // if ()
+            elseif (function_exists ('is_shop') && is_shop () === true) {
+                // WooCommerce shop page
+                $layout = 0;
+
+                $layout = intval (get_post_meta (wc_get_page_id ('shop'), 'fuse_post_layout', true));
+
+                if ($layout == 0) {
+                    $layout = $this->_getPostTypeArchiveLayout ();
+                } // if ()
+            } // elseif ()
             elseif (is_post_type_archive ()) {
                 $layout = $this->_getPostTypeArchiveLayout ();
             } // elseif ()
