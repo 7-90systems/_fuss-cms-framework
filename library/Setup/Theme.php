@@ -45,6 +45,7 @@
             add_action ('wp_enqueue_scripts', array ($this, 'wpEnqueueScripts'));
             add_action ('login_enqueue_scripts', array ($this, 'loginEnqueueScripts'));
             add_action ('admin_enqueue_scripts', array ($this, 'adminEnqueueScripts'));
+            add_action ('admin_init', array ($this, 'editorScripts'));
             
             // Menus
             add_action ('after_setup_theme', array ($this, 'registerNavMenus'));
@@ -147,14 +148,10 @@
             } // if ()
             
             // Do we have an editor stylesheet?
-            $editor_url = $theme_base.'assets/css/editor.css';
-            
-            if (file_exists (get_template_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'editor.css')) {
-                wp_register_style ('fuse_theme_editor_stylesheet', $editor_url);
-                $deps [] = 'fuse_theme_editor_stylesheet';
-                
-                add_editor_style ($editor_url);
-            } // if ()
+            foreach ($this->_getEditorStylesheets () as $key => $file) {
+                wp_register_style ('fuse_editor_style_'.$key, $file);
+                $deps [] = 'fuse_editor_style_'.$key;
+            } // foreach ()
             
             // Finalise dependencies
             $deps = apply_filters ('fuse_css_dependencies', $deps);
@@ -203,6 +200,35 @@
             
             do_action ('fuse_after_enqueue_javascript');
         } // _enqueueJavaScript ()
+        
+        /**
+         *  Set up the editor scripts.
+         */
+        public function editorScripts () {
+            foreach ($this->_getEditorStylesheets () as $key => $file) {
+                add_editor_style ($file);
+            } // foreach ()
+        } // editorScripts ()
+        
+        /**
+         *  Get the editor styles
+         */
+        protected function _getEditorStylesheets () {
+            $stylesheets = array ();
+            
+            $parent = get_template_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'editor.css';
+            $child = get_stylesheet_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'editor.css';
+                
+            if (file_exists ($parent)) {
+                $stylesheets ['parent'] = trailingslashit (get_template_directory_uri ()).'assets/css/editor.css';
+            } // if ()
+                
+            if (file_exists ($child)) {
+                $stylesheets ['child'] = trailingslashit (get_stylesheet_directory_uri ()).'assets/css/editor.css';
+            } // if ()
+            
+            return $stylesheets;
+        } // _getEditorStylesheets ()
         
         
         
