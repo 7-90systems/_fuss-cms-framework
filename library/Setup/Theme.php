@@ -70,6 +70,9 @@
             
             // Remove extraneous <p> tags from shortcodes
             add_filter ('the_content', array ($this, 'removeShortcodeP'), PHP_INT_MAX);
+            
+            // Disable the stupid (my opinion) Yoast filter that blocks 'reply to' in comments
+            add_filter ('wpseo_remove_reply_to_com', '__return_false');
         } // __construct ()
         
         
