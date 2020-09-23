@@ -62,7 +62,7 @@
             // Set up our body class for the layout
             add_filter ('body_class', array ($this, 'bodyClass'));
             
-            // Set up the admin orm tags
+            // Set up the admin form tags
             add_action ('post_edit_form_tag', array ($this, 'postEditFormTag'));
             
             // Register assets
