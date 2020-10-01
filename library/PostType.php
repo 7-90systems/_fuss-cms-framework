@@ -71,7 +71,8 @@
             $this->_args = $args;
             
             // Set up the post type registration.
-            add_action ('init', array ($this, 'register'));
+            add_action ('init', array ($this, 'registerPostType'));
+            add_action ('init', array ($this, 'registerTaxonomies'));
             
             /**
              *  TODO: Check out the details at https://rudrastyh.com/gutenberg/plugin-sidebars.html
@@ -94,7 +95,7 @@
         /**
          *  Register this post type.
          */
-        final public function register () {
+        final public function registerPostType () {
             $labels = array (
                 'name' => $this->_name_plural,
                 'singular_name' => $this->_name_singular,
@@ -131,7 +132,16 @@
             $args = array_merge ($args, $this->_args);
             
             register_post_type ($this->_slug, $args);
-        } // register ()
+        } // registerPostType ()
+        
+        /**
+         *  Register our taxonomies.
+         */
+        public function registerTaxonomies () {
+            /**
+             *  Over-ride this function as required.
+             */
+        } // registerTaxonomies ()
         
         
         
