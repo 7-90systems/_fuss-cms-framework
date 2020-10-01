@@ -42,6 +42,10 @@
             
             $posttype_layout = new PostType\Layout ();
             $email_sender = new Setup\EmailSender ();
+            
+            if (is_admin ()) {
+                $admin = new Admin ();
+            } // if ()
         } // __construct ()
         
         
