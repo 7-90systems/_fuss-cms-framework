@@ -24,6 +24,7 @@
             
             // Add our admin page sections
             add_action ('fuse_admin_page_emailsender', array ($this, 'emailSender'));
+            add_action ('fuse_admin_page_geo', array ($this, 'geo'));
         } // __construct ()
         
         
@@ -78,7 +79,7 @@
         
         
         /**
-         *  Set up teh email sender form.
+         *  Set up the email sender form.
          */
         public function emailSender () {
             ?>
@@ -93,7 +94,7 @@
         } // emailSender ()
         
         /**
-         *  Set the overall text for the page.
+         *  Set the overall text for the email sender page.
          */
         public function senderText () {
             ?>
@@ -123,9 +124,46 @@
         
         
         /**
+         *  Set up the geo form.
+         */
+        public function geo () {
+            ?>
+                <form action="<?php echo esc_url (admin_url ('options.php')); ?>" method="post">
+                    <?php
+                        do_settings_sections ('fuse_geo');
+                        settings_fields ('fuse_geo_section');
+                        submit_button ();
+                    ?>
+                </form>
+            <?php
+        } // geo ()
+        
+        /**
+         *  Set the overall text for the geolocation page.
+         */
+        public function geoText () {
+            ?>
+                <p><?php _e ('Set up the Google Geolocation API and mapping setings.', 'fuse'); ?></p>
+            <?php
+        } // geoText ()
+
+        /**
+         *  Set up the Google API key field
+         */
+        public function geoKeyField () {
+            ?>
+                <input name="fuse_geo_key" type="text" class="regular-text" value="<?php esc_attr_e (get_option ('fuse_geo_key', '')); ?>" />
+            <?php
+        } // geoKeuField ()
+        
+        
+        
+        
+        /**
          *  Register the settings
          */
         public function registerSettings () {
+            // Email Sender
             add_settings_section ('fuse_email_sender_section', __ ('Set Email Sender', 'fuse'), array ($this, 'senderText'), 'fuse_email_sender');
 
             add_settings_field ('fuse_email_sender_id', __ ('Email sender name','fuse'), array ($this, 'emailNameField'), 'fuse_email_sender', 'fuse_email_sender_section');
@@ -133,6 +171,13 @@
 
             register_setting ('fuse_email_sender_section', 'fuse_email_sender_id');
             register_setting ('fuse_email_sender_section', 'fuse_email_sender_email_id');
+            
+            // Geo
+            add_settings_section ('fuse_geo_section', __ ('Google Geolocation Settings', 'fuse'), array ($this, 'geoText'), 'fuse_geo');
+
+            add_settings_field ('fuse_geo_key', __ ('Google Geolocation Key','fuse'), array ($this, 'geoKeyField'), 'fuse_geo', 'fuse_geo_section');
+
+            register_setting ('fuse_geo_section', 'fuse_geo_key');
         } // registerSettings ()
         
     } // class Admin
