@@ -145,4 +145,85 @@
             <?php
         } // _displaySinglePointMap ()
         
+        /**
+         *  Display a multi-point map
+         */
+        protected function _displayMultiPointMap ($geo_key, $map_id) {
+            /**
+             *  We start with these numbers as the opposite of the actual
+             *  min/max values so we can get actual bounds set.
+             */
+            $bounds = array (
+                'north' => -90,
+                'south' => 90,
+                'east' => -180,
+                'west' => 180
+            );
+            
+            foreach ($this->_points as $point) {
+// echo "<p>'".$point->lat."' : '".$point->lng."'</p>";
+                if ($point->lat > $bounds ['north']) {
+                    $bounds ['north'] = $point->lat;
+                } // if ()
+                
+                if ($point->lat < $bounds ['south']) {
+                    $bounds ['south'] = $point->lat;
+                } // if ()
+                
+                if ($point->lng > $bounds ['east']) {
+                    $bounds ['east'] = $point->lng;
+                } // if ()
+                
+                if ($point->lng < $bounds ['west']) {
+                    $bounds ['west'] = $point->lng;
+                } // if ()
+            } // foreach ()
+// \Fuse\Debug::dump ($bounds, 'Bounds');
+            ?>
+                <div id="<?php esc_attr_e ($map_id); ?>" class="fuse-map-container" style="width: 100%; height: 100%;"></div>
+                <script type="text/javascript">
+                    function <?php echo $map_id; ?>_initMap () {
+                        var map = new google.maps.Map (document.getElementById ('<?php echo $map_id; ?>'));
+                        map.fitBounds (new google.maps.LatLngBounds (
+                            {lat: <?php echo $bounds ['south']; ?>, lng: <?php echo $bounds ['west']; ?>},
+                            {lat: <?php echo $bounds ['north']; ?>, lng: <?php echo $bounds ['east']; ?>}
+                        ));
+                        
+                        var locations = [
+                            <?php
+                                $sep = '';
+                                
+                                foreach ($this->_points as $point) {
+                                    echo $sep.'{lat: '.$point->lat.', lng: '.$point->lng.'}';
+                                    
+                                    $sep = ', ';
+                                } // foreach ()
+                            ?>
+                        ];
+                        
+                        var labels = [
+                            <?php
+                                $sep = '';
+                                
+                                foreach ($this->_points as $point) {
+                                    echo $sep.'"'.esc_attr ($point->label).'"';
+                                    
+                                    $sep = ', ';
+                                } // foreach ()
+                            ?>
+                        ];
+                        
+                        var markers = locations.map ((location, i) => {
+                            return new google.maps.Marker ({
+                                position: location,
+                                title: labels [i],
+                                map: map
+                            });
+                        });
+                    } // <?php echo $map_id; ?>_initMap ()
+                </script>
+                <script defer src="https://maps.googleapis.com/maps/api/js?key=<?php esc_attr_e ($geo_key); ?>&callback=<?php esc_attr_e ($map_id); ?>_initMap"></script>
+            <?php
+        } // _displayMultipointMap ()
+        
     } // class Map
