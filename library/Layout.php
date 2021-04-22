@@ -81,6 +81,7 @@
          */
         protected function _setLayout () {
             $this->_layout = $this->_getCurrentLayout ();
+\Fuse\Debug::dump ($this->_layout);
             
             $parts = get_post_meta ($this->_layout, 'fuse_layout_parts', true);
             
@@ -293,7 +294,7 @@
         protected function _get404Layout () {
             $layout = get_option ('fuse_layout_defaults_other_404', 0);
 
-            if ($layout = 0) {
+            if ($layout == 0) {
                 $layout = $this->_getDefaultLayout ();
             } // if ()
 
