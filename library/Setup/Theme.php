@@ -309,7 +309,7 @@
          *  Enqueue our CSS files.
          */
         protected function _adminEnqueueCss () {
-            $deps = apply_filters ('fuse_css_admin_dependencies', array ());
+            $deps = apply_filters ('fuse_css_admin_dependencies', array ('fuse-admin-settings-forms'));
             
             $theme_base = trailingslashit (get_stylesheet_directory_uri ());
             
@@ -317,7 +317,7 @@
             if (is_child_theme ()) {
                 $parent_base = trailingslashit (get_template_directory_uri ());
                 
-                // Do we have an login stylesheet?
+                // Do we have an editor stylesheet?
                 $editor_url = $parent_base.'assets/css/admin.css';
                 
                 if (file_exists (get_stylesheet_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'admin.css')) {
@@ -326,12 +326,15 @@
                 } // if ()
             } // if ()
             
-            // Do we have an admin stylesheet?
+            // Do we have an editor stylesheet?
             $editor_url = $theme_base.'assets/css/admin.css';
             
             if (file_exists (get_template_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'admin.css')) {
                 wp_register_style ('fuse_theme_login_stylesheet', $editor_url);
             } // if ()
+            
+            // Register the settings forms styles
+            wp_register_style ('fuse-admin-settings-forms', FUSE_BASE_URL.'/assets/css/admin-settings-form.css');
             
             wp_enqueue_style ('fuse-core-admin', FUSE_BASE_URL.'/assets/css/admin.css', $deps);
         } // _adminEnqueueCss ()

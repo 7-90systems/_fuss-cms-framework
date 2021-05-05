@@ -5,8 +5,9 @@
  */
 jQuery (document).ready (function () {
         
-    // We want to make it harder to change the site URL's
+    // We want to make it harder to change the site URLs
     fuseMaskSiteUrls ();
+    fuseSettingsForms ();
     
 });
 
@@ -56,4 +57,27 @@ function fuseMaskSiteUrls () {
             btn.toggleClass ('enable');
         } // if ()
     });
-} // fuseMaskSiteUrls
+} // fuseMaskSiteUrls ()
+
+
+
+
+/**
+ *  Set up our settings form actions.
+ */
+function fuseSettingsForms () {
+    jQuery ('.fuse-settings-form-list li:first-child a').addClass ('active');
+    jQuery ('.fuse-settings-panel').hide ().first ().show ();
+    
+    jQuery ('.fuse-settings-form-list a').click (function (e) {
+        e.preventDefault ();
+        
+        var btn = jQuery (this);
+        
+        jQuery ('.fuse-settings-form-list a').removeClass ('active');
+        btn.addClass ('active');
+        
+        jQuery ('.fuse-settings-panel').hide ();
+        jQuery (btn.attr ('href')).show ();
+    });
+} // fuseSettingsForms ()

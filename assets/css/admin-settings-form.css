@@ -1,0 +1,82 @@
+/*  ********************************************************************************  **
+
+    This file contains the styles for the settings forms.
+    
+    Colours:
+        Text:                   #3C434A
+        Normal borders:         #CCCCCC
+        Dark background:        #F5F5F5
+        Light background:       #FDFDFD
+
+**  ********************************************************************************  */
+
+.fuse-settings-form {
+    background: #FDFDFD;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    display: flex;
+    position: relative;
+}
+.fuse-settings-form::after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+
+
+
+/*  **********  Panel Select List Column  **********  */
+
+.fuse-settings-form-list,
+.fuse-settings-form-list li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: relative;
+}
+
+.fuse-settings-form-list {
+    width: 180px;
+    z-index: 2;
+}
+
+.fuse-settings-form-list li {
+    margin-right: -1px;
+}
+.fuse-settings-form-list li a {
+    display: block;
+    padding: 10px 20px;
+    background: #F5F5F5;
+    text-decoration: none;
+    color: #3C434A;
+    border-bottom: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+}
+.fuse-settings-form-list li:first-child a {
+    border-top-left-radius: 3px;
+}
+.fuse-settings-form-list li a:hover {
+    background: #FFFFFF;
+}
+.fuse-settings-form-list li a.active,
+.fuse-settings-form-list li a.active:hover {
+    background: #FFFFFF;
+    font-weight: bold;
+    border-right-color: #FFFFFF;
+}
+
+
+
+
+/*  **********  Panels area  **********  */
+
+.fuse-settings-form-panels {
+    flex-grow: 1;
+    padding: 30px;
+    border-left: 1px solid #CCCCCC;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    position: relative;
+    z-index: 0;
+}

@@ -34,14 +34,43 @@
          *  Set up our admin menu items.
          */
         public function adminMenu () {
-            add_options_page (__ ('Fuse CMS', 'fuse'), __ ('Fuse CMS', 'fuse'), 'manage_options', 'fuse', array ($this, 'adminPage'));
+            // Old menu
+            /***
+             *  TODO: REmove this when we have everything running
+             */
+            // add_options_page (__ ('Fuse CMS', 'fuse'), __ ('Fuse CMS', 'fuse'), 'manage_options', 'fuse', array ($this, 'adminPage'));
+            
+            add_options_page (__ ('Fuse CMS Settings', 'fuse'), __ ('Fuse CMS Settings', 'fuse'), 'manage_options', 'fuse', array ($this, 'settingsPage'));
         } // adminMenu ()
         
         
         
         
         /**
+         *  Set up our administration options page.
+         */
+        public function settingsPage () {
+            $form = new Admin\Form\SiteSettings ();
+            ?>
+                <div class="wrap">
+                    
+                    <h1><?php _e ('Fuse CMS Website Settings', 'fuse'); ?></h1>
+                    
+                    <?php
+                        echo $form;
+                    ?>
+                    
+                </div>
+            <?php
+        } // settingsPage ()
+        
+        
+        
+        
+        /**
          *  Set up the Fuse admin page.
+         *
+         *  TODO: To be removed
          */
         public function adminPage () {
             if (array_key_exists ('section', $_GET)) {
@@ -80,6 +109,8 @@
         
         /**
          *  Set up the email sender form.
+         *
+         *  TODO: To be removed
          */
         public function emailSender () {
             ?>
@@ -95,6 +126,8 @@
         
         /**
          *  Set the overall text for the email sender page.
+         *
+         *  TODO: To be removed
          */
         public function senderText () {
             ?>
@@ -104,6 +137,8 @@
 
         /**
          *  Set up the email sender name field
+         *
+         *  TODO: To be removed
          */
         public function emailNameField () {
             ?>
@@ -113,6 +148,8 @@
 
         /**
          *  Set up the email address field.
+         *
+         *  TODO: To be removed
          */
         public function emailEmailField () {
             ?>
@@ -125,6 +162,8 @@
         
         /**
          *  Set up the geo form.
+         *
+         *  TODO: To be removed
          */
         public function geo () {
             ?>
@@ -140,6 +179,8 @@
         
         /**
          *  Set the overall text for the geolocation page.
+         *
+         *  TODO: To be removed
          */
         public function geoText () {
             ?>
@@ -149,6 +190,8 @@
 
         /**
          *  Set up the Google API key field
+         *
+         *  TODO: To be removed
          */
         public function geoKeyField () {
             ?>
@@ -161,6 +204,8 @@
         
         /**
          *  Register the settings
+         *
+         *  TODO: To be removed
          */
         public function registerSettings () {
             // Email Sender
