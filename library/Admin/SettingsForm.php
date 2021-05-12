@@ -108,7 +108,9 @@
                         <?php foreach ($panels as $panel): ?>
                         
                             <div id="fuse-settings-panel-<?php echo $panel->id; ?>" class="fuse-settings-panel">
-                                <h2><?php echo apply_filters ('the_title', $panel->label); ?></h2>
+                                <?php
+                                    echo $panel;
+                                ?>
                             </div>
                         
                         <?php  endforeach; ?>

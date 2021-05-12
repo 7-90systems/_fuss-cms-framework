@@ -2,17 +2,13 @@
     /**
      *  @package fuse-cms-framework
      *
-     *  This is the base settings form panel class.
-     *
-     *  Actions:
-     *      fuse_before_settings_form_panel_{panel_id}
-     *      fuse_after_settings_form_panel_{panel_id}
+     *  This class is the base for our form sections. These will be housed within panels and  show the required fields.
      */
     
     namespace Fuse\Admin\SettingsForm;
     
     
-    class Panel {
+    class Section {
         
         /**
          *  @var string The panel ID.
@@ -43,54 +39,63 @@
          *  @param string $id The panel ID;
          *  @param string $label The label for this panel
          *  @param array $args The arguments for this panel:
-         *      description     The description text shown.
+         *      description     The description to go above the fields.
+         *      help            The help text to go under the fields.
          */
-        public function __construct ($id, $label, $items = array (), $args = array ()) {
+        public function __construct ($id, $label, $fields = array (), $args = array ()) {
             $this->id = $id;
             $this->label = $label;
-            $this->_items = $items;
+            $this->_fields = $fields;
             
             $this->_args = array_merge (array (
-                'description' => ''
+                'description' => '',
+                'help' => ''
             ), $args);
-        } // __construct ()
+        } // __consturct ()
         
         
         
         
         /**
-         *  Return the panels HTML code.
+         *  Get the HTML code for this section.
          *
-         *  @return string The HTML code for the panel.
+         *  @return string The sections HTML code.
          */
-        public function getPanelHtml () {
-            $html = '<h2>'.$this->label.'</h2>';
+        public function getSectionHtml () {
+            $class = array (
+                'fuse-panel-section'
+            );
+            
+            $html = '<div id="'.esc_attr ($this->id).'" class="'.implode (' ', $class).'">';
+            $html.= '  <h4>'.$this->label.'</h4>';
             
             if (strlen ($this->_args ['description']) > 0) {
                 $html.= apply_filters ('the_content', $this->_args ['description']);
             } // if ()
             
-            do_action ('fuse_before_settings_form_panel_'.$this->id);
-            
-            foreach ($this->_items as $item) {
-                $html.= $item.'';
+            foreach ($this->_fields as $field) {
+                $html.= $field->render ();
             } // foreach ()
             
-            do_action ('fuse_after_settings_form_panel_'.$this->id);
+            if (strlen ($this->_args ['description']) > 0) {
+                $html.= '<p class="fuse-settings-form-help">'.$this->_args ['help'].'</p>';
+            } // if ()
+            
+            $html.= '</div>';
             
             return $html;
-        } // getPanelHtml ()
+        } // getSectionHtml ()
         
         
         
         
         /**
-         *  Return the HTML code for this panel.
+         *  Get the HTML code for thi section.
          *
-         *  @return stirng The panels HTML code.
+         *  @return string The sections HTML code;
          */
         public function __toString () {
-            return $this->getPanelHtml ();
+            return $this->getSectionHtml ();
         } // __toString ()
         
-    } // class Panel
+    } // class Section

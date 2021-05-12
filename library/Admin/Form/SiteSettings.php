@@ -17,7 +17,28 @@
          */
         public function __construct () {
             $panels = array (
-                new SettingsForm\Panel ('email', __ ('Email', 'fuse'), array ()),
+                new SettingsForm\Panel ('email', __ ('Email', 'fuse'), array (
+                    new SettingsForm\Section ('sending_name', __ ('Email Senders Name'),
+                        array (
+                            new SettingsForm\Field\Text ('from_name', '', array (
+                                'class' => 'settings-form-field-regular'
+                            ))
+                        ), array (
+                            'description' => 'Description goes into here',
+                            'help' => 'This is the main email sender.'
+                        )
+                    ),
+                    new SettingsForm\Section ('sending_email', __ ('From Email Address'),
+                        array (
+                            new SettingsForm\Field\Email ('from_email', '', array (
+                                'class' => 'settings-form-field-regular'
+                            ))
+                        ), array (
+                            'description' => 'Description goes into here',
+                            'help' => 'This is the main email sender.'
+                        )
+                    )
+                )),
                 new SettingsForm\Panel ('google', __ ('Google API', 'fuse'), array ())
             );
             
