@@ -67,28 +67,15 @@
             $args = shortcode_atts ($this->_defaults, $shortcode_args);
             $content = $shortcode_content;
             
-            ob_start ();
-            get_template_part ('templates/shortcodes/'.$this->_template);
-            $html = ob_get_contents ();
-            ob_end_clean ();
+            $html = '';
             
-            if (strlen ($html) == 0) {
-                $template_locations = apply_filters ('fuse_shortcode_template_folders', array (
-                    FUSE_BASE_URI.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'shortcodes'.DIRECTORY_SEPARATOR.$this->_template.'.php'
-                ));
+            $template = self::getTemplateLocation ($this->_template);
                 
-                $template_found = false;
-                
-                foreach ($template_locations as $loc) {
-                    if ($template_found === false && file_exists ($loc)) {
-                        ob_start ();
-                        load_template ($loc, false);
-                        $html = ob_get_contents ();
-                        ob_end_clean ();
-                        
-                        $template_found = true;
-                    } // if ()
-                } // foreach ()
+            if (empty ($template) === false) {
+                ob_start ();
+                load_template ($template, false);
+                $html = ob_get_contents ();
+                ob_end_clean ();
             } // if ()
             
             return trim ($html);
@@ -106,4 +93,38 @@
             return $this->_shortcode;
         } // getShortcode ()
         
-    } // lass Shortcode
+        
+        
+        
+        /**
+         *  Locate the template file for the given template.
+         *
+         *  @param string $template The template file name, without '.php'.
+         *
+         *  @return string|NULL Returns the file location or NULL if the file
+         *  does not exist in the available locations.
+         */
+        static public function getTemplateLocation ($template) {
+            $location = NULL;
+            
+            $template_locations = array ();
+            
+            if (is_child_theme ()) {
+                $template_locations = get_stylesheet_directory ().DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'shortcodes'.DIRECTORY_SEPARATOR.$template.'.php';
+            } // if ()
+            
+            $template_locations [] = get_template_directory ().DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'shortcodes'.DIRECTORY_SEPARATOR.$template.'.php';
+            $template_locations [] = FUSE_BASE_URI.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'shortcodes'.DIRECTORY_SEPARATOR.$template.'.php';
+                
+            $template_found = false;
+                
+            foreach (apply_filters ('fuse_shortcode_template_locations', $template_locations, $template) as $loc) {
+                if ($template_found === false && file_exists ($loc)) {
+                    $location = $loc;
+                } // if ()
+            } // foreach ()
+            
+            return $location;
+        } // getTemplateLocation ()
+        
+    } // class Shortcode

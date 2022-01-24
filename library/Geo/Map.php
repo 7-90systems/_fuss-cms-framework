@@ -88,7 +88,7 @@
          *  Display our map code!
          */
         public function display () {
-            $geo_key = get_option ('fuse_geo_key', '');
+            $geo_key = get_fuse_option ('google_api_key', '');
             
             if (empty ($geo_key) === false && count ($this->_points) > 0) {
                 $map_id = uniqid ('fuse_geo_map_');
@@ -106,7 +106,7 @@
          *  Display a map with direction markers.
          */
         public function displayDirectionMap () {
-            $geo_key = get_option ('fuse_geo_key', '');
+            $geo_key = get_fuse_option ('google_api_key', '');
             
             if (empty ($geo_key) === false && count ($this->_points) > 0) {
                 $map_id = uniqid ('fuse_geo_map_');
@@ -152,6 +152,8 @@
                             <?php endif; ?>
                             map: map
                         });
+                        
+                        jQuery (document).trigger ('fuse_geo_maps_callback');
                     } // <?php echo $map_id; ?>_initMap ()
                 </script>
                 <script defer src="https://maps.googleapis.com/maps/api/js?key=<?php esc_attr_e ($geo_key); ?>&callback=<?php esc_attr_e ($map_id); ?>_initMap"></script>

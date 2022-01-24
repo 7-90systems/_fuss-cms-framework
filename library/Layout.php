@@ -165,13 +165,6 @@
                  */
                 $layout = $this->_getDefaultLayout ();
             } // else
-            
-            /**
-             *  Check to see if an invalid layout was called.
-             */
-            if (empty ($layout) || isset ($layout->post_type) === false || $layout->post_type != 'fuse_layouts') {
-                $layout = $this->_getDefaultLayout ();
-            } // if ()
 
             return $layout;
         } // getCurrentLayout ()

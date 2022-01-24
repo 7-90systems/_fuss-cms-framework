@@ -5,9 +5,8 @@
      *  This class performs our base administration tasks and sets up the admin
      *  pages for the system.
      *
-     *  @action fuse_admin_page_*SECTION*
-     *
-     *  @filter fuse_admin_page_tabs
+     *  @action fuse_admin_menu
+     *  @action fuse_form_metabox_*FIELD_NAME*_save
      */
     
     namespace Fuse;
@@ -19,12 +18,14 @@
          *  Object constructor.
          */
         public function __construct () {
+            // Set up our administration menu.
             add_action ('admin_menu', array ($this, 'adminMenu'));
-            add_action ('admin_init', array ($this, 'registerSettings'));
             
-            // Add our admin page sections
-            add_action ('fuse_admin_page_emailsender', array ($this, 'emailSender'));
-            add_action ('fuse_admin_page_geo', array ($this, 'geo'));
+            // Set up our theme/plugins updater set up.
+            $update = new Update ();
+            
+            // Add in our functionality to save the Fuse Form values for post types
+            add_action ('save_post', array ($this, 'saveFuseFormMetaBoxValues'), 10, 2);
         } // __construct ()
         
         
@@ -34,195 +35,64 @@
          *  Set up our admin menu items.
          */
         public function adminMenu () {
-            // Old menu
-            /***
-             *  TODO: REmove this when we have everything running
-             */
-            // add_options_page (__ ('Fuse CMS', 'fuse'), __ ('Fuse CMS', 'fuse'), 'manage_options', 'fuse', array ($this, 'adminPage'));
+            // Set up our main site settings page.
+            add_menu_page (__ ('Fuse CMS Site Settings', 'fuse'), __ ('Fuse CMS', 'fuse'), 'manage_options', 'fusesettings', array ($this, 'sitesettings'), 'dashicons-fusecms');
             
-            add_options_page (__ ('Fuse CMS Settings', 'fuse'), __ ('Fuse CMS Settings', 'fuse'), 'manage_options', 'fuse', array ($this, 'settingsPage'));
+            do_action ('fuse_admin_menu');
         } // adminMenu ()
         
         
         
         
         /**
-         *  Set up our administration options page.
+         *  Set up the Fuse site settings page.
          */
-        public function settingsPage () {
-            $form = new Admin\Form\SiteSettings ();
+        public function siteSettings () {
+            $form = new \Fuse\Forms\Form\Settings ();
             ?>
                 <div class="wrap">
                     
-                    <h1><?php _e ('Fuse CMS Website Settings', 'fuse'); ?></h1>
+                    <h1><?php _e ('Site Settings', 'fuse'); ?></h1>
                     
                     <?php
-                        echo $form;
+                        if (count ($_POST) > 0) {
+                            $form->save ($_POST ['fuseform']);
+                        } // if ()
+                        
+                       $form->render (true);
                     ?>
                     
                 </div>
+            
             <?php
-        } // settingsPage ()
+        } // siteSettings ()
         
         
         
         
         /**
-         *  Set up the Fuse admin page.
+         *  Save the values from any Fuse Forms that are set up for the post
+         *  type.
          *
-         *  TODO: To be removed
+         *  @param int $post_id The ID of the post object.
+         *  @param WP_Post $post The post object.
          */
-        public function adminPage () {
-            if (array_key_exists ('section', $_GET)) {
-                $tab = $_GET ['section'];
+        public function saveFuseFormMetaBoxValues ($post_id, $post) {
+            // Don't update on autosave.
+            if (defined ('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+                return;
             } // if ()
             else {
-                $tab = 'emailsender';
+                // Let's see if we have any Fuse form fields.
+                if (array_key_exists ('fuseform', $_POST) && is_array ($_POST ['fuseform'])) {
+                    // Save the values for each form field that we've got.
+                    foreach ($_POST ['fuseform'] as $field_name => $value) {
+                        update_post_meta ($post_id, 'fuse_form_'.$field_name, $value);
+                        
+                        do_action ('fuse_form_metabox_'.$field_name.'_save', $value, $post);
+                    } // forech ()
+                } // if ()
             } // else
-            ?>
-                <div class="wrap">
-                    
-                    <h1><?php _e ('Fuse CMS for WordPress', 'fuse'); ?></h1>
-                    
-                    <nav class="nav-tab-wrapper">
-                        
-                        <a href="?page=fuse&section=emailsender" class="nav-tab<?php if ($tab == 'emailsender') echo ' nav-tab-active' ?>"><?php _e ('Email Sender', 'fuse'); ?></a>
-                        
-                        <a href="?page=fuse&section=geo" class="nav-tab<?php if ($tab == 'geo') echo ' nav-tab-active' ?>"><?php _e ('Google Geo-Location', 'fuse'); ?></a>
-                        
-                        <?php
-                            do_action ('fuse_admin_page_tabs');
-                        ?>
-                        
-                    </nav>
-                    
-                    <?php
-                        do_action ('fuse_admin_page_'.$tab);
-                    ?>
-                    
-                </div>
-            <?php
-        } // adminPage ()
-        
-        
-        
-        
-        /**
-         *  Set up the email sender form.
-         *
-         *  TODO: To be removed
-         */
-        public function emailSender () {
-            ?>
-                <form action="<?php echo esc_url (admin_url ('options.php')); ?>" method="post">
-                    <?php
-                        do_settings_sections ('fuse_email_sender');
-                        settings_fields ('fuse_email_sender_section');
-                        submit_button ();
-                    ?>
-                </form>
-            <?php
-        } // emailSender ()
-        
-        /**
-         *  Set the overall text for the email sender page.
-         *
-         *  TODO: To be removed
-         */
-        public function senderText () {
-            ?>
-                <p><?php _e ('Set the default email senders details for your site.', 'fuse'); ?></p>
-            <?php
-        } // senderText ()
-
-        /**
-         *  Set up the email sender name field
-         *
-         *  TODO: To be removed
-         */
-        public function emailNameField () {
-            ?>
-                <input name="fuse_email_sender_id" type="text" class="regular-text" value="<?php esc_attr_e (get_option ('fuse_email_sender_id', '')); ?>" placeholder="<?php esc_attr_e ('From Name', 'fuse'); ?>" />
-            <?php
-        } // emailNameField ()
-
-        /**
-         *  Set up the email address field.
-         *
-         *  TODO: To be removed
-         */
-        public function emailEmailField () {
-            ?>
-                <input name="fuse_email_sender_email_id" type="email" class="regular-text" value="<?php esc_attr_e (get_option ('fuse_email_sender_email_id', '')); ?>" placeholder="noreply@yourdomain.com" />
-            <?php
-        } // emailEmailField ()
-        
-        
-        
-        
-        /**
-         *  Set up the geo form.
-         *
-         *  TODO: To be removed
-         */
-        public function geo () {
-            ?>
-                <form action="<?php echo esc_url (admin_url ('options.php')); ?>" method="post">
-                    <?php
-                        do_settings_sections ('fuse_geo');
-                        settings_fields ('fuse_geo_section');
-                        submit_button ();
-                    ?>
-                </form>
-            <?php
-        } // geo ()
-        
-        /**
-         *  Set the overall text for the geolocation page.
-         *
-         *  TODO: To be removed
-         */
-        public function geoText () {
-            ?>
-                <p><?php _e ('Set up the Google Geolocation API and mapping setings.', 'fuse'); ?></p>
-            <?php
-        } // geoText ()
-
-        /**
-         *  Set up the Google API key field
-         *
-         *  TODO: To be removed
-         */
-        public function geoKeyField () {
-            ?>
-                <input name="fuse_geo_key" type="text" class="regular-text" value="<?php esc_attr_e (get_option ('fuse_geo_key', '')); ?>" />
-            <?php
-        } // geoKeuField ()
-        
-        
-        
-        
-        /**
-         *  Register the settings
-         *
-         *  TODO: To be removed
-         */
-        public function registerSettings () {
-            // Email Sender
-            add_settings_section ('fuse_email_sender_section', __ ('Set Email Sender', 'fuse'), array ($this, 'senderText'), 'fuse_email_sender');
-
-            add_settings_field ('fuse_email_sender_id', __ ('Email sender name','fuse'), array ($this, 'emailNameField'), 'fuse_email_sender', 'fuse_email_sender_section');
-            add_settings_field ('fuse_email_sender_email_id', __ ('Email sender email', 'fuse'), array ($this, 'emailEmailField'), 'fuse_email_sender', 'fuse_email_sender_section');
-
-            register_setting ('fuse_email_sender_section', 'fuse_email_sender_id');
-            register_setting ('fuse_email_sender_section', 'fuse_email_sender_email_id');
-            
-            // Geo
-            add_settings_section ('fuse_geo_section', __ ('Google Geolocation Settings', 'fuse'), array ($this, 'geoText'), 'fuse_geo');
-
-            add_settings_field ('fuse_geo_key', __ ('Google Geolocation Key','fuse'), array ($this, 'geoKeyField'), 'fuse_geo', 'fuse_geo_section');
-
-            register_setting ('fuse_geo_section', 'fuse_geo_key');
-        } // registerSettings ()
+        } // saveFuseFormMetaBoxValues ()
         
     } // class Admin

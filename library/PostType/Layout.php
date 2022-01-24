@@ -2,6 +2,9 @@
     /**
      *  @package fusecms
      *
+     *  @action before_fuse_post_layout
+     *  @action after_fuse_post_layout
+     *
      *  This is our Layout class. We use this to manage layouts for the various
      *  pages, content types, taxonomies, etc, of the site.
      */
@@ -55,6 +58,7 @@
         public function addMetaBoxes () {
             add_meta_box ('fuse_layout_parts_meta', __ ('Display Areas', 'fuse'), array ($this, 'partsMeta'), $this->getSlug (), 'normal', 'default');
             add_meta_box ('fuse_layout_defaults_meta', __ ('Set Layout Defaults', 'fuse'), array ($this, 'defaultsMeta'), $this->getSlug (), 'normal', 'default');
+            add_meta_box ('fuse_layout_advanced_meta', __ ('Advanced Layout Options', 'fuse'), array ($this, 'advancedMeta'), $this->getSlug (), 'normal', 'default');
 
             // Let each public post type select their layout individually
             $public_post_types = get_post_types (array (
@@ -314,7 +318,27 @@
         } // defaultsMeta ()
         
         /**
+         *  Set up the advanced settings meta box.
+         */
+        public function advancedMeta ($post) {
+            ?>
+                <table class="form-table">
+                    <tr>
+                        <th><?php _e ('Additional CSS classes', 'fuse'); ?></th>
+                        <td>
+                            <input type="text" name="fuse_layout_advanced_css" value="<?php esc_attr_e (get_post_meta ($post->ID, 'fuse_layout_advanced_css', true)); ?>" class="large-text" />
+                        </td>
+                    </tr>
+                </table>
+            <?php
+        } // advancedMeta ()
+        
+        /**
          *  Set up the post layout meta box.
+         *
+         *  Note that any fields that are added using the available actions will
+         *  need to have their values saved manually as this is not an automated
+         *  process.
          */
         public function postLayoutMeta ($post) {
             $selected_layout = get_post_meta ($post->ID, 'fuse_post_layout', true);
@@ -326,12 +350,20 @@
                 'order' => 'ASC'
             ));
 ?>
+    <?php
+        do_action ('before_fuse_post_layout');
+    ?>
+    
     <select name="fuse_post_layout">
         <option value="default">Default</option>
         <?php foreach ($layouts as $layout): ?>
             <option value="<?php echo $layout->ID; ?>"<?php selected ($layout->ID, $selected_layout); ?>><?php echo $layout->post_title; ?></option>
         <?php endforeach; ?>
     </select>
+    
+    <?php
+        do_action ('after_fuse_post_layout');
+    ?>
 <?php
         } // postLayoutMeta ()
         
@@ -358,9 +390,6 @@
                 update_post_meta ($post_id, 'fuse_parts_sidebar_left_2', $_POST ['fuse_parts_sidebar_left_2']);
                 update_post_meta ($post_id, 'fuse_parts_sidebar_right_1', $_POST ['fuse_parts_sidebar_right_1']);
                 update_post_meta ($post_id, 'fuse_parts_sidebar_right_2', $_POST ['fuse_parts_sidebar_right_2']);
-                
-                
-                
                 
                 /**
                  *  Check for defaults
@@ -454,7 +483,9 @@
                     } // else
                 } // foreach ()
                 
-                
+                if (array_key_exists ('fuse_layout_advanced_css', $_POST)) {
+                    update_post_meta ($post_id, 'fuse_layout_advanced_css', $_POST ['fuse_layout_advanced_css']);
+                } // if ()
             } // if ()
         } // savePost ()
         

@@ -5,6 +5,9 @@
      *  This file contains our template functions.
      *
      *  @filter fuse_fallback_image_url The fallback image URL.
+     *  @filter fuse_header_template
+     *  @filter fuse_footer_template
+     *  @filter fuse_layout_sidebar_class
      */
     
     /**
@@ -28,8 +31,8 @@
     if (function_exists ('fuse_comments_paging_nav') === false) {
         function fuse_comments_paging_nav ($args = array ()) {
             $args = array_merge (array (
-                'prev_text' => __ ('Previous', 'massive'),
-                'next_text' => __ ('Next', 'massive')
+                'prev_text' => __ ('Previous', 'fuse'),
+                'next_text' => __ ('Next', 'fuse')
             ), $args);
             
             the_comments_pagination ($args);
@@ -51,7 +54,7 @@
             $layout = $fuse->layout;
             
             if (is_null ($layout) || $layout->header == 1) {
-                get_header ($name);
+                get_header (apply_filters ('fuse_header_template', $name));
             } // if ()
             else {
                 // Blank header
@@ -80,7 +83,7 @@
             $layout = $fuse->layout;
             
             if (is_null ($layout) || $layout->footer == 1) {
-                get_footer ($name);
+                get_footer (apply_filters ('fuse_footer_template', $name));
             } // if ()
             else {
                 // Blank footer
@@ -118,7 +121,7 @@
             <?php
                 $sidebar = get_post_meta ($layout->getLayout (), 'fuse_parts_sidebar_'.$location.'_1', true);
             ?>
-            <ul class="sidebar-container <?php echo $col_1; ?>">
+            <ul class="sidebar-container <?php echo apply_filters ('fuse_layout_sidebar_class', $col_1, $location, $layout); ?>">
                 <?php dynamic_sidebar ($sidebar); ?>
             </ul>
 
@@ -133,7 +136,7 @@
             <?php
                 $sidebar = get_post_meta ($layout->getLayout (), 'fuse_parts_sidebar_'.$location.'_2', true);
             ?>
-            <ul class="sidebar-container <?php echo $col_2; ?>">
+            <ul class="sidebar-container <?php echo apply_filters ('fuse_layout_sidebar_class', $col_2, $location, $layout); ?>">
                 <?php dynamic_sidebar ($sidebar); ?>
             </ul>
         

@@ -37,14 +37,51 @@
 .admin-green {
     color: #00CC00;
 }
-.admin-blud {
+.admin-blue {
     color: #0000CC;
 }
 
 .admin-bold {
     font-weight: bold;
 }
-
 .admin-italic {
     font-style: italic;
+}
+
+.admin-left {
+   text-align: left
+}
+.admin-right {
+   text-align: right;
+}
+.admin-center {
+   text-align: center;
+}
+
+
+
+
+/*  **********  Custom Dashicons  **********  */
+
+@font-face {
+    font-family: 'fusecms';
+    src: url('../fonts/fusecms.eot');
+    src: url('../fonts/fusecms.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/fusecms.woff') format('woff'),
+         url('../fonts/fusecms.ttf') format('truetype'),
+         url('../fonts/fusecms.svg#fusecms') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+.dashicons-fusecms:before {
+	display: inline-block;
+   font-family: 'fusecms';
+   font-style: normal;
+   font-weight: normal;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale
+}
+.dashicons-fusecms:before {
+    content:'\0041';
 }

@@ -20,15 +20,32 @@
      *  @filter fuse_after_enqueue_css Run after CSS is enqueued
      *  @filter fuse_before_enqueue_javascript Run before JavaScript is enqueued.
      *  @filter fuse_after_enqueue_javascript Run after JavaScript is enqueued
+     *  @filter fuse_block_patterns Add block pattern objects to be registered.
+     *  @fitler fuse_gutenberg_stylesheets Filter the lsit of CSS stylesheets for the Gutenberg editor.
      */
     
     namespace Fuse\Setup;
     
     use Fuse\Setup\Theme\ImageSize;
     use Fuse\Shortcode;
+    use Fuse\Block;
     
     
     class Theme {
+        
+        /**
+         *  @var Fuse\Setup\Theme\Enqueue\Css The CSS enqueue file finder.
+         */
+        protected $_css_enqueue;
+        
+        /**
+         *  @var Fuse\Setup\Theme\Enqueue\JavaScript The JavaScript enqueue file
+         *  finder.
+         */
+        protected $_javascript_enqueue;
+        
+        
+        
         
         /**
          *  Object constructor.
@@ -45,7 +62,12 @@
             add_action ('wp_enqueue_scripts', array ($this, 'wpEnqueueScripts'));
             add_action ('login_enqueue_scripts', array ($this, 'loginEnqueueScripts'));
             add_action ('admin_enqueue_scripts', array ($this, 'adminEnqueueScripts'));
+            
             add_action ('admin_init', array ($this, 'editorScripts'));
+            add_action ('enqueue_block_editor_assets', array ($this, 'gutenbergStyles'));
+            
+            $this->_css_enqueue = new Theme\Enqueue\Css ();
+            $this->_javascript_enqueue = new Theme\Enqueue\JavaScript ();
             
             // Menus
             add_action ('after_setup_theme', array ($this, 'registerNavMenus'));
@@ -67,6 +89,9 @@
             
             // Register assets
             $assets = new Assets ();
+            
+            // Register our block patterns.
+            add_action ('init', array ($this, 'registerBlockPatterns'));
             
             // Remove extraneous <p> tags from shortcodes
             add_filter ('the_content', array ($this, 'removeShortcodeP'), PHP_INT_MAX);
@@ -121,7 +146,7 @@
             // Set up our assets
             wp_register_style ('mmenulight', FUSE_BASE_URL.'/assets/external/mmenu-light-master/dist/mmenu-light.css');
             wp_register_style ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/dist/css/superfish.css');
-                wp_register_style ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/example1/colorbox.css');
+            wp_register_style ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/example1/colorbox.css');
             
             if (defined ('WP_DEBUG') && WP_DEBUG === true) {
                 wp_register_style ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.css');
@@ -154,6 +179,14 @@
             foreach ($this->_getEditorStylesheets () as $key => $file) {
                 wp_register_style ('fuse_editor_style_'.$key, $file);
                 $deps [] = 'fuse_editor_style_'.$key;
+            } // foreach ()
+            
+            // Get our page-based individual CSS files
+            $this->_css_enqueue->load ();
+            $css_files = $this->_css_enqueue->getRequiredFiles ();
+            
+            foreach ($css_files as $alias => $file) {
+                $deps [] = $alias;
             } // foreach ()
             
             // Finalise dependencies
@@ -197,9 +230,19 @@
             } // if ()
             
             if (file_exists (get_template_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'javascript'.DIRECTORY_SEPARATOR.'functions.js')) {
-                $deps = apply_filters ('fuse_javascript_dependencies', $deps);
-                wp_enqueue_script ('fuse_theme_functions', trailingslashit (get_template_directory_uri ()).'assets/javascript/functions.js', $deps);
+                wp_register_script ('fuse_theme_functions', trailingslashit (get_template_directory_uri ()).'assets/javascript/functions.js', $deps);
+                $deps [] = 'fuse_theme_functions';
             } // if ()
+            
+            // Get our page-based individual JavaScript files
+            $this->_javascript_enqueue->load ();
+            $js_files = $this->_javascript_enqueue->getRequiredFiles ();
+            
+            foreach ($js_files as $alias => $file) {
+                $deps [] = $alias;
+            } // foreach ()
+            
+            wp_enqueue_script ('fuse_cms_base', FUSE_BASE_URL.'/assets/javascript/functions.js', apply_filters ('fuse_javascript_dependencies', $deps));
             
             do_action ('fuse_after_enqueue_javascript');
         } // _enqueueJavaScript ()
@@ -214,21 +257,49 @@
         } // editorScripts ()
         
         /**
+         *  Add our Gutenberg stylsheets.
+         */
+        public function gutenbergStyles () {
+            $stylesheets =  apply_filters ('fuse_gutenberg_stylesheets', $this->_getEditorStylesheets ());
+
+            foreach ($stylesheets as $alias => $url) {
+                wp_enqueue_style ($alias, $url);
+            } // foreach ()
+        } // gutenbergStyles ()
+        
+        /**
          *  Get the editor styles
          */
         protected function _getEditorStylesheets () {
             $stylesheets = array ();
             
-            $parent = get_template_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'editor.css';
-            $child = get_stylesheet_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'editor.css';
-                
-            if (file_exists ($parent)) {
-                $stylesheets ['parent'] = trailingslashit (get_template_directory_uri ()).'assets/css/editor.css';
+            $locations = array (
+                'parent_block_editor' => array (
+                    'uri' => get_template_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'block-editor.css',
+                    'url' => trailingslashit (get_template_directory_uri ()).'assets/css/block-editor.css'
+                ),
+                'parent_editor' => array (
+                    'uri' => get_template_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'editor.css',
+                    'url' => trailingslashit (get_template_directory_uri ()).'assets/css/editor.css'
+                )
+            );
+            
+            if (is_child_theme ()) {
+                $locations ['child_block_editor'] = array (
+                    'uri' => get_stylesheet_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'block-editor.css',
+                    'url' => trailingslashit (get_stylesheet_directory_uri ()).'assets/css/block-editor.css'
+                );
+                $locations ['child_editor'] = array (
+                    'uri' => get_stylesheet_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'editor.css',
+                    'url' => trailingslashit (get_stylesheet_directory_uri ()).'assets/css/editor.css'
+                );
             } // if ()
-                
-            if (file_exists ($child)) {
-                $stylesheets ['child'] = trailingslashit (get_stylesheet_directory_uri ()).'assets/css/editor.css';
-            } // if ()
+            
+            foreach ($locations as $alias => $stylesheet) {
+                if (file_exists ($stylesheet ['uri'])) {
+                    $stylesheets ['fuse-'.$alias] = $stylesheet ['url'];
+                } // if ()
+            } // foreach ()
             
             return $stylesheets;
         } // _getEditorStylesheets ()
@@ -309,7 +380,14 @@
          *  Enqueue our CSS files.
          */
         protected function _adminEnqueueCss () {
-            $deps = apply_filters ('fuse_css_admin_dependencies', array ('fuse-admin-settings-forms'));
+            wp_register_style ('fuse-jquery-ui', FUSE_BASE_URL.'/assets/external/jquery-ui-1.12.1/jquery-ui.min.css');
+            wp_register_style ('fuse_container', FUSE_BASE_URL.'/assets/css/admin/container.css', array (
+                'fuse-jquery-ui'
+            ));
+            
+            $deps = apply_filters ('fuse_css_admin_dependencies', array (
+                'fuse_container'
+            ));
             
             $theme_base = trailingslashit (get_stylesheet_directory_uri ());
             
@@ -317,7 +395,7 @@
             if (is_child_theme ()) {
                 $parent_base = trailingslashit (get_template_directory_uri ());
                 
-                // Do we have an editor stylesheet?
+                // Do we have an login stylesheet?
                 $editor_url = $parent_base.'assets/css/admin.css';
                 
                 if (file_exists (get_stylesheet_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'admin.css')) {
@@ -326,15 +404,12 @@
                 } // if ()
             } // if ()
             
-            // Do we have an editor stylesheet?
+            // Do we have an admin stylesheet?
             $editor_url = $theme_base.'assets/css/admin.css';
             
             if (file_exists (get_template_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'admin.css')) {
                 wp_register_style ('fuse_theme_login_stylesheet', $editor_url);
             } // if ()
-            
-            // Register the settings forms styles
-            wp_register_style ('fuse-admin-settings-forms', FUSE_BASE_URL.'/assets/css/admin-settings-form.css');
             
             wp_enqueue_style ('fuse-core-admin', FUSE_BASE_URL.'/assets/css/admin.css', $deps);
         } // _adminEnqueueCss ()
@@ -343,7 +418,14 @@
          *  Enqueue our JavaScript files for the admin area.
          */
         protected function _adminEnqueueJavaScript () {
+            wp_register_script ('fuse_container', FUSE_BASE_URL.'/assets/javascript/admin/container.js', array (
+                'jquery',
+                'jquery-ui-core',
+                'jquery-ui-datepicker'
+            ));
+            
             $deps = apply_filters ('fuse_javascript_admin_dependencies', array (
+                'fuse_container',
                 'jquery'
             ));
             
@@ -454,6 +536,13 @@
             $layout = $fuse->layout;
             
             $parts = get_post_meta ($layout->getLayout (), 'fuse_layout_parts', true);
+            
+            // Do we have any additional CSS classes to add?
+            $additional_css = get_post_meta ($layout->getLayout (), 'fuse_layout_advanced_css', true);
+            
+            if (strlen ($additional_css) > 0) {
+                $classes [] = $additional_css;
+            } // if ()
 
             $col_count = 0;
 
@@ -483,14 +572,14 @@
             if ($parts ['left_1'] == 1 && $parts ['left_2'] == 1) {
                 $classes [] = 'fuse-layout-double-left-col';
             } // if ()
-            elseif ($parts ['left_1'] == 1) {
+            elseif ($parts ['left_1'] == 1 || $parts ['left_2'] == 1) {
                 $classes [] = 'fuse-layout-single-left-col';
             } // elseif ()
 
             if ($parts ['right_1'] == 1 && $parts ['right_2'] == 1) {
                 $classes [] = 'fuse-layout-double-right-col';
             } // if ()
-            elseif ($parts ['right_1'] == 1) {
+            elseif ($parts ['right_1'] == 1 || $parts ['right_2'] == 1) {
                 $classes [] = 'fuse-layout-single-right-col';
             } // elseif ()
             
@@ -530,6 +619,9 @@
                     $classes [] = 'double-left-sidebar';
                 } // if ()
             } // if ()
+            elseif ($parts ['left_2'] == 1) {
+                $classes [] = 'with-left-sidebar';
+            } // elseif ()
 
             if ($parts ['right_1'] == 1) {
                 $classes [] = 'with-right-sidebar';
@@ -538,6 +630,9 @@
                     $classes [] = 'double-right-sidebar';
                 } // if ()
             } // if ()
+            elseif ($parts ['right_2'] == 1) {
+                $classes [] = 'with-right-sidebar';
+            } // elseif ()
             
             return $classes;
         } // bodyClasses ()
@@ -551,6 +646,25 @@
         public function postEditFormTag () {
             echo ' enctype="multipart/form-data"';
         } // postEditFormTag ()
+        
+        
+        
+        
+        /**
+         *  Register our block patterns. See the Fuse\Block\Pattern class for
+         *  more information.
+         */
+        public function registerBlockPatterns () {
+            $patterns = apply_filters ('fuse_block_patterns', array ());
+            
+            if (count ($patterns) == 0) {
+                $patterns [] = new Block\Pattern\Example ();
+            } // if ()
+            
+            foreach ($patterns as $pattern) {
+                $pattern->registerPattern ();
+            } // foreach ()
+        } // registerBlockPatterns ()
         
         
         
