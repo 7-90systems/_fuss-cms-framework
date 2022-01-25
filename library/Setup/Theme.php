@@ -234,14 +234,6 @@
                 $deps [] = 'fuse_theme_functions';
             } // if ()
             
-            // Get our page-based individual JavaScript files
-            $this->_javascript_enqueue->load ();
-            $js_files = $this->_javascript_enqueue->getRequiredFiles ();
-            
-            foreach ($js_files as $alias => $file) {
-                $deps [] = $alias;
-            } // foreach ()
-            
             wp_enqueue_script ('fuse_cms_base', FUSE_BASE_URL.'/assets/javascript/functions.js', apply_filters ('fuse_javascript_dependencies', $deps));
             
             do_action ('fuse_after_enqueue_javascript');

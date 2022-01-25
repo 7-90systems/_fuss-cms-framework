@@ -46,7 +46,7 @@ function fuseMaskSiteUrls () {
             
             if (btn.hasClass ('enable')) {
                 btn.text (fuse_admin.fuse_url_button_enabled);
-                field.removeProp ('readonly').removeAttr ('readonly');
+                field.removeProp ('readonly');
             } // if ()
             else {
                 btn.text (fuse_admin.fuse_url_button_disabled);

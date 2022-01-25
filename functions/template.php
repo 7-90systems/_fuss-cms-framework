@@ -171,16 +171,35 @@
     if (function_exists ('fuse_get_feature_image') === false) {
         function fuse_get_feature_image ($post, $size = 'full', $fallback = true) {
             $image = NULL;
+            $image_id = 0;
             
             if (has_post_thumbnail ($post)) {
                 $image_id = get_post_thumbnail_id ($post);
-                
-                if ($image_id > 0) {
-                    $image = wp_get_attachment_image_url ($image_id, $size);
-                } // if ()
             } // if ()
             
-            if (is_null ($image) && $fallback !== false) {
+            return fuse_get_image_url ($image_id, $size, $fallback);
+        } // fuse_get_feature_image ()
+    } // if ()
+    
+    /**
+     *  Get an image URL given the image ID or return a fallback if none exists.
+     *
+     *  @param int $image_id the ID of the image.
+     *  @param string $size The image size.
+     *  @param bool $use_fallback Boolean 'true' to use a fallback image.
+     *
+     *  @return string|NULL Returns the image URL or a NULL value if no image
+     *  is available.
+     */
+    if (function_exists ('fuse_get_image_url') === false) {
+        function fuse_get_image_url ($image_id, $size = 'full', $fallback = false) {
+            $image = NULL;
+            
+            if ($image_id > 0) {
+                $image = wp_get_attachment_image_url ($image_id, $size);
+            } // if ()
+            
+            if (empty ($image) && $fallback !== false) {
                 $fallback_image = apply_filters ('fuse_fallback_image_url', 'assets/images/fallback/'.esc_attr ($size).'.jpg', $size);
                     
                 if (is_child_theme () && file_exists (trailingslashit (get_stylesheet_directory ()).$fallback_image)) {
@@ -193,5 +212,5 @@
             } // if ()
             
             return $image;
-        } // fuse_get_feature_image ()
+        } // fuse_get_image_url ()
     } // if ()

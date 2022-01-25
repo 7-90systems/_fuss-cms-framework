@@ -86,10 +86,6 @@
                             $files [] = substr ($file->getPathname (), $path_string_length);
                         } // if ()
                     } // foreach ()
-                    
-                    if ($this->_file_extension == '.js') {
-                        $files = array_reverse ($files);
-                    } // if ()
                    
                     foreach ($files as $file) {
                         $id = trim ($file, '\\/');
@@ -157,7 +153,7 @@
                 
                 // Post slug
                 $search_slug = $post_type.'_'.str_replace (array ('\\', '/'), '_', $page_uri);
-
+                
                 if (array_key_exists ($search_slug, $this->_files)) {
                     $files [$search_slug] = $this->_files [$search_slug];
                 } // if ()
@@ -194,14 +190,6 @@
                     } // if ()
                 } // foreach ()
             } // if ()
-            elseif (function_exists ('WC') && is_shop ()) {
-                // WooCommerce shop page - this is a special page type
-                $shop_id = get_post_field ('post_name', wc_get_page_id ('shop'));
-
-                if (array_key_exists ('page_'.$shop_id, $this->_files)) {
-                    $files ['page_'.$shop_id] = $this->_files ['page_'.$shop_id];
-                } // if ()
-            } // elseif ()
             elseif (is_post_type_archive ()) {
                 // Get the files for this post type archive
                 $type = get_queried_object ()->name;
@@ -223,10 +211,16 @@
                 } // if ()
             } // elseif ()
             elseif (is_tax ()) {
-                $slug = get_queried_object ()->slug;
-                
                 // Get files for the taxonomy
-                $type = get_query_var ('taxonomy');
+                if (function_exists ('is_product_category') && is_product_category ()) {
+                    $type = 'product_cat';
+                    $slug = get_query_var ('product_cat');
+                } // if ()
+                else {
+                    $type = get_query_var ('taxonomy');
+                    $slug = get_query_var ('term');
+                } // else
+                    
 
                 if (array_key_exists ('taxonomy_'.$type, $this->_files)) {
                     $files ['taxonomy_'.$type] = $this->_files ['taxonomy_'.$type];

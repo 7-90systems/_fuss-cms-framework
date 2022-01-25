@@ -31,14 +31,14 @@
             $folders = array (
                 array (
                     'path' => get_template_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'javascript',
-                    'url' => untrailingslashit (get_template_directory_uri ().'/assets/javascript')
+                    'url' => untrailingslashit (get_template_directory_uri ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'javascript')
                 )
             );
             
             if (is_child_theme ()) {
                 $folders [] = array (
                     'path' => get_stylesheet_directory ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'javascript',
-                    'url' => untrailingslashit (get_stylesheet_directory_uri ().'/assets/javascript')
+                    'url' => untrailingslashit (get_stylesheet_directory_uri ().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.'javascript')
                 );
             } // if ()
             
@@ -53,7 +53,7 @@
          */
         protected function _enqueue () {
             foreach ($this->_files as $alias => $file) {
-                wp_register_script ($alias, $file ['file'], $file ['deps']);
+                wp_register_script ($alias, $file ['file'], $deps);
             } // foreach ()
         } // _enqueue ()
         
