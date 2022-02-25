@@ -109,7 +109,8 @@
         public function setThemeSupports () {
             $supports = apply_filters ('fuse_theme_supports', array (
                 'html5',
-                'title-tag'
+                'title-tag',
+                'editor-styles'
             ));
             
             foreach ($supports as $key => $args) {
@@ -234,6 +235,16 @@
                 $deps [] = 'fuse_theme_functions';
             } // if ()
             
+            // Get our page-based individual CSS files
+            $this->_javascript_enqueue->load ();
+            $js_files = $this->_javascript_enqueue->getRequiredFiles ();
+            
+            foreach ($js_files as $alias => $file) {
+                $deps [] = $alias;
+            } // foreach ()
+            
+            // Finalise dependencies
+            $deps = apply_filters ('fuse_javscript_dependencies', $deps);
             wp_enqueue_script ('fuse_cms_base', FUSE_BASE_URL.'/assets/javascript/functions.js', apply_filters ('fuse_javascript_dependencies', $deps));
             
             do_action ('fuse_after_enqueue_javascript');
@@ -259,11 +270,16 @@
             } // foreach ()
         } // gutenbergStyles ()
         
+        
+        
+        
         /**
          *  Get the editor styles
          */
         protected function _getEditorStylesheets () {
-            $stylesheets = array ();
+            $stylesheets = array (
+                'fuse-block_editor' => FUSE_BASE_URL.'/assets/css/admin/block-editor.css'
+            );
             
             $locations = array (
                 'parent_block_editor' => array (

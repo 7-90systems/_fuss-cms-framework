@@ -86,6 +86,13 @@
                             $files [] = substr ($file->getPathname (), $path_string_length);
                         } // if ()
                     } // foreach ()
+                    
+                    /**
+                     *  For JavaScript files, the .js file is found after the .dep file, so reverse the array.
+                     */
+                    if ($this->_file_extension == '.js') {
+                        $files = array_reverse ($files);
+                    } // if ()
                    
                     foreach ($files as $file) {
                         $id = trim ($file, '\\/');
