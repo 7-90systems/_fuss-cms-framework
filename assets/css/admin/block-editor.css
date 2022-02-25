@@ -9,7 +9,8 @@ body {
     position: relative;
     padding: 5px;
 }
-.wp-block::after {
+.wp-block::after,
+.block-editor-block-list__layout .block-editor-block-list__block::after {
     position: absolute;
     top: -14px;
     right: 0;
