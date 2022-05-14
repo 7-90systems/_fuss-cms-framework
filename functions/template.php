@@ -8,6 +8,7 @@
      *  @filter fuse_header_template
      *  @filter fuse_footer_template
      *  @filter fuse_layout_sidebar_class
+     *  @filter fuse_sidebar_classes
      */
     
     /**
@@ -116,7 +117,7 @@
 ?>
     <?php if ($layout->$col_1 == 1): ?>
 
-        <section class="secondary sidebar widget-area sidebar-<?php echo $location; ?>" role="complementary">
+        <section class="secondary sidebar widget-area sidebar-<?php echo $location; ?> <?php echo implode (' ', apply_filters ('fuse_sidebar_classes', array (), 1, $location, $layout)); ?>" role="complementary">
 
             <?php
                 $sidebar = get_post_meta ($layout->getLayout (), 'fuse_parts_sidebar_'.$location.'_1', true);
@@ -131,7 +132,7 @@
     
     <?php if ($layout->$col_2 == 1): ?>
     
-        <section class="secondary sidebar widget-area sidebar-<?php echo $location; ?>" role="complementary">
+        <section class="secondary sidebar widget-area sidebar-<?php echo $location; ?> <?php echo implode (' ', apply_filters ('fuse_sidebar_classes', array (), 2, $location, $layout)); ?>" role="complementary">
         
             <?php
                 $sidebar = get_post_meta ($layout->getLayout (), 'fuse_parts_sidebar_'.$location.'_2', true);

@@ -168,6 +168,25 @@
 
             return $layout;
         } // getCurrentLayout ()
+        
+        
+        
+        
+        /**
+         *  Get the number of sidebars set for this layout.
+         *
+         *  return int The sidebar count.
+         */
+        public function getSidebarCount () {
+            $count = 0;
+            
+            if ($this->left_sidebar_1 !== false) $count++;
+            if ($this->left_sidebar_2 !== false) $count++;
+            if ($this->right_sidebar_1 !== false) $count++;
+            if ($this->right_sidebar_2 !== false) $count++;
+            
+            return $count;
+        } // getsidebarcount ()
 
 
 
