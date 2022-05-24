@@ -21,7 +21,7 @@
      *  @filter fuse_before_enqueue_javascript Run before JavaScript is enqueued.
      *  @filter fuse_after_enqueue_javascript Run after JavaScript is enqueued
      *  @filter fuse_block_patterns Add block pattern objects to be registered.
-     *  @fitler fuse_gutenberg_stylesheets Filter the lsit of CSS stylesheets for the Gutenberg editor.
+     *  @fitler fuse_gutenberg_stylesheets Filter the list of CSS stylesheets for the Gutenberg editor.
      */
     
     namespace Fuse\Setup;
@@ -108,7 +108,15 @@
          */
         public function setThemeSupports () {
             $supports = apply_filters ('fuse_theme_supports', array (
-                'html5',
+                'html5' => array (
+                    'comment-list',
+                    'comment-form',
+                    'search-form',
+                    'gallery',
+                    'caption',
+                    'style',
+                    'script'
+                ),
                 'title-tag',
                 'editor-styles'
             ));
@@ -116,7 +124,7 @@
             foreach ($supports as $key => $args) {
                 if (is_numeric ($key)) {
                     // Simple call
-                    add_theme_support ($args);
+                    add_theme_support ($args, array ());
                 } // if ()
                 else {
                     // Extended call

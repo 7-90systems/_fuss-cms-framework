@@ -9,6 +9,7 @@
      *  @filter fuse_settings_form_panels
      *  @filter fuse_settings_form_email_sender_fields
      *  @filter fuse_settings_form_google_api_fields
+     *  @filter fuse_settings_form_submit_text
      */
     
     namespace Fuse\Forms\Form;
@@ -49,7 +50,7 @@
                 'method' => 'post',
                 'action' => esc_url (admin_url ('admin.php?page=fusesettings')),
                 'action_bar' => new \Fuse\Forms\Component\ActionBar (array (
-                    new Component\Button ('Save settings')
+                    new Component\Button (apply_filters ('fuse_settings_form_submit_text', __ ('Save settings', 'fuse')))
                 ))
             );
             
