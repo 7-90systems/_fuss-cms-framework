@@ -110,7 +110,7 @@
             $template_locations = array ();
             
             if (is_child_theme ()) {
-                $template_locations = get_stylesheet_directory ().DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'shortcodes'.DIRECTORY_SEPARATOR.$template.'.php';
+                $template_locations [] = get_stylesheet_directory ().DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'shortcodes'.DIRECTORY_SEPARATOR.$template.'.php';
             } // if ()
             
             $template_locations [] = get_template_directory ().DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'shortcodes'.DIRECTORY_SEPARATOR.$template.'.php';
