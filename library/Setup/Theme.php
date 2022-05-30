@@ -124,7 +124,7 @@
             foreach ($supports as $key => $args) {
                 if (is_numeric ($key)) {
                     // Simple call
-                    add_theme_support ($args, array ());
+                    add_theme_support ($args);
                 } // if ()
                 else {
                     // Extended call
