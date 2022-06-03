@@ -160,11 +160,19 @@
             } // elseif ()
             else {
                 /**
-                 *  We shouldn't get to this part, but if we do just use the
+                 *  We normally won't get to this part, but if we do just use the
                  *  system-default layout.
                  */
                 $layout = $this->_getDefaultLayout ();
             } // else
+            
+            /**
+             *  If all else fails or the layout that's set for a page is not valid
+             *  we fall back to the default layout.
+             */
+            if (empty ($layout) === true) {
+                $layout = $this->_getDefaultLayout ();
+            } // if ()
 
             return $layout;
         } // getCurrentLayout ()
