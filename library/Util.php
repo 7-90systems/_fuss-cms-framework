@@ -5,6 +5,8 @@
 	 */
 
 	namespace Fuse;
+	
+	use Datetime;
 
 
 	class Util {
@@ -13,6 +15,9 @@
 		 *	Block direct instantiation.
 		 */
 		private function __construct () {}
+		
+		
+		
 
 		/**
 		 *	Save attachment media file
@@ -114,5 +119,34 @@
 
             return $string;
         } // randomString ()
+		
+		
+		
+		
+		/**
+		 *	Get the months of the year.
+		 *
+		 *	@return array The months of the year with name and the number of days for that month.
+		 */
+		static public function getMonths ($year = NULL) {
+			$months = array ();
+			
+			if (empty ($year) === true) {
+				$year = current_time ('Y');
+			} // if ()
+			
+			$date = new DateTime ();
+			
+			for ($i = 1; $i <= 12; $i++) {
+				$date->setDate ($year, $i, 1);
+				
+				$months [$i] = array (
+					'name' => $date->format ('F'),
+					'days' => $date->  format ('t')
+				);
+			} // for ()
+			
+			return $months;
+		} // getMonths ()
 
 	} // class Util
