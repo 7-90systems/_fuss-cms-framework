@@ -152,21 +152,6 @@
         
         
         /**
-         *  Register our meta values when using the Gutenberg editor.
-         *
-         *  Override this function and use the register_meta() function to set up the meta values
-         *  that you need for your post types.
-         */
-        public function registerMeta () {
-            /**
-             *  Over-ride this function as required.
-             */
-        } // registerMeta ()
-        
-        
-        
-        
-        /**
          *  Save the posts values.
          *
          *  @param int $post_id The ID of the post being updated.
