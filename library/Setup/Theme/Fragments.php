@@ -16,7 +16,7 @@
      *  @filter fuse_theme_fragments
      */
     
-    namespace Fuse\Themes;
+    namespace Fuse\Setup\Theme;
     
     
     class Fragments {
@@ -60,6 +60,8 @@
                                 for (var i in response) {
                                     jQuery ('#' + i).html (response [i]);
                                 } // for ()
+                                
+                                jQuery ('body').trigger ('fuse_theme_fragments_load', [section]);
                             }
                         });
                     } // fuseHtmlFragments ()
