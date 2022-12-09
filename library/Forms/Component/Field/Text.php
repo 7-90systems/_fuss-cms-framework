@@ -45,7 +45,7 @@
                 'id' => $this->getId (),
                 'name' => $this->getName (),
                 'type' => $this->_args ['type'],
-                'value' => $this->_value
+                'value' => $this->getValue ()
             ));
             
             if (array_key_exists ('required', $attributes)) {

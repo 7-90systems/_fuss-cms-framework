@@ -92,7 +92,7 @@
          *  @return array The field values.
          */
         public function getValues () {
-            return array ($this->name => $this->_value);
+            return array ($this->name => $this->getValue ());
         } //getValues ()
         
         
@@ -104,7 +104,7 @@
          *  @return mixed The forms value.
          */
         public function getValue () {
-            return $this->_value;
+            return stripslashes ($this->_value);
         } // getValue ()
         
         /**

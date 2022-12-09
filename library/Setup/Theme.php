@@ -98,6 +98,9 @@
             
             // Disable the stupid (my opinion) Yoast filter that blocks 'reply to' in comments
             add_filter ('wpseo_remove_reply_to_com', '__return_false');
+            
+            // Set up our theme features
+            add_action ('after_setup_theme', array ($this, 'setupThemeFeatures'));
         } // __construct ()
         
         
@@ -124,7 +127,7 @@
             foreach ($supports as $key => $args) {
                 if (is_numeric ($key)) {
                     // Simple call
-                    add_theme_support ($args, array ());
+                    add_theme_support ($args);
                 } // if ()
                 else {
                     // Extended call
@@ -712,5 +715,19 @@
 			
 			return trim ($content);
         } // removeShortcodeP ()
+        
+        
+        
+        
+        /**
+         *  Set up our themes features.
+         */
+        public function setupThemeFeatures () {
+            // HTML Fragments
+            if (get_fuse_option ('html_fragments', false)) {
+                
+                $themes_fragments = new Theme\Fragments ();
+            } // if ()
+        } // setupThemeFeatures ()
         
     } // class Theme
