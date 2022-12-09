@@ -161,7 +161,7 @@
                 wp_register_style ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.css');
             } // if ()
             else {
-                wp_register_style ('bxslider', FUSE_BASE_URL.'/assets/extrenal/bxslider-4-4.2.12/dist/jquery.bxslider.min.css');
+                wp_register_style ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.min.css');
             } // else
             
             $theme_base = trailingslashit (get_stylesheet_directory_uri ());
