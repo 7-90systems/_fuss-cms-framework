@@ -70,6 +70,8 @@
             $this->_files = array ();
             
             $extension_length = strlen ($this->_file_extension);
+                    
+            $default_index = 1;
             
             foreach ($this->_base_folder_uri as $location) {
                 $path = $location ['path'];
@@ -98,6 +100,12 @@
                         $id = trim ($file, '\\/');
                         $id = substr ($id, 0, strpos ($id, '.'));
                         $id = str_replace (array ('\\', '/'), '_', $id);
+                        
+                        // We want to have all of the 'default' files included
+                        if ($id == 'default') {
+                            $id.= '_'.$default_index;
+                            $default_index++;
+                        } // if ()
                        
                         if (substr ($file, $extension_length * -1, $extension_length) == $this->_file_extension) {
                             $this->_files [$id] = array (
