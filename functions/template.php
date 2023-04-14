@@ -5,6 +5,10 @@
      *  This file contains our template functions.
      *
      *  @filter fuse_fallback_image_url The fallback image URL.
+     *  @filter fuse_header_template
+     *  @filter fuse_footer_template
+     *  @filter fuse_layout_sidebar_class
+     *  @filter fuse_sidebar_classes
      */
     
     /**
@@ -28,8 +32,8 @@
     if (function_exists ('fuse_comments_paging_nav') === false) {
         function fuse_comments_paging_nav ($args = array ()) {
             $args = array_merge (array (
-                'prev_text' => __ ('Previous', 'massive'),
-                'next_text' => __ ('Next', 'massive')
+                'prev_text' => __ ('Previous', 'fuse'),
+                'next_text' => __ ('Next', 'fuse')
             ), $args);
             
             the_comments_pagination ($args);
@@ -51,7 +55,7 @@
             $layout = $fuse->layout;
             
             if (is_null ($layout) || $layout->header == 1) {
-                get_header ($name);
+                get_header (apply_filters ('fuse_header_template', $name));
             } // if ()
             else {
                 // Blank header
@@ -80,7 +84,7 @@
             $layout = $fuse->layout;
             
             if (is_null ($layout) || $layout->footer == 1) {
-                get_footer ($name);
+                get_footer (apply_filters ('fuse_footer_template', $name));
             } // if ()
             else {
                 // Blank footer
@@ -113,12 +117,12 @@
 ?>
     <?php if ($layout->$col_1 == 1): ?>
 
-        <section class="secondary sidebar widget-area sidebar-<?php echo $location; ?>" role="complementary">
+        <section class="secondary sidebar widget-area sidebar-<?php echo $location; ?> <?php echo implode (' ', apply_filters ('fuse_sidebar_classes', array (), 1, $location, $layout)); ?>" role="complementary">
 
             <?php
                 $sidebar = get_post_meta ($layout->getLayout (), 'fuse_parts_sidebar_'.$location.'_1', true);
             ?>
-            <ul class="sidebar-container <?php echo $col_1; ?>">
+            <ul class="sidebar-container <?php echo apply_filters ('fuse_layout_sidebar_class', $col_1, $location, $layout); ?>">
                 <?php dynamic_sidebar ($sidebar); ?>
             </ul>
 
@@ -128,12 +132,12 @@
     
     <?php if ($layout->$col_2 == 1): ?>
     
-        <section class="secondary sidebar widget-area sidebar-<?php echo $location; ?>" role="complementary">
+        <section class="secondary sidebar widget-area sidebar-<?php echo $location; ?> <?php echo implode (' ', apply_filters ('fuse_sidebar_classes', array (), 2, $location, $layout)); ?>" role="complementary">
         
             <?php
                 $sidebar = get_post_meta ($layout->getLayout (), 'fuse_parts_sidebar_'.$location.'_2', true);
             ?>
-            <ul class="sidebar-container <?php echo $col_2; ?>">
+            <ul class="sidebar-container <?php echo apply_filters ('fuse_layout_sidebar_class', $col_2, $location, $layout); ?>">
                 <?php dynamic_sidebar ($sidebar); ?>
             </ul>
         
@@ -168,16 +172,35 @@
     if (function_exists ('fuse_get_feature_image') === false) {
         function fuse_get_feature_image ($post, $size = 'full', $fallback = true) {
             $image = NULL;
+            $image_id = 0;
             
             if (has_post_thumbnail ($post)) {
                 $image_id = get_post_thumbnail_id ($post);
-                
-                if ($image_id > 0) {
-                    $image = wp_get_attachment_image_url ($image_id, $size);
-                } // if ()
             } // if ()
             
-            if (is_null ($image) && $fallback !== false) {
+            return fuse_get_image_url ($image_id, $size, $fallback);
+        } // fuse_get_feature_image ()
+    } // if ()
+    
+    /**
+     *  Get an image URL given the image ID or return a fallback if none exists.
+     *
+     *  @param int $image_id the ID of the image.
+     *  @param string $size The image size.
+     *  @param bool $use_fallback Boolean 'true' to use a fallback image.
+     *
+     *  @return string|NULL Returns the image URL or a NULL value if no image
+     *  is available.
+     */
+    if (function_exists ('fuse_get_image_url') === false) {
+        function fuse_get_image_url ($image_id, $size = 'full', $fallback = false) {
+            $image = NULL;
+            
+            if ($image_id > 0) {
+                $image = wp_get_attachment_image_url ($image_id, $size);
+            } // if ()
+            
+            if (empty ($image) && $fallback !== false) {
                 $fallback_image = apply_filters ('fuse_fallback_image_url', 'assets/images/fallback/'.esc_attr ($size).'.jpg', $size);
                     
                 if (is_child_theme () && file_exists (trailingslashit (get_stylesheet_directory ()).$fallback_image)) {
@@ -190,5 +213,5 @@
             } // if ()
             
             return $image;
-        } // fuse_get_feature_image ()
+        } // fuse_get_image_url ()
     } // if ()

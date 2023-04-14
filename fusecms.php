@@ -10,6 +10,7 @@
      *  Author URI: https://7-90.com.au
      *  Version: 2.0
      *  Text Domain: fuse
+     *  Fuse Update Server: http://fuse.local
      */
     
     namespace Fuse;

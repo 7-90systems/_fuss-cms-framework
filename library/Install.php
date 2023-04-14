@@ -51,6 +51,11 @@
                         'footer' => true
                     ));
                     
+                    add_post_meta ($layout_id, 'fuse_parts_sidebar_left_1', 'default');
+                    add_post_meta ($layout_id, 'fuse_parts_sidebar_left_2', 'default');
+                    add_post_meta ($layout_id, 'fuse_parts_sidebar_right_1', 'default');
+                    add_post_meta ($layout_id, 'fuse_parts_sidebar_right_2', 'default');
+                    
                     add_option ('fuse_layout_defaults_global', $layout_id);
                 } // if ()
             } // if ()

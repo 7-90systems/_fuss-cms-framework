@@ -1,8 +1,10 @@
 <?php
     /**
-     *  @package fusecms
+     *  @package fuse-cms-framework
      *
-     *  Set up our email sender area.
+     *  @version 1.0
+     *
+     *  Set up our email sender for the site.
      */
 
     namespace Fuse\Setup;
@@ -25,7 +27,7 @@
          *  Set the 'from' email address.
          */
         public function emailFrom ($email) {
-            $tmp_from = get_option('fuse_email_sender_email_id');
+            $tmp_from = get_fuse_option ('fuse_email_from_email');
 
             if (empty ($tmp_from) === false) {
                 $email = $tmp_from;
@@ -38,7 +40,7 @@
          *  Set the 'from' name.
          */
         public function emailFromName ($name) {
-            $tmp_name = get_option('fuse_email_sender_id');
+            $tmp_name = get_fuse_option ('fuse_email_from_name');
 
             if (empty ($tmp_name) === false) {
                 $name = $tmp_name;

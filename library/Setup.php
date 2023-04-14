@@ -1,6 +1,8 @@
 <?php
     /**
-     *  @package fusecms
+     *  @package fuse-cms-framework
+     *
+     *  @version 1.0
      *
      *  This is our set up class.
      *
@@ -10,7 +12,8 @@
      *  Gutenberg blocks using the Fuse\Editor\Block() class.
      *
      *  @action fuse_before_load_functions Run before function files are loaded.
-     *  @action fuse_efter_load_functions Fun after function files are loaded.
+     *  @action fuse_efter_load_functions Run after function files are loaded.
+     *  @action fuse_init Run after the Fuse system is initialised and is ready.
      */
     
     namespace Fuse;
@@ -46,6 +49,11 @@
             if (is_admin ()) {
                 $admin = new Admin ();
             } // if ()
+            
+            /**
+             *  When we are finished we can call the action related to Fuse.
+             */
+            do_action ('fuse_init');
         } // __construct ()
         
         

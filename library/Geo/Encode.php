@@ -87,7 +87,7 @@
         protected function _encode () {
             $point = false;
             
-            $geo_key = get_option ('fuse_geo_key', '');
+            $geo_key = get_fuse_option ('google_api_key', '');
             
             if (empty ($geo_key) === false) {
                 // Check that we have an address est!

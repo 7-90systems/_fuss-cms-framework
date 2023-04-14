@@ -35,24 +35,6 @@
         
         
         /**
-         *  @var bool This value tells us if this post type is to use the
-         *  Gutenberg editor or not. You can set this to false in your post type
-         *  to disable Gutenberg for your post type.
-         */
-        protected $_use_gutenberg = true;
-        
-        
-        
-        
-        /**
-         *  @var bool Tells us if the Gutenberg editor is active.
-         */
-        static protected $_is_gutenberg = NULL;
-        
-        
-        
-        
-        /**
          *  Object constructor.
          *
          *  @param string $slug The post type slug for this post type.
@@ -84,9 +66,6 @@
             add_filter ('manage_edit-'.$slug.'_columns', array ($this, 'adminListColumns'));
             add_filter ('manage_'.$slug.'_posts_custom_column', array ($this, 'adminListValues'), 10, 2);
             add_filter ('manage_'.$slug.'_pages_custom_column', array ($this, 'adminListValues'), 10, 2);
-            
-            // Check Gutenberg use
-            add_filter ('use_block_editor_for_post_type', array ($this, 'checkGutenberg'), 10, 2);
         } // __construct ()
         
         
@@ -173,21 +152,6 @@
         
         
         /**
-         *  Register our meta values when using the Gutenberg editor.
-         *
-         *  Override this function and use the register_meta() function to set up the meta values
-         *  that you need for your post types.
-         */
-        public function registerMeta () {
-            /**
-             *  Over-ride this function as required.
-             */
-        } // registerMeta ()
-        
-        
-        
-        
-        /**
          *  Save the posts values.
          *
          *  @param int $post_id The ID of the post being updated.
@@ -235,22 +199,5 @@
         final public function getSlug () {
             return $this->_slug;
         } // getSlug ()
-        
-        
-        
-        
-        /**
-         *  Check to see if we want to disable the Gutenberg editor for this
-         *  post type.
-         *
-         *  #return bool True or false.
-         */
-        final public function checkGutenberg ($status, $post_type) {
-            if ($post_type == $this->getSlug () && $this->_use_gutenberg !== true) {
-                $status = false;
-            } // if ()
-            
-            return $status;
-        } // checkGutenberg ()
         
     } // class PostType
