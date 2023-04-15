@@ -21,6 +21,7 @@
     /**
      *  Start up our class auto-loader.
      */
+    require_once (FUSE_BASE_URI.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'Traits'.DIRECTORY_SEPARATOR.'Singleton.php');
     require_once (FUSE_BASE_URI.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'Loader.php');
     
     $fuse_loader = Loader::getInstance ();

@@ -18,21 +18,20 @@
     
     namespace Fuse;
     
+    use Fuse\Traits\Singleton;
+    
     
     class Setup {
         
-        /**
-         *  @var Fuse\Loader The singular instance of the setup class.
-         */
-        static private $_instance;
+        use Singleton;
         
         
         
         
         /**
-         *  Object constructor.
+         *  Set up our class.
          */
-        private function __construct () {
+        private function _init () {
             /**
              *  Load our functions
              */
@@ -54,7 +53,7 @@
              *  When we are finished we can call the action related to Fuse.
              */
             do_action ('fuse_init');
-        } // __construct ()
+        } // _init ()
         
         
         
@@ -75,7 +74,7 @@
                 $files = glob (trailingslashit ($dir).'*.php');
                 
                 foreach ($files as $file) {
-                    if (strtolower (substr ($file, -9, 9)) != 'index.php') {
+                    if (basename ($file) != 'index.php') {
                         require_once ($file);
                     } // if ()
                 } // foreach ()
@@ -83,19 +82,5 @@
             
             do_action ('fuse_after_load_actions');
         } // loadFunctions ()
-
-        
-        
-        
-        /**
-         *  Get the single instance of this class.
-         */
-        static final public function getInstance () {
-            if (empty (self::$_instance)) {
-                self::$_instance = new Setup ();
-            } // if ()
-            
-            return self::$_instance;
-        } // getInstance ()
         
     } // class Setup
