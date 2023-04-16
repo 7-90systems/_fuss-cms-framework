@@ -16,12 +16,13 @@
      *  @filter fuse_sidebars Set up sidebars to be registered.
      *  @filter fuse_image_sizes Set up the additional image sizes.
      *  @filter fuse_register_shortcodes Set up the shortcodes to register.
-     *  @filter fuse_before_enqueue_css Run before CSS is enqueued.
-     *  @filter fuse_after_enqueue_css Run after CSS is enqueued
-     *  @filter fuse_before_enqueue_javascript Run before JavaScript is enqueued.
-     *  @filter fuse_after_enqueue_javascript Run after JavaScript is enqueued
-     *  @filter fuse_block_patterns Add block pattern objects to be registered.
-     *  @fitler fuse_gutenberg_stylesheets Filter the list of CSS stylesheets for the Gutenberg editor.
+     *  
+     *  @action fuse_before_enqueue_css Run before CSS is enqueued.
+     *  @action fuse_after_enqueue_css Run after CSS is enqueued
+     *  @action fuse_before_enqueue_javascript Run before JavaScript is enqueued.
+     *  @action fuse_after_enqueue_javascript Run after JavaScript is enqueued
+     *  @action fuse_block_patterns Add block pattern objects to be registered.
+     *  @action fuse_gutenberg_stylesheets Filter the list of CSS stylesheets for the Gutenberg editor.
      */
     
     namespace Fuse\Setup;

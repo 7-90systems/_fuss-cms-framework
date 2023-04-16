@@ -102,7 +102,7 @@
                         $id = str_replace (array ('\\', '/'), '_', $id);
                         
                         // We want to have all of the 'default' files included
-                        if ($id == 'default') {
+                        if ($id == 'default' && substr ($file, -4, 4) != '.dep') {
                             $id.= '_'.$default_index;
                             $default_index++;
                         } // if ()
@@ -117,6 +117,9 @@
                             if (array_key_exists ($id, $this->_files)) {
                                 $this->_files [$id]['deps'] = explode ('|', file_get_contents ($path.$file));
                             } // if ()
+                            elseif ($id == 'default' && array_key_exists ('default_1', $this->_files)) {
+                                $this->_files ['default_1']['deps'] = explode ('|', file_get_contents ($path.$file));
+                            } // elseif ()
                         } // elseif ()
                     } // foreach ()
                 } // if ()
