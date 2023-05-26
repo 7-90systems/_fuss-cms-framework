@@ -1,0 +1,166 @@
+/**
+ *  @package fuse-cms
+ *
+ *  This file contains the CSS styles for layout in the Fuse CMS Framework.
+ *
+ *  Device breakpoints:
+ *      XXL  - 1450px
+ *      XL   - 1200px
+ *      L    - 992px
+ *      M    - 768px
+ *      S    - 576px
+ *      XS   - Under 576px
+ */
+
+/*  ********************************************************************************  **
+
+    CSS variables.
+    
+    Feel free to over-ride these in your theme to suit your layout!
+
+**  ********************************************************************************  */
+
+:root {
+    
+    --fuse-site-max-width: 1800px;
+    
+    --fuse-container-padding-x: 5%;
+    --fuse-container-padding-y: 60px;
+
+    
+    
+}
+
+
+
+
+/*  ********************************************************************************  **
+
+    Container elements
+
+**  ********************************************************************************  */
+
+.fuse-container {
+    position: relative;
+    margin: 0;
+    padding: var(--fuse-container-padding-y) var(--fuse-container-padding-x);
+}
+.fuse-container > div {
+    position: relative;
+    max-width: var(--fuse-site-max-width);\
+    margin: 0 auto;
+    padding: 0;
+}
+
+
+
+
+/*  **********  Container content alignment  **********  */
+
+.fuse-container.content-left > div {
+    margin-left: 0;
+}
+.fuse-container.content-right > div {
+    margin-right: 0;
+}
+
+
+
+
+/*  **********  Container widths  *********  */
+
+.fuse-container.narrow {
+    padding-left: calc(var(--fuse-container-padding-x) * 2.5);
+    padding-right: calc(var(--fuse-container-padding-x) * 2.5);
+}
+.fuse-container.thin {
+    padding-left: calc(var(--fuse-container-padding-x) * 3.5);
+    padding-right: calc(var(--fuse-container-padding-x) * 3.5);
+}
+
+
+
+
+/*  **********  Top and bottom padding  **********  */
+
+.fuse-container.no-top-padding {
+    padding-top: 0 !important;
+}
+.fues-container.no-bottom-padding {
+    padding-bottom: 0 !important;
+}
+
+
+
+
+/*  ********************************************************************************  **
+
+    Media queries - Small
+
+**  ********************************************************************************  */
+
+@media screen and (min-width: 576px) {
+    
+    
+    
+}
+
+
+
+
+/*  ********************************************************************************  **
+
+    Media queries - Medium
+
+**  ********************************************************************************  */
+
+@media screen and (min-width: 768px) {
+    
+    
+    
+}
+
+
+
+
+/*  ********************************************************************************  **
+
+    Media queries - Large
+
+**  ********************************************************************************  */
+
+@media screen and (min-width: 992px) {
+    
+    
+    
+}
+
+
+
+
+/*  ********************************************************************************  **
+
+    Media queries - Extra Large
+
+**  ********************************************************************************  */
+
+@media screen and (min-width: 1200px) {
+    
+    
+    
+}
+
+
+
+
+/*  ********************************************************************************  **
+
+    Media queries - Extra Extra Large
+
+**  ********************************************************************************  */
+
+@media screen and (min-width: 1450px) {
+    
+    
+    
+}
