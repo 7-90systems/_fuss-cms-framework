@@ -52,6 +52,16 @@
          *  Enqueue our JavaScript files.
          */
         protected function _enqueue () {
+            // Are we using our layout CSS files?
+            if (get_fuse_option ('theme_css_layout', 'no') == 'yes') {
+                wp_enqueue_style ('fuse_theme_layout', FUSE_BASE_URL.'/assets/css/layout/layout.css');
+            } // if ()
+            
+            if (get_fuse_option ('theme_css_buttons', 'no') == 'yes') {
+                wp_enqueue_style ('fuse_theme_buttons', FUSE_BASE_URL.'/assets/css/layout/buttons.css');
+            } // if ()
+            
+            // Load our normal stylesheets
             foreach ($this->_files as $alias => $file) {
                 wp_register_style ($alias, $file ['file'], $file ['deps']);
             } // foreach ()

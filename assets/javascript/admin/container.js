@@ -9,6 +9,7 @@
 jQuery (document).ready (function () {
     
     fuseFormsSetup ();
+    fuseFormRequired ();
 
 });
 
@@ -87,6 +88,7 @@ function _checkFuseFormFieldConditions () {
             } // else
         } // if ()
     });
+    
     
     /**
      *  Check panel visibility.
@@ -275,3 +277,30 @@ function _fuseFormsSetupDateFields () {
         });
     });
 } // _fuseFormsSetupDateFields ()
+
+
+
+
+/**
+ *  Set up the functionality to show required fields.
+ */
+function fuseFormRequired () {
+    jQuery ('.fuse-forms-container input, .fuse-forms-container select, .fuse-forms-container textarea').on ('input', _fuseFormCheckRequired);
+    jQuery ('.fuse-forms-container select').change (_fuseFormCheckRequired);
+} // fuseFormRequired ()
+
+function _fuseFormCheckRequired () {
+    var el = jQuery (this);
+    
+    if (el.prop ('required')) {
+        var label = el.parent ().siblings ('label');
+        
+        if (el.val ().length > 0) {
+            label.removeClass (['required-empty', 'admin-bold', 'admin-red']);
+        } // if ()
+        else {
+            label.addClass (['required-empty', 'admin-bold', 'admin-red']);
+        } // else
+
+    } // if ()
+} // _fuseFormCheckRequired ()
