@@ -58,7 +58,8 @@
             } // if ()
             
             if (get_fuse_option ('theme_css_buttons', 'no') == 'yes') {
-                wp_enqueue_style ('fuse_theme_buttons', FUSE_BASE_URL.'/assets/css/layout/buttons.css');
+                wp_enqueue_style ('fuse_theme_buttons', FUSE_BASE_URL.'/assets/css/layout/buttons.css', array  ('dashicons'));
+                wp_enqueue_script ('fuse_theme_buttons', FUSE_BASE_URL.'/assets/javascript/buttons.js', array  ('jquery'));
             } // if ()
             
             // Load our normal stylesheets
