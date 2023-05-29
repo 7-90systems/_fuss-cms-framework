@@ -27,6 +27,7 @@
     --fuse-button-colour-background: #EB2823;
     --fuse-button-colour-background-hover: var(--fuse-button-colour-border);
     --fuse-button-colour-text: #FFFFFF;
+    --fuse-button-shadow: 2px 2px 3px 1px rgba(0, 0, 0, 0.4);
     
     
     
@@ -68,6 +69,11 @@ a.button:hover,
 button:hover,
 .wp-block-button .wp-block-button__link:hover {
     background: var(--fuse-button-colour-background-hover);
+}
+a.button.shadow,
+button.shadow,
+.wp-block-button.shadow .wp-block-button__link {
+    box-shadow: var(--fuse-button-shadow);
 }
 
 
