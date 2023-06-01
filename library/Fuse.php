@@ -27,8 +27,8 @@
         /**
          *  Object constructor.
          */
-        private function __construct () {
+        protected function _init () {
             $this->layout = new Layout ();
-        } // __construct ()
+        } // _init ()
         
     } // class Fuse
