@@ -178,7 +178,7 @@
          *  Add our parent post type meta box.
          */
         final public function addParentMetaBox () {
-            add_meta_box ('fuse_posttype_parent_meta', array ($this, 'parentMeta'));
+            add_meta_box ('fuse_posttype_parent_meta', __ ('Set Parent', 'fuse'), array ($this, 'parentMeta'), $this->getSlug (), 'side', 'high');
         } // addParentMetaBox ()
         
         /**
@@ -205,17 +205,19 @@
          */
         final public function saveParentPostType ($post_id, $post) {
             if (defined ('DOING_AUTOSAVE') === false || DOING_AUTOSAVE !== true) {
-                global $wpdb;
-                
-                $wpdb->update ($wpdb->posts, array (
-                    'post_parent' => $_POST ['fuse_posttype_parent']
-                ), array (
-                    'ID' => $post_id
-                ), array (
-                    '%d'
-                ), array (
-                    '%d'
-                ));
+                if (array_key_exists ('fuse_posttype_parent', $_POST)) {
+                    global $wpdb;
+                    
+                    $wpdb->update ($wpdb->posts, array (
+                        'post_parent' => $_POST ['fuse_posttype_parent']
+                    ), array (
+                        'ID' => $post_id
+                    ), array (
+                        '%d'
+                    ), array (
+                        '%d'
+                    ));
+                } // if ()
             } // if ()
         } // saveParentPostType ()
         
