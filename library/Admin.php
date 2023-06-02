@@ -22,7 +22,7 @@
             add_action ('admin_menu', array ($this, 'adminMenu'));
             
             // Set up our theme/plugins updater set up.
-            $update = new Update ();
+            $update = Update::getInstance ();
             
             // Add in our functionality to save the Fuse Form values for post types
             add_action ('save_post', array ($this, 'saveFuseFormMetaBoxValues'), 10, 2);
