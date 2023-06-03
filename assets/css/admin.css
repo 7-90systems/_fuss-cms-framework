@@ -85,3 +85,41 @@
 .dashicons-fusecms:before {
     content:'\0041';
 }
+
+
+
+
+/*  **********  Image Inputs  **********  */
+
+.fuse-input-image-container {
+   --image-size: 80px;
+}
+.fuse-input-image-container .image-container {
+   position: relative;
+   width: var(--image-size);
+   height: var(--image-size);
+}
+
+.fuse-input-image-container .image-container img {
+   position: relative;
+   z-index: 0;
+   width: var(--image-size);
+   height: var(--image-size);
+   display: block;
+}
+.fuse-input-image-container .image-container .delete {
+   position: absolute;
+   z-index: 1;
+   top: -5px;
+   right: -5px;
+   padding: 0;
+   border: 3px solid var(--wp--preset--color--cyan-bluish-gray);
+   border-radius: 6px;
+   color: var(--wp--preset--color--cyan-bluish-gray);
+   background: var(--wp--preset--color--white);
+   cursor: pointer;
+}
+.fuse-input-image-container .image-container .delete:hover {
+   border-color: var(--wp--preset--color--vivid-red);
+   color: var(--wp--preset--color--vivid-red);
+}

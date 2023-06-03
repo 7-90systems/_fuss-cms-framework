@@ -84,7 +84,16 @@
             // Is this a child of another parent post type?
             if (strlen($this->_parent_post_type) > 0) {
                 add_action ('add_meta_boxes_'.$slug, array ($this, 'addParentMetaBox'));
+                add_action ('add_meta_boxes_'.$this->_parent_post_type, array ($this, 'addParentMetaBoxes'));
                 add_action ('save_post_'.$slug, array ($this, 'saveParentPostType'), 10, 2);
+                
+                add_filter ('manage_edit-'.$this->_parent_post_type.'_columns', array ($this, 'parentAdminListColumns'));
+                add_filter ('manage_'.$this->_parent_post_type.'_posts_custom_column', array ($this, 'parentAdminListValues'), 10, 2);
+                add_filter ('manage_'.$this->_parent_post_type.'_pages_custom_column', array ($this, 'parentAdminListValues'), 10, 2);
+
+                add_filter ('manage_edit-'.$slug.'_columns', array ($this, 'childAdminListColumns'));
+                add_filter ('manage_'.$slug.'_posts_custom_column', array ($this, 'childAdminListValues'), 10, 2);
+                add_filter ('manage_'.$slug.'_pages_custom_column', array ($this, 'childAdminListValues'), 10, 2);
             } // if ()
         } // __construct ()
         
@@ -187,14 +196,27 @@
          *  @param WP_Post $post The post object.
          */
         final public function parentMeta ($post) {
-            ?>
-                <select name="fuse_posttype_parent">
-                    <option value="">&nbsp;</option>
-                    <?php foreach ($this->_getParentPosts () as $row): ?>
-                        <option value="<?php echo $row->ID; ?>"<?php selected ($row->ID, $post->post_parent); ?>><?php echo $row->post_title; ?></option>
-                    <?php endforeach; ?>
-                </select>
-            <?php
+            $parent = $post->post_parent;
+            
+            if ($parent == 0 && array_key_exists ('parent', $_GET)) {
+                $parent = intval ($_GET ['parent']);
+            } // if ()
+            
+            if ($parent > 0) {
+                $parent = get_post ($parent);
+                
+                echo '<p class="admin-bold" style="font-size: 1.3em;"><a href="'.esc_url (admin_url ('post.php?post='.$parent->ID.'&action=edit')).'">'.$parent->post_title.'</a></p>';
+            } // if ()
+            else {
+                ?>
+                    <select name="fuse_posttype_parent">
+                        <option value="">&nbsp;</option>
+                        <?php foreach ($this->_getParentPosts () as $row): ?>
+                            <option value="<?php echo $row->ID; ?>"<?php selected ($row->ID, $parent); ?>><?php echo $row->post_title; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php
+            } // else
         } // parentMeta ()
         
         /**
@@ -241,7 +263,7 @@
          *
          *  @return array The post items. Each item has ID and post_title.
          */
-        final private function _getParentPosts () {
+        private function _getParentPosts () {
             global $wpdb;
             
             $query = $wpdb->prepare ("SELECT
@@ -281,6 +303,67 @@
              */
         } // addMetaBoxes ()
         
+        /**
+         *  Set up meta boxes on the parent post type.
+         */
+        public function addParentMetaBoxes () {
+            add_meta_box ('fuse_posttype_parent_children_meta', $this->_name_plural, array ($this, 'listChildren'), $this->_parent_post_type, 'normal', 'low');
+        } // addParentMetaBoxes ()
+        
+        /**
+         *  Add the list of children for this parent post.
+         */
+        public function listChildren ($post) {
+            $children = get_posts (array (
+                'numberposts' => -1,
+                'post_type' => $this->getSlug (),
+                'post_parent' => $post->ID,
+                'orderby' => 'title',
+                'order' => 'ASC'
+            ));
+            ?>
+                <table class="widefat">
+                    <thead>
+                        <tr>
+                            <th><?php echo $this->_name_singular; ?></th>
+                            <th style="width: 60px;">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th><?php echo $this->_name_singular; ?></th>
+                            <th style="width: 60px;">&nbsp;</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <?php if (count ($children) > 0): ?>
+                        
+                            <?php foreach ($children as $child): ?>
+                            
+                                <tr>
+                                    <td><?php echo $child->post_title; ?></th>
+                                    <td style="width: 60px; text-align: right;"><a href="<?php echo esc_url (admin_url ('post.php?post='.$child->ID.'&action=edit')); ?>"><?php _e ('Edit', 'fuse'); ?></a></th>
+                                </tr>
+                            
+                            <?php endforeach; ?>
+                        
+                        <?php else: ?>
+
+                            <tr>
+                                <td colspan="2" style="text-align: center"><?php _e ('Nothing found', 'fuse'); ?></th>
+                            </tr>
+                        
+                        <?php endif; ?>
+
+                    </tbody>
+                </table>
+                
+                <p>
+                    <a href="<?php echo esc_url (admin_url ('post-new.php?post_type='.$this->getSlug ().'&parent='.$post->ID)); ?>" class="button"><?php printf (__ ('Add a new %s', 'fuse'), $this->_name_singular); ?></a>
+                </p>
+            <?php
+        } // listChildren ()
+        
         
         
         
@@ -305,7 +388,7 @@
          *
          *  @param array $columns The existing columns.
          *
-         *  @return array The completed column list
+         *  @return array The completed column list.
          */
         public function adminListColumns ($columns) {
             return $columns;
@@ -320,5 +403,91 @@
         public function adminListValues ($column, $post_id) {
             // Don't do anything here, but you can do it yourself!
         } // adminListValues ()
+        
+        /**
+         *  Add the required columns to the parent post type.
+         *
+         *  @param array $columns The existing columns.
+         *
+         *  @return array The completed column list.
+         */
+        public function parentAdminListColumns ($cols) {
+            $cols ['fuse_posttype_parent_items'] = $this->_name_plural;
+            
+            return $cols;
+        } // parentAdminListColumns ()
+        
+        /**
+         *  Output the values for our custom admin list columns for the parent post type.
+         *
+         *  @param string $column The name of the column
+         *  @param int $post_id The ID of the post.
+         */
+        public function parentAdminListValues ($column, $post_id) {
+            switch ($column) {
+                case 'fuse_posttype_parent_items';
+                    echo $this->_getChildCount ($post_id);
+                    break;
+            } // switch ()
+        } // adminListValues ()
+        
+        /**
+         *  Add the required columns to the child post type.
+         *
+         *  @param array $columns The existing columns.
+         *
+         *  @return array The completed column list.
+         */
+        public function childAdminListColumns ($cols) {
+            $parent_post_type = get_post_type_object ($this->_parent_post_type);
+            
+            if ($parent_post_type) {
+                $cols ['fuse_posttype_child_parent'] = $parent_post_type->labels->singular_name;
+            } // if ()
+            
+            return $cols;
+        } // childAdminListColumns ()
+        
+        /**
+         *  Output the values for our custom admin list columns for the child post type.
+         *
+         *  @param string $column The name of the column
+         *  @param int $post_id The ID of the post.
+         */
+        public function childAdminListValues ($column, $post_id) {
+            switch ($column) {
+                case 'fuse_posttype_child_parent';
+                    $post = get_post ($post_id);
+                    
+                    if ($post) {
+                        $parent = get_post ($post->post_parent);
+                        
+                        echo '<a href="'.esc_url (admin_url ('post.php?post='.$parent->ID.'&action=edit')).'">'.$parent->post_title.'</a>';
+                    } // if ()
+                    else {
+                        echo '<span class="admin-red admin-bold">'.__ ('Not set', 'fuse').'</span>';
+                    } // else
+                    
+                    break;
+            } // switch ()
+        } // childListValues ()
+        
+        
+        
+        
+        /**
+         *  Get the count of child items for the given post ID.
+         */
+        protected function _getChildCount ($parent_id) {
+            global $wpdb;
+            
+            $query = $wpdb->prepare ("SELECT
+                COUNT(ID)
+            FROM ".$wpdb->posts."
+            WHERE post_type = %s
+                AND post_parent = %d", $this->getSlug (), $parent_id);
+            
+            return $wpdb->get_var ($query);
+        } // _getChildCount ()
         
     } // class PostType
