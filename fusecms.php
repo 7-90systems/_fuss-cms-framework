@@ -9,6 +9,8 @@
      *  Author: 7-90 Systems
      *  Author URI: https://7-90.com.au
      *  Version: 2.0
+     *  Requires at least: 6.0
+     *  Requires PHP: 7.4
      *  Text Domain: fuse
      *  Fuse Update Server: http://fusecms.org
      */

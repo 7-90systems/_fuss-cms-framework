@@ -44,9 +44,10 @@
             
             if (empty ($checked_data->checked) === false) {
                 foreach ($this->getPlugins () as $plugin_file => $update_server) {
+                    $version = array_key_exists ($plugin_file, $checked_datea->checked) ? $checked_data->checked [$plugin_file] : '0';
                     $args = array (
                         'slug' => $plugin_file,
-                        'version' => $checked_data->checked [$plugin_file],
+                        'version' => $version,
                     );
                     $request_string = array (
                         'body' => array (

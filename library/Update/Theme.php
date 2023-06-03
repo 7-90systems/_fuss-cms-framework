@@ -119,6 +119,8 @@
          *  Get the list of themes to update.
          */
         public function getThemes () {
+            $this->_themes = array ();
+            
             if (empty ($this->_themes)) {
                 foreach (wp_get_themes () as $slug => $theme) {
                     $file_uri = trailingslashit ($theme->get_file_path ()).'style.css';
