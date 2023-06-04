@@ -29,14 +29,13 @@
          *  Render the inputs HTML code.
          */
         public function render () {
-            $id = uniqid ('fuse_input_image_');
             $image = NULL;
             
             if (intval ($this->value) > 0) {
                 $image = wp_get_attachment_image_url (intval ($this->value), 'thumbnail');
             } // if ()
             ?>
-                <div id="<?php esc_attr_e ($id); ?>" class="fuse-input-image-container">
+                <div class="fuse-input-image-container">
                 
                     <button class="button"<?php if (empty ($image) === false) echo ' style="display: none;"'; ?>><?php _e ('Choose image...', 'fuse'); ?></button>
                 
