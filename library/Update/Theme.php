@@ -7,8 +7,15 @@
     
     namespace Fuse\Update;
     
+    use Fuse\Traits\Update;
+    
     
     class Theme {
+        
+        use Update;
+        
+        
+        
         
         /**
          *  @var array Our themes list. Don't access this list directly. Use the getThemes() function in this class.
@@ -54,7 +61,7 @@
                 );
                 $response = NULL;
                 
-                $raw_response = wp_remote_post($theme ['server'], $send_for_check);
+                $raw_response = wp_remote_post ($this->_getServerUrl ($theme ['server']), $send_for_check);
                 
                 if (!is_wp_error($raw_response) && ($raw_response ['response']['code'] == 200)) {
                     $response = maybe_unserialize ($raw_response['body']);
@@ -91,7 +98,7 @@
                         'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo ('url')
                     );
                     
-                    $request = wp_remote_post ($theme ['server'], $request_string);
+                    $request = wp_remote_post ($this->_getServerUrl ($theme ['server']), $request_string);
                     
                     if (is_wp_error ($request)) {
                         $res = new WP_Error ('themes_api_failed', __('An Unexpected HTTP Error occurred during the API request.</p> <p><a href="?" onclick="document.location.reload(); return false;">Try again</a>'), $request->get_error_message ());

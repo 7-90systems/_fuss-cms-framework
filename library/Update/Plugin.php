@@ -8,9 +8,15 @@
     namespace Fuse\Update;
     
     use WP_Error;
+    use Fuse\Traits\Update;
     
     
     class Plugin {
+        
+        use Update;
+        
+        
+        
         
         /**
          *  @var array Our plugins list. Don't access this list directly. Use the getPlugins() function in this class.
@@ -44,7 +50,7 @@
             
             if (empty ($checked_data->checked) === false) {
                 foreach ($this->getPlugins () as $plugin_file => $update_server) {
-                    $version = array_key_exists ($plugin_file, $checked_datea->checked) ? $checked_data->checked [$plugin_file] : '0';
+                    $version = array_key_exists ($plugin_file, $checked_data->checked) ? $checked_data->checked [$plugin_file] : '0';
                     $args = array (
                         'slug' => $plugin_file,
                         'version' => $version,
@@ -55,16 +61,25 @@
                             'request' => serialize ($args),
                             'api-key' => md5 (get_bloginfo ('url'))
                         ),
-                        'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo ('url')
+                        'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo ('url'),
+                        'timeout' => 60
                     );
                     
                     // Start checking for an update
-                    $raw_response = wp_remote_post ($update_server, $request_string);
+error_log ("Plugin update: '".$this->_getServerUrl ($update_server)."'");
+                    $raw_response = wp_remote_post ($this->_getServerUrl ($update_server), $request_string);
                     $response = NULL;
                     
                     if (!is_wp_error ($raw_response) && ($raw_response ['response']['code'] == 200)) {
+error_log ("  - Got good response");
                         $response = maybe_unserialize ($raw_response ['body']);
                     } // if ()
+elseif (is_wp_error ($raw_response)) {
+error_log ("  - WP Error :( - Error: '".$raw_response->get_error_message ()."'");
+}
+else {
+error_log ("  - Unknown error :( - Error: '".is_wp_error ($raw_response)."'");
+}
                     
                     if (is_object ($response) && !empty ($response)) {
                         $checked_data->response [$plugin_file] = $response;
@@ -98,7 +113,7 @@
                         'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo ('url')
                     );
                     
-                    $request = wp_remote_post ($update_server, $request_string);
+                    $request = wp_remote_post ($this->_getServerUrl ($update_server), $request_string);
                     
                     if (is_wp_error ($request)) {
                         $res = new WP_Error ('plugins_api_failed', __('An Unexpected HTTP Error occurred during the API request.</p> <p><a href="?" onclick="document.location.reload(); return false;">Try again</a>'), $request->get_error_message ());
