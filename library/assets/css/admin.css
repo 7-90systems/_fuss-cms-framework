@@ -1,0 +1,145 @@
+/**
+ *  Set up the administration styles.
+ */
+
+/*  **********  Layouts  **********  */
+
+.layout-parts-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.layout-parts-table tr {
+    vertical-align: top;
+}
+.layout-parts-table td {
+    text-align: center;
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #CCD0D4;
+    background: #FFFFFF;
+}
+.layout-parts-table td.show {
+    background: rgba(0, 255, 0, 0.2);
+}
+
+
+
+
+/*  **********  Shared Common Styles  **********  */
+
+.admin-grey,
+.admin-light {
+    color: #999999;
+}
+.admin-red {
+    color: #CC0000;
+}
+.admin-green {
+    color: #00CC00;
+}
+.admin-blue {
+    color: #0000CC;
+}
+
+.admin-bold {
+    font-weight: bold;
+}
+.admin-italic {
+    font-style: italic;
+}
+
+.admin-left {
+   text-align: left
+}
+.admin-right {
+   text-align: right;
+}
+.admin-center {
+   text-align: center;
+}
+
+
+
+
+/*  **********  Custom Dashicons  **********  */
+
+@font-face {
+    font-family: 'fusecms';
+    src: url('../fonts/fusecms.eot');
+    src: url('../fonts/fusecms.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/fusecms.woff') format('woff'),
+         url('../fonts/fusecms.ttf') format('truetype'),
+         url('../fonts/fusecms.svg#fusecms') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+.dashicons-fusecms:before {
+	display: inline-block;
+   font-family: 'fusecms';
+   font-style: normal;
+   font-weight: normal;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale
+}
+.dashicons-fusecms:before {
+    content:'\0041';
+}
+
+
+
+
+/*  **********  Image Inputs  **********  */
+
+.fuse-input-image-container,
+.fuse-input-gallery-container {
+   --image-size: 80px;
+}
+.fuse-input-image-container .image-container,
+.fuse-input-gallery-container .gallery-images .image-container {
+   position: relative;
+   width: var(--image-size);
+   height: var(--image-size);
+}
+
+.fuse-input-image-container .image-container img,
+.fuse-input-gallery-container .gallery-images .image-container img {
+   position: relative;
+   z-index: 0;
+   width: var(--image-size);
+   height: var(--image-size);
+   display: block;
+}
+.fuse-input-image-container .image-container .delete,
+.fuse-input-gallery-container .gallery-images .image-container .delete {
+   position: absolute;
+   z-index: 1;
+   top: -5px;
+   right: -5px;
+   padding: 0;
+   border: 3px solid var(--wp--preset--color--cyan-bluish-gray);
+   border-radius: 6px;
+   color: var(--wp--preset--color--cyan-bluish-gray);
+   background: var(--wp--preset--color--white);
+   cursor: pointer;
+}
+.fuse-input-image-container .image-container .delete:hover,
+.fuse-input-gallery-container .gallery-images .image-container .delete:hover {
+   border-color: var(--wp--preset--color--vivid-red);
+   color: var(--wp--preset--color--vivid-red);
+}
+
+
+
+
+/*  **********  GAllery Inouts  **********  */
+
+.fuse-input-gallery-container .gallery-images {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 20px;
+   padding-bottom: 20px;
+}
+.fuse-input-gallery-container .gallery-images .image-container {
+   cursor: grab;
+}

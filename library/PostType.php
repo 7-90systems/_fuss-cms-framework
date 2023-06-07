@@ -206,6 +206,7 @@
                 $parent = get_post ($parent);
                 
                 echo '<p class="admin-bold" style="font-size: 1.3em;"><a href="'.esc_url (admin_url ('post.php?post='.$parent->ID.'&action=edit')).'">'.$parent->post_title.'</a></p>';
+                echo '<input type="hidden" name="fuse_posttype_parent" value="'.intval ($parent->ID).'" />';
             } // if ()
             else {
                 ?>

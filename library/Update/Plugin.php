@@ -30,12 +30,7 @@
          *  Object constructor
          */
         public function __construct () {
-            // add_action ('init', array ($this, 'getPlugins'));
-            
             add_filter ('pre_set_site_transient_update_plugins', array ($this, 'checkForPluginUpdate'));
-            /**
-             *  TODO: Leaving this here for now. It may be needed, but at the moment it doesn't look like it.
-             */
             add_filter ('plugins_api', array ($this, 'pluginApiCall'), 10, 3);
         } // __construct ()
         
@@ -62,42 +57,46 @@
                             'api-key' => md5 (get_bloginfo ('url'))
                         ),
                         'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo ('url'),
-                        'timeout' => 60
+                        'timeout' => 60,
+                        'httpversion' => '1.1',
+                        'method' => 'POST'
                     );
                     
                     // Start checking for an update
-error_log ("Plugin update: '".$this->_getServerUrl ($update_server)."'");
                     $raw_response = wp_remote_post ($this->_getServerUrl ($update_server), $request_string);
                     $response = NULL;
                     
-                    if (!is_wp_error ($raw_response) && ($raw_response ['response']['code'] == 200)) {
-error_log ("  - Got good response");
-                        $response = maybe_unserialize ($raw_response ['body']);
+                    if (is_array ($raw_response) && array_key_exists ('response', $raw_response) && $raw_response ['response']['code'] == 404) {
+                        // Not found, so dont do anyhting
                     } // if ()
-elseif (is_wp_error ($raw_response)) {
-error_log ("  - WP Error :( - Error: '".$raw_response->get_error_message ()."'");
-}
-else {
-error_log ("  - Unknown error :( - Error: '".is_wp_error ($raw_response)."'");
-}
+                    else {
+                        if (!is_wp_error ($raw_response) && ($raw_response ['response']['code'] == 200)) {
+                            $response = json_decode ($raw_response ['body']);
+                        } // if ()
                     
-                    if (is_object ($response) && !empty ($response)) {
-                        $checked_data->response [$plugin_file] = $response;
-                    } // if ()
+                        if (is_object ($response) && !empty ($response)) {
+                            foreach (get_object_vars ($response) as $key => $val) {
+                                if (is_string ($val) === false) {
+                                    $response->{$key} = (array) $val;
+                                } // if ()
+                            } // foreach ()
+                            
+                            $checked_data->response [$plugin_file] = $response;
+                        } // if ()
+                    } // else
                 } // foreach ()
             } // if ()
             
             return $checked_data;
-        } // check_for_plugin_update()
+        } // check_for_plugin_update ()
         
         /**
          *  Perform the plugin API call
          */
         public function pluginApiCall ($def, $action, $args) {
-// \Fuse\Debug::dump ($args, 'Args', true);
             global $wp_version;
             
-            $res = false;
+            $result = false;
             
             foreach ($this->getPlugins () as $slug => $update_server) {
                 if (property_exists ($args, 'slug') && $slug == $args->slug) {
@@ -110,25 +109,36 @@ error_log ("  - Unknown error :( - Error: '".is_wp_error ($raw_response)."'");
                             'request' => serialize ($args),
                             'api-key' => md5 (get_bloginfo ('url'))
                         ),
-                        'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo ('url')
+                        'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo ('url'),
+                        'timeout' => 60,
+                        'httpversion' => '1.1',
+                        'method' => 'POST'
                     );
                     
                     $request = wp_remote_post ($this->_getServerUrl ($update_server), $request_string);
                     
                     if (is_wp_error ($request)) {
-                        $res = new WP_Error ('plugins_api_failed', __('An Unexpected HTTP Error occurred during the API request.</p> <p><a href="?" onclick="document.location.reload(); return false;">Try again</a>'), $request->get_error_message ());
+                        $result = new WP_Error ('plugins_api_failed', __('An Unexpected HTTP Error occurred during the API request.</p>'), $request->get_error_message ());
                     } // if ()
                     else {
-                        $res = unserialize ($request ['body']);
-                        
-                        if ($res === false) {
-                            $res = new WP_Error ('plugins_api_failed', __('An unknown error occurred'), $request ['body']);
+                        $result = json_decode ($request ['body']);
+
+                        if (is_object ($result) && !empty ($result)) {
+                            foreach (get_object_vars ($result) as $key => $val) {
+                                if (is_string ($val) === false) {
+                                    $result->{$key} = (array) $val;
+                                } // if ()
+                            } // foreach ()
+                        } // if ()
+
+                        if ($result === false) {
+                            $result = new WP_Error ('plugins_api_failed', __('An unknown error occurred'), $request ['body']);
                         } // if ()
                     } // else
                 } // if ()
             } // foreach ()
             
-            return $res;
+            return $result;
         } // pluginApiCall ()
         
         
