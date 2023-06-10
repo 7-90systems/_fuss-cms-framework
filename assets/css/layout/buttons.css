@@ -23,8 +23,8 @@
     --fuse-button-border: 1px solid;
     --fuse-button-border-radius: 5px;
     
-    --fuse-button-colour-border: #EE4A46;
-    --fuse-button-colour-background: #EB2823;
+    --fuse-button-colour-border: #FF6868;
+    --fuse-button-colour-background: #FF4D4D;
     --fuse-button-colour-background-hover: var(--fuse-button-colour-border);
     --fuse-button-colour-text: #FFFFFF;
     --fuse-button-shadow: 2px 2px 3px 1px rgba(0, 0, 0, 0.4);

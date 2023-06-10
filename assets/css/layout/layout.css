@@ -162,6 +162,10 @@
     gap: var(--fuse-grid-gap);
     margin-bottom: var(--fuse-grid-gap);
 }
+.fuse-grid-row.spaced:last-of-type,
+.wp-block-columns.fuse-grid-row.spaced:last-of-type {
+    margin-bottom: 0;
+}
 .fuse-grid-row.align-center {
     justify-content: center;
 }
@@ -177,8 +181,8 @@
 
 /* REMOVE THIS WHEN WE ARE DONE  */
 .fuse-grid-cell {
-    background: #F9F9F9;
-    border: 1px solid #EEEEEE;
+    background: rgba(0, 0, 0, 0.005);
+    border: 1px solid rgba(0, 0, 0, 0.02);
 }
 /*  END REMOVE EHRE  */
 
