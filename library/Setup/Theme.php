@@ -102,6 +102,11 @@
             
             // Set up our theme features
             add_action ('after_setup_theme', array ($this, 'setupThemeFeatures'));
+            
+            // Add our header & footer scripts
+            add_action ('wp_head', array ($this, 'addHeaderScripts'));
+            add_action ('wp_body_open', array ($this, 'addBodyScripts'));
+            add_action ('wp_footer', array ($this, 'addFooterScripts'));
         } // __construct ()
         
         
@@ -733,5 +738,41 @@
                 $themes_fragments = new Theme\Fragments ();
             } // if ()
         } // setupThemeFeatures ()
+        
+        
+        
+        
+        /**
+         *  Add our header scripts.
+         */
+        public function addHeaderScripts () {
+            $scripts = get_fuse_option ('header_script');
+            
+            if (strlen ($scripts) > 0) {
+                echo stripslashes ($scripts);
+            } // if ()
+        } // addHeaderScripts ()
+        
+        /**
+         *  Add our body scripts.
+         */
+        public function addBodyScripts () {
+            $scripts = get_fuse_option ('body_script');
+            
+            if (strlen ($scripts) > 0) {
+                echo stripslashes ($scripts);
+            } // if ()
+        } // addBodyScripts ()
+        
+        /**
+         *  Add our footer scripts.
+         */
+        public function addFooterScripts () {
+            $scripts = get_fuse_option ('footer_script');
+            
+            if (strlen ($scripts) > 0) {
+                echo stripslashes ($scripts);
+            } // if ()
+        } // addFooterScripts ()
         
     } // class Theme
