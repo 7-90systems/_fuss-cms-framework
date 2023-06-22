@@ -49,11 +49,6 @@
                 ))),
                 new Component\Panel ('theme_features', __ ('Theme Features', 'fuse'), apply_filters ('fuse_settings_form_theme_features_fields', array (
                     new Component\Field\Toggle ('html_fragments', __ ('Enable HTML Fragments'), get_fuse_option ('html_fragments', false))
-                ))),
-                new Component\Panel ('theme_scripts', __ ('Header &amp; Footer Scripts', 'fuse'), apply_filters ('fuse_settings_form_theme_scripts_fields', array (
-                    new Component\Field\TextArea ('header_script', __ ('Scripts to add to &lt;header&gt; tag'), get_fuse_option ('header_script', false)),
-                    new Component\Field\TextArea ('body_script', __ ('Scripts to add to the start of the &lt;body&gt; tag'), get_fuse_option ('header_script', false)),
-                    new Component\Field\TextArea ('footer_script', __ ('Scripts to add before the ending &lt;body&gt; tag'), get_fuse_option ('header_script', false))
                 )))
             ));
             

@@ -22,7 +22,7 @@
          *  GEt the full update server URL.
          */
         protected function _getServerUrl ($domain_path) {
-            return trailingslashit ($domain_path).'wp-json/fuseupdateserver/v1';
+            return trailingslashit ($domain_path).'wp-json/fuseupdateserver/v1/data';
         } // _getServerUrl ()
         
     } // trait Update

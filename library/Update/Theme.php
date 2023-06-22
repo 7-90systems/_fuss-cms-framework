@@ -64,7 +64,7 @@
                 $raw_response = wp_remote_post ($this->_getServerUrl ($theme ['server']), $send_for_check);
                 
                 if (!is_wp_error($raw_response) && ($raw_response ['response']['code'] == 200)) {
-                    $response = maybe_unserialize ($raw_response['body']);
+                    $response = (array) json_decode ($raw_response['body']);
                 } // if ()
             
                 // Feed the update data into WP updater
@@ -104,7 +104,7 @@
                         $res = new WP_Error ('themes_api_failed', __('An Unexpected HTTP Error occurred during the API request.</p> <p><a href="?" onclick="document.location.reload(); return false;">Try again</a>'), $request->get_error_message ());
                     } // if ()
                     else {
-                        $res = unserialize ($request ['body']);
+                        $res = json_decode ($request ['body']);
                         
                         if ($res === false) {
                             $res = new WP_Error ('themes_api_failed', __('An unknown error occurred'), $request ['body']);

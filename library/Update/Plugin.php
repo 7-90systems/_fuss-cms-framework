@@ -62,6 +62,10 @@
                         'method' => 'POST'
                     );
                     
+                    if (defined ('WP_DEBUG') && WP_DEBUG === true) {
+                        $request_string ['sslverify'] = false;
+                    } // if ()
+                    
                     // Start checking for an update
                     $raw_response = wp_remote_post ($this->_getServerUrl ($update_server), $request_string);
                     $response = NULL;
