@@ -407,9 +407,11 @@
             wp_register_style ('fuse_container', FUSE_BASE_URL.'/assets/css/admin/container.css', array (
                 'fuse-jquery-ui'
             ));
+            wp_register_style ('fuse_form_fields', FUSE_BASE_URL.'/assets/css/fields.css');
             
             $deps = apply_filters ('fuse_css_admin_dependencies', array (
-                'fuse_container'
+                'fuse_container',
+                'fuse_form_fields'
             ));
             
             $theme_base = trailingslashit (get_stylesheet_directory_uri ());
@@ -446,9 +448,13 @@
                 'jquery-ui-core',
                 'jquery-ui-datepicker'
             ));
+            wp_register_script ('fuse_form_fields', FUSE_BASE_URL.'/assets/javascript/fields.js', array (
+                'jquery'
+            ));
             
             $deps = apply_filters ('fuse_javascript_admin_dependencies', array (
                 'fuse_container',
+                'fuse_form_fields',
                 'jquery'
             ));
             
