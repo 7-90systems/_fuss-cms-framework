@@ -48,7 +48,7 @@
                     new Component\Field\Toggle ('theme_css_buttons', __ ('Enable button CSS styles'), get_fuse_option ('theme_css_buttons', false))
                 ))),
                 new Component\Panel ('theme_features', __ ('Theme Features', 'fuse'), apply_filters ('fuse_settings_form_theme_features_fields', array (
-                    new Component\Field\Toggle ('html_fragments', __ ('Enable HTML Fragments'), get_fuse_option ('html_fragments', false))
+                    new Component\Field\Toggle ('html_fragments', __ ('Enable HTML Fragments', 'fuse'), get_fuse_option ('html_fragments', false))
                 )))
             ));
             

@@ -449,7 +449,8 @@
                 'jquery-ui-datepicker'
             ));
             wp_register_script ('fuse_form_fields', FUSE_BASE_URL.'/assets/javascript/fields.js', array (
-                'jquery'
+                'jquery',
+                'jquery-ui-sortable'
             ));
             
             $deps = apply_filters ('fuse_javascript_admin_dependencies', array (
@@ -470,6 +471,8 @@
             } // if ()
             
             wp_enqueue_script ('fuse-core-admin', FUSE_BASE_URL.'/assets/javascript/admin.js', $deps);
+            
+            wp_enqueue_media ();
             
             wp_localize_script ('fuse-core-admin', 'fuse_admin', array (
                 'fuse_url_button_message' => __ ('Do you really want to enable this option? This may break your site if you are not sure of what you are setting here.', 'fuse'),
