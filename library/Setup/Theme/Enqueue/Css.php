@@ -19,7 +19,20 @@
          */
         public function __construct () {
             parent::__construct ('.css');
+            
+            add_action ('after_setup_theme', array ($this, 'checkWooStylesheets'));
         } // __construct ()
+        
+        
+        
+        /**
+         *  Check if we want to remove the WooCommerce stylesheets.
+         */
+        public function checkWooStylesheets () {
+            if (get_fuse_option ('theme_css_woo', 'no') != 'no') {
+                add_filter ('woocommerce_enqueue_styles', '__return_empty_array');
+            } // if ()
+        } // checkWooStylesheets ()
         
         
         
@@ -66,6 +79,14 @@
             foreach ($this->_files as $alias => $file) {
                 wp_register_style ($alias, $file ['file'], $file ['deps']);
             } // foreach ()
+            
+            // Are we removing default stylesheets?
+            if (get_fuse_option ('theme_css_block', false) === true) {
+                // Dequeue Gutenberg styles
+                wp_dequeue_style ('wp-block-library');
+                 wp_dequeue_style ('wp-block-library-theme');
+                  wp_dequeue_style ('wc-blocks-style');
+            } // if ()
         } // _enqueue ()
         
     } // class Css

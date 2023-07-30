@@ -25,6 +25,16 @@
          *  Object constructor.
          */
         public function __construct () {
+            $theme_style_options = array (
+                    new Component\Field\Toggle ('theme_css_layout', __ ('Enable layout CSS styles'), get_fuse_option ('theme_css_layout', false)),
+                    new Component\Field\Toggle ('theme_css_buttons', __ ('Enable button CSS styles'), get_fuse_option ('theme_css_buttons', false)),
+                    new Component\Field\Toggle ('theme_css_block', __ ('Disable Gutenberg block editor stylesheets'), get_fuse_option ('theme_css_block', false))
+            );
+            
+            if (function_exists ('WC')) {
+                $theme_style_options [] = new Component\Field\Toggle ('theme_css_woo', __ ('Disable WooCommerce stylesheets'), get_fuse_option ('theme_css_woo', false));
+            } // if ()
+            
             $panels = apply_filters ('fuse_settings_form_panels', array (
                 new Component\Panel ('email_sender', __ ('Email Sender', 'fuse'), apply_filters ('fuse_settings_form_email_sender_fields', array (
                     new Component\Field\Text ('fuse_email_from_name', __ ('Send from name', 'fuse'), get_fuse_option ('fuse_email_from_name', get_bloginfo ('name')), array (
@@ -43,10 +53,7 @@
                         'description' => __ ('Please make sure that this Google API key is available for every Google API that is needed for your site.', 'fuse')
                     ))
                 ))),
-                new Component\Panel ('theme_css', __ ('Theme CSS Styles', 'fuse'), apply_filters ('fuse_settings_form_theme_css_fields', array (
-                    new Component\Field\Toggle ('theme_css_layout', __ ('Enable layout CSS styles'), get_fuse_option ('theme_css_layout', false)),
-                    new Component\Field\Toggle ('theme_css_buttons', __ ('Enable button CSS styles'), get_fuse_option ('theme_css_buttons', false))
-                ))),
+                new Component\Panel ('theme_css', __ ('Theme CSS Styles', 'fuse'), apply_filters ('fuse_settings_form_theme_css_fields', $theme_style_options)),
                 new Component\Panel ('theme_features', __ ('Theme Features', 'fuse'), apply_filters ('fuse_settings_form_theme_features_fields', array (
                     new Component\Field\Toggle ('html_fragments', __ ('Enable HTML Fragments', 'fuse'), get_fuse_option ('html_fragments', false))
                 )))
