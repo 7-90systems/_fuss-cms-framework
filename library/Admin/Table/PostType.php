@@ -62,61 +62,82 @@
             
             ob_start ();
             ?>
-                <table class="widefat fuse-post-type-table fuse-sortable-table">
+                <div class="fuse-post-type-table-container">
                     
-                    <thead>
-                        <tr>
-                            <th class="fuse-post-type-table-column-item"><?php echo $post_type->labels->singular_name; ?></th>
-                            <th class="fuse-post-type-table-column-delete">&nbsp;</th>
-                        </tr>
-                    </thead>
-                    
-                    <tfoot>
-                        <tr>
-                            <th class="fuse-post-type-table-column-item"><?php echo $post_type->labels->singular_name; ?></th>
-                            <th class="fuse-post-type-table-column-delete">&nbsp;</th>
-                        </tr>
-                    </tfoot>
-                    
-                    <tbody>
+                    <table class="widefat fuse-post-type-table">
                         
-                        <?php if (count ($items) > 0): ?>
+                        <thead>
+                            <tr>
+                                <th class="fuse-post-type-table-column-item"><?php echo $post_type->labels->singular_name; ?></th>
+                                <th class="fuse-post-type-table-column-delete">&nbsp;</th>
+                            </tr>
+                        </thead>
                         
-                            <?php foreach ($items as $item): ?>
+                        <tfoot>
+                            <tr>
+                                <th class="fuse-post-type-table-column-item"><?php echo $post_type->labels->singular_name; ?></th>
+                                <th class="fuse-post-type-table-column-delete">&nbsp;</th>
+                            </tr>
+                        </tfoot>
+                        
+                        <tbody>
                             
-                                <tr class="fuse-post-type-row-item" data-id="<?php echo $item->ID; ?>">
+                            <?php if (count ($current_items) > 0): ?>
+                            
+                                <?php foreach ($current_items as $item): ?>
+                                    <?php
+                                        $item = get_post ($item);
+                                    ?>
+                                
+                                    <tr class="fuse-post-type-row-item" data-id="<?php echo $item->ID; ?>">
+                                        <td class="fuse-post-type-table-column-item">
+                                            <a href="<?php echo esc_url (admin_url ('post='.$item->ID.'&action=edit')); ?>"><?php echo $item->post_title; ?></a>
+                                        </td>
+                                        <td class="fuse-post-type-table-column-delete">
+                                            <span class="dashicons dashicons-dismiss"></span>
+                                            <span class="screen-reader-text"><?php _e ('Delete', 'mrg'); ?></span>
+                                        </td>
+                                    </tr>
+                                
+                                <?php endforeach; ?>
+                                
+                            <?php endif; ?>
+                            
+                            <tr class="fuse-post-type-row-empty"<?php if (count($current_items) > 0) echo ' style="display: none;"'; ?>>
+                                <th class="fuse-post-type-table-column-empty" colspan="2"><?php printf (__ ('No %s available', 'mrg'), strtolower ($post_type->labels->name)); ?></th>
+                            </tr>
+                                
+                        </tbody>
+                        
+                        <template>
+                            <tr class="fuse-post-type-row-item" data-id="%%ID%%">
                                     <td class="fuse-post-type-table-column-item">
-                                        <a href="<?php echo esc_url (admin_url ('post='.$item->ID.'&action=edit')); ?>"><?php echo $item->post_title; ?></a>
+                                        <a href="<?php echo esc_url (admin_url ('post=%%ID&action=edit')); ?>">%%TITLE%%</a>
                                     </td>
                                     <td class="fuse-post-type-table-column-delete">
                                         <span class="dashicons dashicons-dismiss"></span>
                                         <span class="screen-reader-text"><?php _e ('Delete', 'mrg'); ?></span>
                                     </td>
                                 </tr>
-                            
+                        </template>
+                        
+                    </table>
+                    
+                    <input type="hidden" name="<?php esc_attr_e ($this->_field_name); ?>" value="<?php echo implode (',', $current_items); ?>" class="fuse-post-type-table-ids" />
+                    
+                    <p class="fuse-post-type-table-add">
+                        <select name="fuse-post-type-add-select">
+                            <option value="">&nbsp;</option>
+                            <?php foreach ($items as $item): ?>
+                                <option value="<?php echo $item->ID; ?>"<?php if (in_array ($item->ID, $current_items)) echo ' disabled="disabled"'; ?>><?php echo $item->post_title; ?></option>
                             <?php endforeach; ?>
-                        
-                        <?php endif; ?>
-                        
-                        <tr class="fuse-post-type-row-empty"<?php if (count($items) > 0) echo ' style="display: none;"'; ?>>
-                            <th class="fuse-post-type-table-column-empty" colspan="2"><?php printf (__ ('No %s available', 'mrg'), strtolower ($post_type->labels->name)); ?></th>
-                        </tr>
-                            
-                    </tbody>
+                        </select>
+                        <button class="button fuse-post-type-table-add-button">
+                            <?php printf (__ ('Add a new %s', 'fuse'), $post_type->labels->singular_name); ?>
+                        </button>
+                    </p>
                     
-                    <template>
-                        <tr class="fuse-post-type-row-item" data-id="%%ID%%">
-                                <td class="fuse-post-type-table-column-item">
-                                    <a href="<?php echo esc_url (admin_url ('post=%%ID&action=edit')); ?>">%%TITLE%%</a>
-                                </td>
-                                <td class="fuse-post-type-table-column-delete">
-                                    <span class="dashicons dashicons-dismiss"></span>
-                                    <span class="screen-reader-text"><?php _e ('Delete', 'mrg'); ?></span>
-                                </td>
-                            </tr>
-                    </template>
-                    
-                </table>
+                </div>
             <?php
             $html = ob_get_contents ();
             ob_end_clean ();

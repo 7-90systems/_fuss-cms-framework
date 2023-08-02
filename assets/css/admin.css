@@ -93,3 +93,31 @@
 .dashicons-fusecms:before {
     content:'\0041';
 }
+
+
+
+
+/*  **********  Sortable tables  ********** */
+
+table.fuse-post-type-table tr {
+   cursor: ns-resize;
+}
+
+
+
+
+/*  **********  Post type admin tables  *********  */
+
+.fuse-post-type-table th.fuse-post-type-table-column-item,
+.fuse-post-type-table td.fuse-post-type-table-column-item {
+   
+}
+.fuse-post-type-table th.fuse-post-type-table-column-delete,
+.fuse-post-type-table td.fuse-post-type-table-column-delete {
+   width: 20px;
+   text-align: center;
+}
+.fuse-post-type-table td.fuse-post-type-table-column-delete .dashicons {
+   color: var(--fuse-admin-colour-red);
+   cursor: pointer;
+}

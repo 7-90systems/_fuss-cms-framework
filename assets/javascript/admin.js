@@ -11,6 +11,8 @@ jQuery (document).ready (function () {
     // Set up our input fields
     fuseSetupInputFields ();
     
+    // Set up our post type tables.
+    fuseSetupPostTypeTables ();
 });
 
 
@@ -190,8 +192,6 @@ function fuseSetupGalleryInput () {
                 
                 for (var attachment of images) {
                     attachment = attachment.toJSON ();
-// console.log (attachment);
-                //  var attachment = images [i].toJSON ();
                     
                     var src = attachment.sizes.full.url;
                     var id = attachment.id;
@@ -199,7 +199,6 @@ function fuseSetupGalleryInput () {
                     if (typeof attachment.sizes.thumbnail != 'undefined') {
                         src = attachment.sizes.thumbnail.url;
                     } // if ()
-console.log ("Added image '" + id + "': '" + src + "'...");
 
                     var html = template.html ();
                     html = html.replace ('%%ID%%', id);
@@ -233,3 +232,85 @@ function _fuseGalleryInputSetIds (input) {
     
     input.val (ids);
 } // _fuseGalleryInputSetIds ()
+
+
+
+
+/**
+ *  Set up our sortable tables.
+ */
+function fuseSetupPostTypeTables () {
+    // SEt up the row sorting
+    jQuery ('table.fuse-post-type-table tbody').sortable ({
+        cursor: 'ns-resize',
+        update: function () {
+            var table = jQuery (this).closest ('table');
+            _fuse_post_type_table_set_ids (table);
+        }
+    });
+    
+    // Add an item
+    jQuery ('.fuse-post-type-table-add-button').click (function (e) {
+        e.preventDefault ();
+        
+        var container = jQuery (this).closest ('.fuse-post-type-table-container');
+        var table = container.find ('table');
+        var selected = container.find ('select').find (':selected');
+        var template = table.find ('template');
+        
+        var id = selected.val ();
+        var title = selected.text ();
+        selected.prop ('disabled', true);
+        selected.closest ('select').val ('');
+        
+        var html = template.clone ().html ();
+        html = html.replace ('%%ID%%', id);
+        html = html.replace ('%%TITLE%%', title);
+
+        table.find ('tbody').append (html);
+        table.find ('tr.fuse-post-type-row-empty').hide ();
+        
+        _fuse_post_type_table_set_ids (table);
+    });
+    
+    // Delete an item
+    jQuery ('table.fuse-post-type-table').on ('click', 'td.fuse-post-type-table-column-delete .dashicons', function (e) {
+        e.preventDefault ();
+        
+        var container = jQuery (this).closest ('.fuse-post-type-table-container');
+        var table = container.find ('table');
+        var select = container.find ('select');
+        var row = jQuery (this).closest ('tr');
+        var id = row.data ('id');
+        
+        select.find ('option').each (function () {
+            var el = jQuery (this);
+            
+            if (el.val () == id) {
+                el.prop ('disabled', false);
+            } //if ()
+        });
+        
+        row.remove ();
+        
+        _fuse_post_type_table_set_ids (table);
+        
+        if (table.find ('tr.fuse-post-type-row-item').length == 0) {
+            table.find ('tr.fuse-post-type-row-empty').show ();
+        } // if ()
+    });
+} //fuseSetupPostTypeTables ()
+
+function _fuse_post_type_table_set_ids (table) {
+    var ids = [];
+    
+    table.find ('tbody tr.fuse-post-type-row-item').each (function () {
+        var id = parseInt (jQuery (this).data ('id'));
+        
+        if (id > 0) {
+            ids.push (id);
+        } // if ()
+    });
+    
+    table.siblings ('input.fuse-post-type-table-ids').val (ids.join (','));
+} // _fuse_post_type_table_set_ids ()
