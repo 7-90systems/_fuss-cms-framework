@@ -28,7 +28,7 @@
                 wp_register_script ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/dist/js/superfish.min.js', array ('jquery'));
             } // else
             
-            wp_register_style ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/css/superfish.css');
+            wp_register_style ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/dist/css/superfish.css');
         } // register ()
         
     } // class SuperFish
