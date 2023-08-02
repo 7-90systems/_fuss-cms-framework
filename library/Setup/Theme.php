@@ -59,6 +59,9 @@
             // Theme Supports
             add_action ('after_setup_theme', array ($this, 'setThemeSupports'));
             
+            // Register assets
+            $assets = new Assets ();
+            
             // JavaScript and CSS files
             add_action ('wp_enqueue_scripts', array ($this, 'wpEnqueueScripts'));
             add_action ('login_enqueue_scripts', array ($this, 'loginEnqueueScripts'));
@@ -87,9 +90,6 @@
             
             // Set up the admin form tags
             add_action ('post_edit_form_tag', array ($this, 'postEditFormTag'));
-            
-            // Register assets
-            $assets = new Assets ();
             
             // Register our block patterns.
             add_action ('init', array ($this, 'registerBlockPatterns'));
@@ -161,19 +161,6 @@
             
             $deps = array ();
             
-            // Set up our assets
-            wp_register_style ('mmenulight', FUSE_BASE_URL.'/assets/external/mmenu-light-master/dist/mmenu-light.css');
-            wp_register_style ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/dist/css/superfish.css');
-            wp_register_style ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/example1/colorbox.css');
-            wp_register_style ('slick', FUSE_BASE_URL.'/assets/external/slick-1.8.1/slick/slick.css');
-            
-            if (defined ('WP_DEBUG') && WP_DEBUG === true) {
-                wp_register_style ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.css');
-            } // if ()
-            else {
-                wp_register_style ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.min.css');
-            } // else
-            
             $theme_base = trailingslashit (get_stylesheet_directory_uri ());
             
             // Are we using a child theme?
@@ -220,24 +207,7 @@
          */
         protected function _enqueueJavaScript () {
             do_action ('fuse_before_enqueue_javascript');
-            
-            // Set up our assets
-            wp_register_script ('mmenulight', FUSE_BASE_URL.'/assets/external/mmenu-light-master/dist/mmenu-light.js', array ('jquery'));
-            wp_register_script ('hoverintent', FUSE_BASE_URL.'/assets/external/superfish-master/dist/js/hoverIntent.js', array ('jquery'));
-            
-            if (defined ('WP_DEBUG') && WP_DEBUG === true) {
-                wp_register_script ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.js', array ('jquery'));
-                wp_register_script ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/dist/js/superfish.js', array ('jquery', 'hoverintent'));
-                wp_register_script ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/jquery.colorbox.js', array ('jquery'));
-                wp_register_script ('slick', FUSE_BASE_URL.'/assets/external/slick-1.8.1/slick/slick.js', array ('jquery'));
-            } // if ()
-            else {
-                wp_register_script ('bxslider', FUSE_BASE_URL.'/assets/external/bxslider-4-4.2.12/dist/jquery.bxslider.min.js', array ('jquery'));
-                wp_register_script ('superfish', FUSE_BASE_URL.'/assets/external/superfish-master/dist/js/superfish.min.js', array ('jquery', 'hoverintent'));
-                wp_register_script ('colorbox', FUSE_BASE_URL.'/assets/external/colorbox-master/jquery.colorbox-min.js', array ('jquery'));
-                wp_register_script ('slick', FUSE_BASE_URL.'/assets/external/slick-1.8.1/slick/slick.min.js', array ('jquery'));
-            } // else
-            
+
             $deps = array (
                 'jquery'
             );

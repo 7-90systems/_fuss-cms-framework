@@ -34,6 +34,10 @@
                 new Asset\MmenuLight (),
                 new Asset\SuperFish ()
             ));
+            
+            foreach ($assets as $asset) {
+                $asset->register ();
+            } // foreach ()
         } // registerAssets ()
         
     } // class Assets

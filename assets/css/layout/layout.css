@@ -178,17 +178,6 @@
 
 /*  **********  Grid cells  **********  */
 
-
-/* REMOVE THIS WHEN WE ARE DONE  */
-.fuse-grid-cell {
-    background: rgba(0, 0, 0, 0.005);
-    border: 1px solid rgba(0, 0, 0, 0.02);
-}
-/*  END REMOVE EHRE  */
-
-
-
-
 .fuse-grid-cell,
 .wp-block-columns.fuse-grid-row > .wp-block-column.fuse-grid-cell,
 .wp-block-columns.fuse-grid-row.is-not-stacked-on-mobile > .wp-block-column.fuse-grid-cell,
