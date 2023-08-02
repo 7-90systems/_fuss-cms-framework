@@ -56,7 +56,14 @@
                 new Component\Panel ('theme_css', __ ('Theme CSS Styles', 'fuse'), apply_filters ('fuse_settings_form_theme_css_fields', $theme_style_options)),
                 new Component\Panel ('theme_features', __ ('Theme Features', 'fuse'), apply_filters ('fuse_settings_form_theme_features_fields', array (
                     new Component\Field\Toggle ('html_fragments', __ ('Enable HTML Fragments', 'fuse'), get_fuse_option ('html_fragments', false))
-                )))
+                ))),
+                new Component\Panel ('header_footer_scripts', __ ('Header &amp; Footer Scripts', 'fuse'), array (
+                    new Component\Field\TextArea ('header_scripts', __ ('Code to be added inside the &lt;head&gt; tag', 'fuse'), get_fuse_option ('header_scripts', ''), array (
+                        'description' => __ ('All scripts and styles must be included inside the relevant HTML tags (&lt;script&gt;, &lt;style&gt;).', 'fuse')
+                    )),
+                    new Component\Field\TextArea ('body_scripts', __ ('Code to be added at the start if the &lt;body&gt; tag', 'fuse'), get_fuse_option ('body_scripts', '')),
+                    new Component\Field\TextArea ('footer_scripts', __ ('Code to be added before the closing &lt;body&gt; tag', 'fuse'), get_fuse_option ('footer_scripts', ''))
+                ))
             ));
             
             $args = array (
