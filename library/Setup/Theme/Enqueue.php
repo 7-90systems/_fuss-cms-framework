@@ -192,7 +192,7 @@
                 $content = get_the_content ();
                 
                 foreach (parse_blocks ($content) as $block) {
-                    if (strlen ($block ['blockName']) > 0) {
+                    if (strlen ($block ['blockName'].'') > 0) {
                         $name = 'blocks_'.str_replace ('/', '_', $block ['blockName']);
                         
                         if (array_key_exists ($name, $this->_files)) {
