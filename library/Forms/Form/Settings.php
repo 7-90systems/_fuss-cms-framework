@@ -61,7 +61,7 @@
                     new Component\Field\TextArea ('header_scripts', __ ('Code to be added inside the &lt;head&gt; tag', 'fuse'), get_fuse_option ('header_scripts', ''), array (
                         'description' => __ ('All scripts and styles must be included inside the relevant HTML tags (&lt;script&gt;, &lt;style&gt;).', 'fuse')
                     )),
-                    new Component\Field\TextArea ('body_scripts', __ ('Code to be added at the start if the &lt;body&gt; tag', 'fuse'), get_fuse_option ('body_scripts', '')),
+                    new Component\Field\TextArea ('body_scripts', __ ('Code to be added at the start of the &lt;body&gt; tag', 'fuse'), get_fuse_option ('body_scripts', '')),
                     new Component\Field\TextArea ('footer_scripts', __ ('Code to be added before the closing &lt;body&gt; tag', 'fuse'), get_fuse_option ('footer_scripts', ''))
                 ))
             ));
