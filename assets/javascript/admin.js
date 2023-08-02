@@ -264,8 +264,8 @@ function fuseSetupPostTypeTables () {
         selected.closest ('select').val ('');
         
         var html = template.clone ().html ();
-        html = html.replace ('%%ID%%', id);
-        html = html.replace ('%%TITLE%%', title);
+        html = html.replaceAll ('%%ID%%', id);
+        html = html.replaceAll ('%%TITLE%%', title);
 
         table.find ('tbody').append (html);
         table.find ('tr.fuse-post-type-row-empty').hide ();

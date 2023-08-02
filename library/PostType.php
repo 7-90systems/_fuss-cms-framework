@@ -118,7 +118,7 @@
                     'not_found' => sprintf (__ ('No %s found', 'fuse'), strtolower ($this->_name_plural)),
                     'not_found_in_trash' => sprintf (__ ('No %s found in trash', 'fuse'), strtolower ($this->_name_plural)),
                     'parent_item_colon' => sprintf (__ ('Parent %s', 'fuse'), $this->_name_singular),
-                    'all_items' => sprintf (__ ('All %s', 'fuse'), $this->_name_plural),
+                    'all_items' => $this->_name_plural,
                     'archives' => sprintf (__ ('%s Archives', 'fuse'), $this->_name_singular),
                     'attributes' => sprintf (__ ('%s Attributes', 'fuse'), $this->_name_singular),
                     'insert_into_item' => sprintf (__ ('Insert into %s', 'fuse'), strtolower ($this->_name_singular)),

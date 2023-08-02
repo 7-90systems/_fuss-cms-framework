@@ -112,7 +112,7 @@
                         <template>
                             <tr class="fuse-post-type-row-item" data-id="%%ID%%">
                                     <td class="fuse-post-type-table-column-item">
-                                        <a href="<?php echo esc_url (admin_url ('post=%%ID&action=edit')); ?>">%%TITLE%%</a>
+                                        <a href="<?php echo esc_url (admin_url ('post=%%ID%%&action=edit')); ?>">%%TITLE%%</a>
                                     </td>
                                     <td class="fuse-post-type-table-column-delete">
                                         <span class="dashicons dashicons-dismiss"></span>
