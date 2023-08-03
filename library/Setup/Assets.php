@@ -32,6 +32,7 @@
                 new Asset\BxSlider (),
                 new Asset\Colorbox (),
                 new Asset\MmenuLight (),
+                new Asset\SlickSlider (),
                 new Asset\SuperFish ()
             ));
             
