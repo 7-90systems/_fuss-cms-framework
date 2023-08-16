@@ -49,7 +49,8 @@
 
 a.button,
 button,
-.wp-block-button .wp-block-button__link {
+.wp-block-button .wp-block-button__link,
+input[type="submit"] {
     display: inline-block;
     margin: var(--fuse-button-margin);
     padding: calc(var(--fuse-button-padding-y) * var(--fuse-button-size)) calc(var(--fuse-button-padding-x) * var(--fuse-button-size));
@@ -67,12 +68,14 @@ button,
 }
 a.button:hover,
 button:hover,
-.wp-block-button .wp-block-button__link:hover {
+.wp-block-button .wp-block-button__link:hover,
+input[type="submit"]:hover  {
     background: var(--fuse-button-colour-background-hover);
 }
 a.button.shadow,
 button.shadow,
-.wp-block-button.shadow .wp-block-button__link {
+.wp-block-button.shadow .wp-block-button__link,
+input[type="submit"].shadow {
     box-shadow: var(--fuse-button-shadow);
 }
 
