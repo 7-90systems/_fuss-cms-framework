@@ -190,10 +190,14 @@
 .fuse-grid-cell {
     width: 100%;
     margin: 0;
-    padding: calc(var(--fuse-grid-gap) / 2);
+    padding: 0;
 }
 .fuse-grid-cell.no-padding {
     padding: 0;
+}
+
+.fuse-grid-cell.padded {
+    padding: calc(var(--fuse-grid-gap) / 2);
 }
 
 
