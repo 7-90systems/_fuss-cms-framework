@@ -104,6 +104,7 @@ button.fuse-button-icon,
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    font-weight: normal !important;
 }
 
 
