@@ -19,7 +19,7 @@
          */
         public function __construct () {
             // Set up our administration menu.
-            add_action ('admin_menu', array ($this, 'adminMenu'));
+            add_action ('admin_menu', array ($this, 'adminMenu'), 9);
             
             // Set up our theme/plugins updater set up.
             $update = Update::getInstance ();
