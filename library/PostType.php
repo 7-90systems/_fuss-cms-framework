@@ -274,7 +274,7 @@
                 post_title
             FROM ".$wpdb->posts."
             WHERE post_type = %s
-                AND post_status NOT IN('trash','inherit')
+                AND post_status NOT IN('trash','inherit','auto-draft')
             ORDER BY post_title ASC", $this->_parent_post_type);
             
             return $wpdb->get_results ($query);
