@@ -22,6 +22,11 @@
 
 :root {
     
+    --fuse-padding-base: 5px;
+    
+    
+    
+    
     /*  **********  Containers  **********  */
     
     --fuse-site-max-width: 1800px;
@@ -29,11 +34,11 @@
     --fuse-container-padding-x: 5%;
     --fuse-container-padding-x-narrow: 12.5%;
     --fuse-container-padding-x-thin: 20%;
-    --fuse-container-padding-y: 60px;
+    --fuse-container-padding-y: calc(var(--fuse-padding-base) * 4);
 
     /*  **********  Grid layout  **********  */
     
-    --fuse-grid-gap: 40px;
+    --fuse-grid-gap: calc(var(--fuse-padding-base) * 3);
     
     --fuse-grid-col-1: calc(100% / 12);
     --fuse-grid-col-2: calc(100% / 12 * 2);
@@ -492,6 +497,16 @@
 
 @media screen and (min-width: 768px) {
     
+    :root {
+        
+        --fuse-padding-base: 10px;
+        
+    }
+    
+    
+    
+    
+    
     /*  **********  Standard grid cells  **********  */
     
     .fuse-grid-cell.fuse-grid-cell-m-1 {
@@ -634,6 +649,15 @@
 **  ********************************************************************************  */
 
 @media screen and (min-width: 992px) {
+    
+    :root {
+        
+        --fuse-padding-base: 15px;
+        
+    }
+    
+    
+    
     
     /*  **********  Standard grid cells  **********  */
 
