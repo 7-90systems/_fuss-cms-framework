@@ -204,7 +204,9 @@
             
             if ($parent > 0) {
                 $parent = get_post ($parent);
-                
+            } // if ()
+            
+            if (empty ($parent) === false) {
                 echo '<p class="admin-bold" style="font-size: 1.3em;"><a href="'.esc_url (admin_url ('post.php?post='.$parent->ID.'&action=edit')).'">'.$parent->post_title.'</a></p>';
                 echo '<input type="hidden" name="fuse_posttype_parent" value="'.intval ($parent->ID).'" />';
             } // if ()
@@ -272,7 +274,7 @@
                 post_title
             FROM ".$wpdb->posts."
             WHERE post_type = %s
-                AND post_status NOT IN('trash','inherit')
+                AND post_status NOT IN('trash','inherit','auto-draft')
             ORDER BY post_title ASC", $this->_parent_post_type);
             
             return $wpdb->get_results ($query);
@@ -459,10 +461,13 @@
             switch ($column) {
                 case 'fuse_posttype_child_parent';
                     $post = get_post ($post_id);
+                    $parent = NULL;
                     
                     if ($post) {
                         $parent = get_post ($post->post_parent);
-                        
+                    } // if ()
+                    
+                    if (empty ($parent) === false) {
                         echo '<a href="'.esc_url (admin_url ('post.php?post='.$parent->ID.'&action=edit')).'">'.$parent->post_title.'</a>';
                     } // if ()
                     else {
