@@ -167,6 +167,10 @@
     gap: var(--fuse-grid-gap);
     margin-bottom: var(--fuse-grid-gap);
 }
+.fuse-grid-row.reverse,
+.wp-block-columns.fuse-grid-row.reverse {
+    flex-direction: row-reverse;
+}
 .fuse-grid-row.spaced:last-of-type,
 .wp-block-columns.fuse-grid-row.spaced:last-of-type {
     margin-bottom: 0;
