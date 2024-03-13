@@ -45,6 +45,8 @@
             $posttype_layout = new PostType\Layout ();
             $email_sender = new Setup\EmailSender ();
             
+            add_action ('after_setup_theme', array ($this, 'loadExtraFunctions'), 11);
+            
             if (is_admin ()) {
                 $admin = new Admin ();
             } // if ()
@@ -82,5 +84,17 @@
             
             do_action ('fuse_after_load_actions');
         } // loadFunctions ()
+        
+        
+        
+        
+        /**
+         *  Load our extra functionality.
+         */
+        public function loadExtraFunctions () {
+            if (get_fuse_option ('pagetype_builder') == 'yes') {
+                $posttype_builder = new PostType\Builder ();
+            } // if ()
+        } // loadExtraFunctions ()
         
     } // class Setup
