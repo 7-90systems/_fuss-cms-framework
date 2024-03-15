@@ -41,8 +41,11 @@
                 $args = $this->_formatSettings ($model->getSettings ());
                 $args ['labels'] = $this->_formatLabels ($model->getLabels ());
                 
-                $result = register_post_type (get_post_meta ($posttype->ID, 'fuse_posttype_builder_slug', true), $args);
-// \Fuse\Debug::dump ($result, 'Register result', true);
+                $slug = get_post_meta ($posttype->ID, 'fuse_posttype_builder_slug', true);
+                
+                if (strlen ($slug) > 0) {
+                    register_post_type ($slug, $args);
+                } // if ()
             } // foreach ()
         } // registerPostTypes ()
         

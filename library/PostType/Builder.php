@@ -153,46 +153,33 @@
                 <table class="widefat">
                     <thead>
                         <tr>
-                            <th style="width: 66.6%;"><?php _e ('Main Column', 'fuse'); ?></th>
-                            <th style="width: 33.4%;"><?php _e ('Side Column', 'fuse'); ?></th>
+                            <th style="width: 60%;"><?php _e ('Main Column', 'fuse'); ?></th>
+                            <th style="width: 40%;"><?php _e ('Side Column', 'fuse'); ?></th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th style="width: 66.6%;"><?php _e ('Main Column', 'fuse'); ?></th>
-                            <th style="width: 33.4%;"><?php _e ('Side Column', 'fuse'); ?></th>
+                            <th style="width: 60%;"><?php _e ('Main Column', 'fuse'); ?></th>
+                            <th style="width: 40%;"><?php _e ('Side Column', 'fuse'); ?></th>
                         </tr>
                     </tfoot>
                     <tbody>
                         <tr>
-                            <td style="width: 66.6%;">
-                                <div id="fuse_posttype_builder_metaboxes_main">
-                                    <p class="none"><?php _e ('No meta boxes set', 'fuse'); ?></p>
-                                </div>
+                            <td style="width: 60%;">
+                                <div id="fuse_posttype_builder_metaboxes_main" class="fuse_posttype_builder_metaboxes" data-location="normal"></div>
+                                <button class="fuse_builder_new_metabox_add button"><?php _e ('Add Meta Box', 'fuse'); ?></button>
                             </td>
-                            <td style="width: 33.4%;">
-                                <div id="fuse_posttype_builder_metaboxes_side">
-                                    <p class="none"><?php _e ('No meta boxes set', 'fuse'); ?></p>
-                                </div>
+                            <td style="width: 40%;">
+                                <div id="fuse_posttype_builder_metaboxes_side" class="fuse_posttype_builder_metaboxes" data-location="side"></div>
+                                <button class="fuse_builder_new_metabox_add button"><?php _e ('Add Meta Box', 'fuse'); ?></button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 
-                <p>
-                    <?php _e ('Add a new meta box:', 'fuse'); ?>
-                    <input type="text" id="fuse_builder_new_metabox_name" name="fuse_builder_new_metabox_name" value="" placeholder="<?php esc_attr_e ('Meta box name', 'fuse'); ?>" />
-                    <select id="fuse_builder_new_metabox_location" name="fuse_builder_new_metabox_location">
-                        <option value="main"><?php _e ('Main Column', 'fuse'); ?></option>
-                        <option value="side"><?php _e ('Side Column', 'fuse'); ?></option>
-                    </select>
-                    <button id="fuse_builder_new_metabox_add" class="button"><?php _e ('Add Meta Box', 'fuse'); ?></button>
-                </p>
-                
-                
                 <!-- These are our HTML templates  -->
                 
-                <template id="fuse-builder_meta_box">
+                <template id="fuse_builder_meta_box">
                     <?php
                         echo $this->_metaboxTemplateHtml ();
                     ?>
@@ -341,110 +328,43 @@
          *  @param string $name The name of the meta box.
          *  @param array $fields The fields to add to this meta box.
          *
-         *  return string The HTML for the emtabox area.
+         *  return string The HTML for the metabox area.
          */
         protected function _metaboxTemplateHtml ($name = '', $fields = array ()) {
+            if (strlen ($name) == 0) {
+                $name = __ ('New Metabox', 'fuse');
+            } // if ()
+            
             ob_start ();
             ?>
                 <div class="fuse-builder-metabox">
                     
-                    <div class="metabox-controls">
-                        <div class="move-up">
-                            <span class="dashicons dashicons-arrow-up" title="<?php esc_attr_e ('Move UP', 'fuse'); ?>"></span>
-                        </div>
-                        <div class="move-down">
-                            <span class="dashicons dashicons-arrow-down" title="<?php esc_attr_e ('Move DOWN', 'fuse'); ?>"></span>
-                        </div>
-                    </div>
-                    
-                    <div class="content">
-                        <input name="title" class="fuse_posttype_builder_metabox_name" value="<?php esc_attr_e ($name); ?>" />
-                            
-                        <div class="fuse_posttype_builder_metabox_field">
-                            
-                            <div class="field-controls">
-                                <div class="move-up">
-                                    <span class="dashicons dashicons-arrow-up" title="<?php esc_attr_e ('Move UP', 'fuse'); ?>"></span>
-                                </div>
-                                <div class="move-down">
-                                    <span class="dashicons dashicons-arrow-down" title="<?php esc_attr_e ('Move DOWN', 'fuse'); ?>"></span>
-                                </div>
-                            </div>
-                                
-                            <input type="text" name="key" value="" placeholder="Data key" class="fuse_posttype_builder_field_key" />
-                            
-                            <input type="text" name="label" value="" placeholder="Label" class="fuse_posttype_builder_field_label" />
-                            <select name="" class="fuse_posttype_builder_field_type">
-                                <option value="text"><?php _e ('Text field', 'fuse'); ?></option>
-                                <option value="text"><?php _e ('Number', 'fuse'); ?></option>
-                            </select>
-                            <a href="#" class="fuse_posttype_builder_metabox_field_delete" title="<?php esc_attr_e ('Delete metabox data field', 'fuse'); ?>">
-                                <span class="dashicons dashicons-dismiss"></span>
-                            </a>
-                        </div>
+                    <div class="fuse_builder_metabox_title">
                         
-                        
-                        
-                        
-                        
-                            
-                        <div class="fuse_posttype_builder_metabox_field">
-                            
-                            <div class="field-controls">
-                                <div class="move-up">
-                                    <span class="dashicons dashicons-arrow-up" title="<?php esc_attr_e ('Move UP', 'fuse'); ?>"></span>
-                                </div>
-                                <div class="move-down">
-                                    <span class="dashicons dashicons-arrow-down" title="<?php esc_attr_e ('Move DOWN', 'fuse'); ?>"></span>
-                                </div>
-                            </div>
-                                
-                            <input type="text" name="key" value="" placeholder="Data key" class="fuse_posttype_builder_field_key" />
-                            
-                            <input type="text" name="label" value="" placeholder="Label" class="fuse_posttype_builder_field_label" />
-                            <select name="" class="fuse_posttype_builder_field_type">
-                                <option value="text"><?php _e ('Text field', 'fuse'); ?></option>
-                            </select>
-                            <a href="#" class="fuse_posttype_builder_metabox_field_delete" title="<?php esc_attr_e ('Delete metabox data field', 'fuse'); ?>">
-                                <span class="dashicons dashicons-dismiss"></span>
-                            </a>
-                        </div>
-                        <div class="fuse_posttype_builder_metabox_field">
-                            
-                            <div class="field-controls">
-                                <div class="move-up">
-                                    <span class="dashicons dashicons-arrow-up" title="<?php esc_attr_e ('Move UP', 'fuse'); ?>"></span>
-                                </div>
-                                <div class="move-down">
-                                    <span class="dashicons dashicons-arrow-down" title="<?php esc_attr_e ('Move DOWN', 'fuse'); ?>"></span>
-                                </div>
-                            </div>
-                                
-                            <input type="text" name="key" value="" placeholder="Data key" class="fuse_posttype_builder_field_key" />
-                            
-                            <input type="text" name="label" value="" placeholder="Label" class="fuse_posttype_builder_field_label" />
-                            <select name="" class="fuse_posttype_builder_field_type">
-                                <option value="text"><?php _e ('Text field', 'fuse'); ?></option>
-                            </select>
-                            <a href="#" class="fuse_posttype_builder_metabox_field_delete" title="<?php esc_attr_e ('Delete metabox data field', 'fuse'); ?>">
-                                <span class="dashicons dashicons-dismiss"></span>
-                            </a>
-                        </div>
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                    </div>
-                    
-                    <div class="delete">
-                        <a href="#" class="fuse_posttype_builder_metabox_delete" title="<?php esc_attr_e ('Delete metabox', 'fuse'); ?>">
+                        <a href="#" class="move">
+                            <span class="dashicons dashicons-menu"></span>
+                        </a>
+                        <a href="#" class="expand">
+                            <span class="dashicons dashicons-arrow-down-alt2"></span>
+                        </a>
+                        <h4 class="title"><?php echo $name; ?></h4>
+                        <a href="#" class="delete">
                             <span class="dashicons dashicons-dismiss"></span>
                         </a>
+                        
                     </div>
-                       
+                    
+                    <div class="fuse_builder_metabox_fields" style="display: none;">
+                        <table class="form-table">
+                            <tr>
+                                <th><?php _e ('Metabox Name', 'fuse'); ?></th>
+                                <td>
+                                    <input type="text" name="" value="" class="widefat metabox-name" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                        
                 </div>
             <?php
             $html = ob_get_contents ();
