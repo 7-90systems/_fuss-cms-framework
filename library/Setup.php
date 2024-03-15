@@ -94,6 +94,7 @@
         public function loadExtraFunctions () {
             if (get_fuse_option ('pagetype_builder') == 'yes') {
                 $posttype_builder = new PostType\Builder ();
+                $setup_builder = Setup\PostType\Builder::getInstance ();
             } // if ()
         } // loadExtraFunctions ()
         

@@ -383,10 +383,12 @@
                 'fuse-jquery-ui'
             ));
             wp_register_style ('fuse_form_fields', FUSE_BASE_URL.'/assets/css/fields.css');
+            wp_register_style ('fuse_posttype_builder', FUSE_BASE_URL.'/assets/css/admin/posttype-builder.css');
             
             $deps = apply_filters ('fuse_css_admin_dependencies', array (
                 'fuse_container',
-                'fuse_form_fields'
+                'fuse_form_fields',
+                'fuse_posttype_builder'
             ));
             
             $theme_base = trailingslashit (get_stylesheet_directory_uri ());
@@ -427,10 +429,14 @@
                 'jquery',
                 'jquery-ui-sortable'
             ));
+            wp_register_script ('fuse_posttype_builder', FUSE_BASE_URL.'/assets/javascript/admin/posttype-builder.js', array (
+                'jquery'
+            ));
             
             $deps = apply_filters ('fuse_javascript_admin_dependencies', array (
                 'fuse_container',
                 'fuse_form_fields',
+                'fuse_posttype_builder',
                 'jquery'
             ));
             

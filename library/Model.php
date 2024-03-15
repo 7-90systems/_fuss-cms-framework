@@ -25,7 +25,7 @@
          *     @param int|WP_Post $post The post ID or WP_Post object.
          */
         public function __construct ($post) {
-            if ($is_numeric ($post)) {
+            if (is_numeric ($post)) {
                 $post = get_post ($post);
             } // if ()
             
@@ -61,5 +61,29 @@
             
             return $value;
         } // get ()
+        
+        
+        
+        
+        
+        /**
+         *  Get a value. This can be either a value of the main post object or a meta value.
+         *
+         *  @param string $name The name of the value to return.
+         *
+         *  @return mixed The value.
+         */
+        public function __get ($name) {
+            $value = NULL;
+            
+            if (property_exists ($this->_post, $name)) {
+                $value = $this->_post->$name;
+            } // if ()
+            else {
+                $value = get_post_meta ($this->_post->ID, $name, true);
+            } // else
+            
+            return $value;
+        } // __get ()
         
     } // class Model
