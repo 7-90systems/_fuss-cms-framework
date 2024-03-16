@@ -149,6 +149,11 @@
         
         // Add the meta boxes meta box.
         public function metaboxesMeta ($post) {
+            $metaboxes = json_decode (get_post_meta ($post->ID, 'fuse_builder_metaboxes', true));
+            
+            if (is_array ($metaboxes) === false) {
+                $metaboxes = array ();
+            } // if ()
             ?>
                 <table class="widefat">
                     <thead>
@@ -166,11 +171,27 @@
                     <tbody>
                         <tr>
                             <td style="width: 60%;">
-                                <div id="fuse_posttype_builder_metaboxes_main" class="fuse_posttype_builder_metaboxes" data-location="normal"></div>
+                                <div id="fuse_posttype_builder_metaboxes_main" class="fuse_posttype_builder_metaboxes" data-location="normal">
+                                    <?php
+                                        foreach ($metaboxes as $metabox) {
+                                            if ($metabox->section == 'main') {
+                                                echo $this->_metaboxTemplateHtml ($metabox->name, $metabox->fields);
+                                            } // if ()
+                                        } // foreach ()
+                                    ?>
+                                </div>
                                 <button class="fuse_builder_new_metabox_add button"><?php _e ('Add Meta Box', 'fuse'); ?></button>
                             </td>
                             <td style="width: 40%;">
-                                <div id="fuse_posttype_builder_metaboxes_side" class="fuse_posttype_builder_metaboxes" data-location="side"></div>
+                                <div id="fuse_posttype_builder_metaboxes_side" class="fuse_posttype_builder_metaboxes" data-location="side">
+                                    <?php
+                                        foreach ($metaboxes as $metabox) {
+                                            if ($metabox->section == 'side') {
+                                                echo $this->_metaboxTemplateHtml ($metabox->name);
+                                            } // if ()
+                                        } // foreach ()
+                                    ?>
+                                </div>
                                 <button class="fuse_builder_new_metabox_add button"><?php _e ('Add Meta Box', 'fuse'); ?></button>
                             </td>
                         </tr>
@@ -178,12 +199,19 @@
                 </table>
                 
                 <!-- These are our HTML templates  -->
-                
                 <template id="fuse_builder_meta_box">
                     <?php
                         echo $this->_metaboxTemplateHtml ();
                     ?>
                 </template>
+                <template id="fuse_builder_meta_box_field">
+                    <?php
+                        echo $this->_metaboxFieldTemplateHtml ();
+                    ?>
+                </template>
+                
+                <?php /* ?><input type="hidden" id="fuse_builder_metaboxes" name="fuse_builder_metaboxes" value="" /><?php */ ?>
+                <textarea id="fuse_builder_metaboxes" name="fuse_builder_metaboxes" style="width: 100%; height: 400px;"><?php echo stripslashes (json_encode ($metaboxes)); ?></textarea>
             <?php
         } // metaboxesMeta ()
         
@@ -253,6 +281,11 @@
                 
                 // Save settings
                 update_post_meta ($post_id, 'fuse_posttype_builder_settings', $_POST ['fuse_posttype_builder_settings']);
+                
+                // Metaboxes
+                if (array_key_exists ('fuse_builder_metaboxes', $_POST)) {
+                    update_post_meta ($post_id, 'fuse_builder_metaboxes', $_POST ['fuse_builder_metaboxes']);
+                } // if ()
             } // if ()
         } // savePost ()
         
@@ -359,10 +392,20 @@
                             <tr>
                                 <th><?php _e ('Metabox Name', 'fuse'); ?></th>
                                 <td>
-                                    <input type="text" name="" value="" class="widefat metabox-name" />
+                                    <input type="text" name="metabox-name" value="<?php esc_attr_e ($name); ?>" class="widefat metabox-name" />
                                 </td>
                             </tr>
                         </table>
+                        <div class="fuse_builder_metabox_fields_list">
+                            <?php
+                                foreach ($fields as $field) {
+                                    echo $this->_metaboxFieldTemplateHtml ($field->name, $field->type, $field->settings);
+                                } // foreach ()
+                            ?>
+                        </div>
+                        <div style="text-align: right;">
+                            <button class="button fuse_builder_field_add"><?php _e ('Add a new field'); ?></button>
+                        </div>
                     </div>
                         
                 </div>
@@ -371,6 +414,142 @@
             ob_end_clean ();
             
             return $html;
-        } // _metaboxTemplateHtml ();
+        } // _metaboxTemplateHtml ()
+        
+        /**
+         *  This function sets up our metabox field template.
+         */
+        protected function _metaboxFieldTemplateHtml ($name = '', $type = 'text', $settings = array ()) {
+            if (strlen ($name) == 0) {
+                $name = __ ('New Field', 'fuse');
+            } // if ()
+            
+            $field_types = array (
+                'text' => __ ('Text field', 'fuse'),
+                'number' => __ ('Number field', 'fuse'),
+                'select' => __ ('Drop down', 'fuse'),
+                'posttype' => __ ('Post type', 'fuse'),
+                'taxonomy' => __ ('Taxonomy', 'fuse')
+            );
+            
+            $post_types = get_post_types (array (), 'objects');
+            $taxonomies = get_taxonomies (array (), 'objects');
+            
+            ob_start ();
+            ?>
+                <div class="fuse-builder-metabox-field">
+                    
+                    <div class="fuse_builder_metabox_field_title">
+                        
+                        <a href="#" class="move">
+                            <span class="dashicons dashicons-menu"></span>
+                        </a>
+                        <a href="#" class="expand">
+                            <span class="dashicons dashicons-arrow-down-alt2"></span>
+                        </a>
+                        <h4 class="title"><?php echo $name; ?></h4>
+                        <a href="#" class="delete">
+                            <span class="dashicons dashicons-dismiss"></span>
+                        </a>
+                        
+                    </div>
+                    
+                    <div class="fuse_builder_metabox_field_settings" style="display: none;">
+                        <table class="form-table">
+                            <tr>
+                                <th><?php _e ('Field Name', 'fuse'); ?></th>
+                                <td>
+                                    <input type="text" name="" value="<?php esc_attr_e ($name); ?>" class="widefat metabox-field-name" />
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="fuse_builder_metabox_field_settings_list">
+                            <table class="form-table">
+                                <tr>
+                                    <th><?php _e ('Field type', 'fuse'); ?></th>
+                                    <td>
+                                        <select name="field_type" class="fuse_builder_field_type widefat">
+                                            <?php foreach ($field_types as $key => $label): ?>
+                                                <option value="<?php esc_attr_e ($key); ?>"<?php selected ($key, $type); ?>><?php echo $label; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Number field options -->
+                                <tr class="fuse_field_options fuse_field_option_number"<?php if ($type != 'number') echo ' style="display: none;"'; ?>>
+                                    <th><?php _e ('Minimum value', 'fuse'); ?></th>
+                                    <td>
+                                        <input type="number" name="min" class="widefat" value="" />
+                                    </td>
+                                </tr>
+                                <tr class="fuse_field_options fuse_field_option_number"<?php if ($type != 'number') echo ' style="display: none;"'; ?>>
+                                    <th><?php _e ('Maximum value', 'fuse'); ?></th>
+                                    <td>
+                                        <input type="number" name="max" class="widefat" value="" />
+                                    </td>
+                                </tr>
+                                <tr class="fuse_field_options fuse_field_option_number"<?php if ($type != 'number') echo ' style="display: none;"'; ?>>
+                                    <th><?php _e ('Step amount', 'fuse'); ?></th>
+                                    <td>
+                                        <input type="number" name="step" class="widefat" value="" />
+                                    </td>
+                                </tr>
+                                
+                                <!-- Select field options -->
+                                <tr class="fuse_field_options fuse_field_option_select"<?php if ($type != 'select') echo ' style="display: none;"'; ?>>
+                                    <th><?php _e ('Options', 'fuse'); ?></th>
+                                    <td>
+                                        <textarea name="options" class="widefat" rows="6"></textarea>
+                                        <p class="description"><?php _e ('One option per line, pipe separated for value and label. eg: value | Label', 'fuse'); ?></p>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Post type field options -->
+                                <tr class="fuse_field_options fuse_field_option_posttype"<?php if ($type != 'posttype') echo ' style="display: none;"'; ?>>
+                                    <th><?php _e ('Post type', 'fuse'); ?></th>
+                                    <td>
+                                        <select name="postytpe" class="widefat">
+                                            <?php foreach ($post_types as $type): ?>
+                                                <option value="<?php esc_attr_e ($type->name); ?>"><?php echo $type->label; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Taxonomy field options -->
+                                <tr class="fuse_field_options fuse_field_option_taxonomy"<?php if ($type != 'taxonomy') echo ' style="display: none;"'; ?>>
+                                    <th><?php _e ('Taxonomy', 'fuse'); ?></th>
+                                    <td>
+                                        <select name="posttype" class="widefat">
+                                            <?php foreach ($taxonomies as $type): ?>
+                                                <option value="<?php esc_attr_e ($type->name); ?>"><?php echo $type->label; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Select type - for select, posttype, taxonomy -->
+                                <tr class="fuse_field_options fuse_field_option_select fuse_field_option_posttype fuse_field_option_taxonomy"<?php if (in_array ($type, array ('select', 'posttype', 'taxonomy')) === false) echo ' style="display: none;"'; ?>>
+                                    <th><?php _e ('Select type', 'fuse'); ?></th>
+                                    <td>
+                                        <select name="selecttype" class="widefat">
+                                            <option value="single"><?php _e ('Single value', 'fuse'); ?></option>
+                                            <option value="multi"><?php _e ('Multiple values', 'fuse'); ?></option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                
+                            </table>
+                        </div>
+                    </div>
+                        
+                </div>
+            <?php
+            $html = ob_get_contents ();
+            ob_end_clean ();
+            
+            return $html;
+        } // _metabox_fieldTemplateHtml ()
         
     } // class Builder
