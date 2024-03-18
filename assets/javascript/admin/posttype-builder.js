@@ -97,7 +97,7 @@ jQuery (document).ready (function () {
     });
     
     // Field updates
-    jQuery ('.fuse_posttype_builder_metaboxes').on ('keyup', '.fuse_builder_metabox_field_settings_list input, .fuse_builder_metabox_field_settings_list textarea', function () {
+    jQuery ('.fuse_posttype_builder_metaboxes').on ('keyup', '.fuse_builder_metabox_field_settings .metabox-data_key, .fuse_builder_metabox_field_settings_list input, .fuse_builder_metabox_field_settings_list textarea', function () {
         fuseBuilderSetMetaboxes ();
     });
     jQuery ('.fuse_posttype_builder_metaboxes').on ('change', '.fuse_builder_metabox_field_settings_list select', function () {

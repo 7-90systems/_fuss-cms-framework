@@ -519,7 +519,7 @@
                                 <tr class="fuse_field_options fuse_field_option_posttype"<?php if ($type != 'posttype') echo ' style="display: none;"'; ?>>
                                     <th><?php _e ('Post type', 'fuse'); ?></th>
                                     <td>
-                                        <select name="postytpe" class="widefat">
+                                        <select name="posttype" class="widefat">
                                             <?php foreach ($post_types as $op_type): ?>
                                                 <option value="<?php esc_attr_e ($op_type->name); ?>"<?php selected ($op_type->name, $selected_post_type); ?>><?php echo $op_type->label; ?></option>
                                             <?php endforeach; ?>
@@ -534,7 +534,7 @@
                                 <tr class="fuse_field_options fuse_field_option_taxonomy"<?php if ($type != 'taxonomy') echo ' style="display: none;"'; ?>>
                                     <th><?php _e ('Taxonomy', 'fuse'); ?></th>
                                     <td>
-                                        <select name="posttype" class="widefat">
+                                        <select name="taxonomy" class="widefat">
                                             <?php foreach ($taxonomies as $op_type): ?>
                                                 <option value="<?php esc_attr_e ($op_type->name); ?>"<?php selected ($op_type->name, $selected_taxonomy); ?>><?php echo $op_type->label; ?></option>
                                             <?php endforeach; ?>
@@ -543,12 +543,15 @@
                                 </tr>
                                 
                                 <!-- Select type - for select, posttype, taxonomy -->
+                                <?php
+                                    $select_type = $this->_getFieldValue ('selecttype', $settings);
+                                ?>
                                 <tr class="fuse_field_options fuse_field_option_select fuse_field_option_posttype fuse_field_option_taxonomy"<?php if (in_array ($type, array ('select', 'posttype', 'taxonomy')) === false) echo ' style="display: none;"'; ?>>
                                     <th><?php _e ('Select type', 'fuse'); ?></th>
                                     <td>
                                         <select name="selecttype" class="widefat">
-                                            <option value="single"><?php _e ('Single value', 'fuse'); ?></option>
-                                            <option value="multi"><?php _e ('Multiple values', 'fuse'); ?></option>
+                                            <option value="single"<?php selected ($select_type, 'single'); ?>><?php _e ('Single value', 'fuse'); ?></option>
+                                            <option value="multi"<?php selected ($select_type, 'multi'); ?>><?php _e ('Multiple values', 'fuse'); ?></option>
                                         </select>
                                     </td>
                                 </tr>

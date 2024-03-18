@@ -201,6 +201,12 @@
                 case 'select':
                     $this->_showSelectField ($post_id, $field);
                     break;
+                case 'posttype':
+                    $this->_showPostTypeField ($post_id, $field);
+                    break;
+                case 'taxonomy':
+                    $this->_showTaxonomyField ($post_id, $field);
+                    break;
                 default:
                     $this->_showTextField ($post_id, $field);
             } // switch ()
@@ -237,26 +243,173 @@
          */
         protected function _showSelectField ($post_id, $field) {
             $options = explode ("\n", $field->settings->options);
-            $selected = get_post_meta ($post_id, $field->key, true);
-            $multiple = $field->settings->selecttype == 'multi' ? ' multiple' : '';
+            
+            $field_options = array ();
+                        
+            foreach ($options as $option) {
+                $option = explode ('|', $option);
+                            
+                if (count ($option) == 1) {
+                    $option [1] = $option [0];
+                } // if ()
+                            
+                $option = array_filter ($option, 'trim');
+                
+                $field_options [$option [0]] = $option [1];
+            } // foreach ()
+            
+            if ($field->settings->selecttype == 'multi') {
+                $this->_buildMultiSelect ($field->key, $field_options, get_post_meta ($post_id, $field->key, true));
+            } // if ()
+            else {
+                $this->_buildSelect ($field->key, $field_options, get_post_meta ($post_id, $field->key, true));
+            } // else
+        } // _showSelectField ()
+        
+        /**
+         *  Show a post type field.
+         */
+        protected function _showPostTypeField ($post_id, $field) {
+            $post_type = $field->settings->posttype;
+
+            if (is_post_type_hierarchical ($post_type)) {
+                $options = $this->_getPostTypeOptions ($post_type, true);
+            } // if ()
+            else {
+                $options = $this->_getPostTypeOptions ($post_type, false);
+            } // else
+            
+            if ($field->settings->selecttype == 'multi') {
+                $this->_buildMultiSelect ($field->key, $options, get_post_meta ($post_id, $field->key, true));
+            } // if ()
+            else {
+                $this->_buildSelect ($field->key, $options, get_post_meta ($post_id, $field->key, true));
+            } // else
+        } // _showPostTypeField ()
+        
+        /**
+         *  Show a taxonomy field.
+         */
+        protected function _showTaxonomyField ($post_id, $field) {
+            $tax = $field->settings->taxonomy;
+
+            if (is_taxonomy_hierarchical ($tax)) {
+                $options = $this->_getTaxonomyOptions ($tax, true);
+            } // if ()
+            else {
+                $options = $this->_getTaxonomyOptions ($tax, false);
+            } // else
+            
+            if ($field->settings->selecttype == 'multi') {
+                $this->_buildMultiSelect ($field->key, $options, get_post_meta ($post_id, $field->key, true));
+            } // if ()
+            else {
+                $this->_buildSelect ($field->key, $options, get_post_meta ($post_id, $field->key, true));
+            } // else
+        } // _showTaxonomyField ()
+        
+        
+        
+        
+        /**
+         *  Build a standard SELECT field.
+         */
+        protected function _buildSelect ($name, $options, $value = '') {
             ?>
-                <select name="<?php esc_attr_e ($field->key); ?>"<?php echo $multiple; ?>>
-                    <?php if ($multiple == ''): ?>
-                        <option value="">&nbsp;</option>
-                    <?php endif; ?>
+                <select name="<?php esc_attr_e ($name); ?>">
+                    <option value="">&nbsp;</option>
                     <?php
-                        foreach ($options as $option) {
-                            $option = explode ('|', $option);
-                            
-                            if (count ($option) == 1) {
-                                $option [1] = $option [0];
-                            } // if ()
-                            
-                            echo '    <option value="'.esc_attr (trim ($option [0])).'"'.selected ($selected, trim ($option [0])).'>'.trim ($option [1]).'</option>'.PHP_EOL;
+                        foreach ($options as $key => $val) {
+                            echo '    <option value="'.esc_attr (trim ($key)).'"'.selected ($value, $key).'>'.$val.'</option>'.PHP_EOL;
                         } // foreach ()
                     ?>
                 </select>
             <?php
-        } // _showSelectField ()
+        } // _buildSelect ()
+        
+        /**
+         *  Build a multiple SELECT field.
+         */
+        protected function _buildMultiSelect ($name, $options, $values = array ()) {
+            if (is_array ($values) === false) {
+                $values = array ();
+            } // if 
+            ?>
+                <select name="<?php esc_attr_e ($name); ?>" class="widefat" multiple>
+                    <?php
+                        foreach ($options as $key => $val) {
+                            $selected = in_array ($key, $values) ? ' selected="selected"' : '';
+                            echo '    <option value="'.esc_attr (trim ($key)).'"'.$selected.'>'.$val.'</option>'.PHP_EOL;
+                        } // foreach ()
+                    ?>
+                </select>
+            <?php
+        } // _buildMultiSelect ()
+        
+        
+        
+        
+        /**
+         *  Get the options for post types.
+         */
+        protected function _getPostTypeOptions ($post_type, $hierarchical = false, $parent_id = 0, $indent = 0) {
+            $options = array ();
+            
+            $args = array (
+                'numberposts' => -1,
+                'post_type' => $post_type,
+                'orderby' => 'title',
+                'order' => 'ASC'
+            );
+
+            if ($hierarchical === true) {
+                $args ['orderby'] = 'menu_order title';
+                $args ['post_parent'] = $parent_id;
+            } // if ()
+            
+            foreach (get_posts ($args) as $post) {
+                $options [$post->ID] = str_repeat ('&nbsp;&nbsp;&nbsp;', $indent).$post->post_title;
+                
+                if ($hierarchical === true) {
+                    $subs = $this->_getPostTypeOptions ($post_type, $hierarchical, $post->ID, $indent + 1);
+                    
+                    foreach ($subs as $key => $label) {
+                        $options [$key] = $label;
+                    } // foreach ()
+                } // if ()
+            } // foreach ()
+            
+            return $options;
+        } // _getPostTypeOptions ()
+        
+        /**
+         *  Get the options for taxonomies.
+         */
+        protected function _getTaxonomyOptions ($taxonomy, $hierarchical = false, $parent_id = 0, $indent = 0) {
+            $options = array ();
+            
+            $args = array (
+                'taxonomy' => $taxonomy,
+                'hide_empty' => false
+            );
+
+            if ($hierarchical === true) {
+                $args ['parent'] = $parent_id;
+            } // if ()
+            
+            foreach (get_terms ($args) as $term) {
+                $options [$term->term_id] = str_repeat ('&nbsp;&nbsp;&nbsp;', $indent).$term->name;
+                
+                if ($hierarchical === true) {
+                    $subs = $this->_getTaxonomyOptions ($taxonomy, $hierarchical, $term->term_id, $indent + 1);
+                    
+                    foreach ($subs as $key => $label) {
+                        $options [$key] = $label;
+                    } // foreach ()
+                } // if ()
+            } // foreach ()
+            
+            return $options;
+        } // _getTaxonomyOptions ()
         
     } // class Builder
