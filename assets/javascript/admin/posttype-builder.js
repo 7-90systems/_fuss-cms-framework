@@ -103,7 +103,23 @@ jQuery (document).ready (function () {
     jQuery ('.fuse_posttype_builder_metaboxes').on ('change', '.fuse_builder_metabox_field_settings_list select', function () {
         fuseBuilderSetMetaboxes ();
     });
-
+    
+    // Delete field
+    jQuery ('.fuse_posttype_builder_metaboxes').on ('click', '.fuse_builder_metabox_field_title a.delete', function (e) {
+        e.preventDefault ();
+        
+        let do_delete = confirm ('Are you sure that you want to delete this field?');
+        
+        if (do_delete) {
+            jQuery (this).closest ('.fuse-builder-metabox-field').remove ();
+            fuseBuilderSetMetaboxes ();
+        } // if ()
+    });
+    
+    // Sort fields
+    jQuery ('.fuse_posttype_builder_metaboxes').on ('click', 'a.move', function (e) {
+        e.preventDefault ();
+    });
 });
 
 
@@ -114,6 +130,16 @@ jQuery (document).ready (function () {
  */
 function fuseBuilderSetSortable () {
     jQuery ('.fuse_posttype_builder_metaboxes').not ('.sortable').sortable ({
+        items: '.fuse-builder-metabox',
+        toleranceElement: '> div',
+        update: function () {
+            fuseBuilderSetMetaboxes ();
+        }
+    }).addClass ('sortable');
+    
+    jQuery ('.fuse_builder_metabox_fields_list').not ('.sortable').sortable ({
+        items: '.fuse-builder-metabox-field',
+        toleranceElement: '> div',
         update: function () {
             fuseBuilderSetMetaboxes ();
         }

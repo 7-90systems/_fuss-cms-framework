@@ -210,8 +210,7 @@
                     ?>
                 </template>
                 
-                <?php /* ?><input type="hidden" id="fuse_builder_metaboxes" name="fuse_builder_metaboxes" value="" /><?php */ ?>
-                <textarea id="fuse_builder_metaboxes" name="fuse_builder_metaboxes" style="width: 100%; height: 400px;"><?php echo stripslashes (json_encode ($metaboxes)); ?></textarea>
+                <input type="hidden" id="fuse_builder_metaboxes" name="fuse_builder_metaboxes" value="" />
             <?php
         } // metaboxesMeta ()
         
@@ -427,6 +426,8 @@
             $field_types = array (
                 'text' => __ ('Text field', 'fuse'),
                 'number' => __ ('Number field', 'fuse'),
+                'email' => __ ('Email address', 'fuse'),
+                'url' => __ ('Website/page URL', 'fuse'),
                 'select' => __ ('Drop down', 'fuse'),
                 'posttype' => __ ('Post type', 'fuse'),
                 'taxonomy' => __ ('Taxonomy', 'fuse')
@@ -480,19 +481,19 @@
                                 <tr class="fuse_field_options fuse_field_option_number"<?php if ($type != 'number') echo ' style="display: none;"'; ?>>
                                     <th><?php _e ('Minimum value', 'fuse'); ?></th>
                                     <td>
-                                        <input type="number" name="min" class="widefat" value="" />
+                                        <input type="number" name="min" class="widefat" value="<?php echo $this->_getFieldValue ('min', $settings); ?>" />
                                     </td>
                                 </tr>
                                 <tr class="fuse_field_options fuse_field_option_number"<?php if ($type != 'number') echo ' style="display: none;"'; ?>>
                                     <th><?php _e ('Maximum value', 'fuse'); ?></th>
                                     <td>
-                                        <input type="number" name="max" class="widefat" value="" />
+                                        <input type="number" name="max" class="widefat" value="<?php echo $this->_getFieldValue ('max', $settings); ?>" />
                                     </td>
                                 </tr>
                                 <tr class="fuse_field_options fuse_field_option_number"<?php if ($type != 'number') echo ' style="display: none;"'; ?>>
                                     <th><?php _e ('Step amount', 'fuse'); ?></th>
                                     <td>
-                                        <input type="number" name="step" class="widefat" value="" />
+                                        <input type="number" name="step" class="widefat" value="<?php echo $this->_getFieldValue ('step', $settings); ?>" />
                                     </td>
                                 </tr>
                                 
@@ -500,30 +501,36 @@
                                 <tr class="fuse_field_options fuse_field_option_select"<?php if ($type != 'select') echo ' style="display: none;"'; ?>>
                                     <th><?php _e ('Options', 'fuse'); ?></th>
                                     <td>
-                                        <textarea name="options" class="widefat" rows="6"></textarea>
+                                        <textarea name="options" class="widefat" rows="6"><?php echo $this->_getFieldValue ('options', $settings); ?></textarea>
                                         <p class="description"><?php _e ('One option per line, pipe separated for value and label. eg: value | Label', 'fuse'); ?></p>
                                     </td>
                                 </tr>
                                 
                                 <!-- Post type field options -->
+                                <?php
+                                    $selected_post_type = $this->_getFieldValue ('posttype', $settings);
+                                ?>
                                 <tr class="fuse_field_options fuse_field_option_posttype"<?php if ($type != 'posttype') echo ' style="display: none;"'; ?>>
                                     <th><?php _e ('Post type', 'fuse'); ?></th>
                                     <td>
                                         <select name="postytpe" class="widefat">
-                                            <?php foreach ($post_types as $type): ?>
-                                                <option value="<?php esc_attr_e ($type->name); ?>"><?php echo $type->label; ?></option>
+                                            <?php foreach ($post_types as $op_type): ?>
+                                                <option value="<?php esc_attr_e ($op_type->name); ?>"<?php selected ($op_type->name, $selected_post_type); ?>><?php echo $op_type->label; ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </td>
                                 </tr>
                                 
                                 <!-- Taxonomy field options -->
+                                <?php
+                                    $selected_taxonomy = $this->_getFieldValue ('taxonomy', $settings);
+                                ?>
                                 <tr class="fuse_field_options fuse_field_option_taxonomy"<?php if ($type != 'taxonomy') echo ' style="display: none;"'; ?>>
                                     <th><?php _e ('Taxonomy', 'fuse'); ?></th>
                                     <td>
                                         <select name="posttype" class="widefat">
-                                            <?php foreach ($taxonomies as $type): ?>
-                                                <option value="<?php esc_attr_e ($type->name); ?>"><?php echo $type->label; ?></option>
+                                            <?php foreach ($taxonomies as $op_type): ?>
+                                                <option value="<?php esc_attr_e ($op_type->name); ?>"<?php selected ($op_type->name, $selected_taxonomy); ?>><?php echo $op_type->label; ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </td>
@@ -550,6 +557,23 @@
             ob_end_clean ();
             
             return $html;
-        } // _metabox_fieldTemplateHtml ()
+        } // _metaboxFieldTemplateHtml ()
+        
+        
+        
+        
+        /**
+         *  get the value for a field from the settings.
+         */
+        protected function _getFieldValue ($name, $settings) {
+            $value = '';
+            $settings = (array) $settings;
+            
+            if (array_key_exists ($name, $settings)) {
+                $value = $settings [$name];
+            } // if ()
+            
+            return $value;
+        } // _getFieldValue ()
         
     } // class Builder
