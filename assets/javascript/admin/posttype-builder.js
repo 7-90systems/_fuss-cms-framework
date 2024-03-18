@@ -180,6 +180,7 @@ function fuseBuilderSetMetaboxes () {
                 let field = {
                     type: field_type,
                     name: field_el.find ('.metabox-field-name').val (),
+                    key: field_el.find ('.metabox-data-key').val (),
                     settings: field_settings
                 };
                 

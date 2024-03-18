@@ -398,7 +398,7 @@
                         <div class="fuse_builder_metabox_fields_list">
                             <?php
                                 foreach ($fields as $field) {
-                                    echo $this->_metaboxFieldTemplateHtml ($field->name, $field->type, $field->settings);
+                                    echo $this->_metaboxFieldTemplateHtml ($field->name, $field->key, $field->type, $field->settings);
                                 } // foreach ()
                             ?>
                         </div>
@@ -418,7 +418,7 @@
         /**
          *  This function sets up our metabox field template.
          */
-        protected function _metaboxFieldTemplateHtml ($name = '', $type = 'text', $settings = array ()) {
+        protected function _metaboxFieldTemplateHtml ($name = '', $key = '', $type = 'text', $settings = array ()) {
             if (strlen ($name) == 0) {
                 $name = __ ('New Field', 'fuse');
             } // if ()
@@ -461,6 +461,12 @@
                                 <th><?php _e ('Field Name', 'fuse'); ?></th>
                                 <td>
                                     <input type="text" name="" value="<?php esc_attr_e ($name); ?>" class="widefat metabox-field-name" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><?php _e ('Data Key', 'fuse'); ?></th>
+                                <td>
+                                    <input type="text" name="" value="<?php esc_attr_e ($key); ?>" class="widefat metabox-data-key" />
                                 </td>
                             </tr>
                         </table>

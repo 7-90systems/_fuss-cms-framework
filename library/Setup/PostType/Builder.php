@@ -21,6 +21,8 @@
          */
         protected function _init () {
             add_action ('init', array ($this, 'registerPostTypes'));
+            
+            add_action ('add_meta_boxes', array ($this, 'addMetaBoxes'));
         } // _init ()
         
         
@@ -48,6 +50,82 @@
                 } // if ()
             } // foreach ()
         } // registerPostTypes ()
+        
+        
+        
+        
+        /**
+         *  Add our meta boxes.
+         */
+        public function addMetaBoxes () {
+            $posttypes = get_posts (array (
+                'numberposts' => -1,
+                'post_type' => 'fuse_posttype'
+            ));
+            
+            foreach ($posttypes as $posttype) {
+                $metaboxes = json_decode (get_post_meta ($posttype->ID, 'fuse_builder_metaboxes', true));
+            
+                if (is_array ($metaboxes) === true) {
+                    foreach ($metaboxes as $metabox) {
+                        $section = $metabox->section;
+                        $name = $metabox->name;
+                        $slug = get_post_meta ($posttype->ID, 'fuse_posttype_builder_slug', true);
+                        
+                        if ($section != 'side') {
+                            $section = 'normal';
+                        } // if ()
+                        
+                        add_meta_box ('fuse_builder_metabox_'.uniqid (), $name, array ($this, 'metabox'), $slug, $section, 'default', array (
+                            'posttype' => $posttype,
+                            'name' => $name
+                        ));
+                    } // foreach ()
+                } // if ()
+            } // foreach ()
+        } // addMetaBoxes ()
+        
+        /**
+         *  Set up our meta boxes!
+         */
+        public function metabox ($post, $args = array ()) {
+            $args = $args ['args'];
+            $name = $args ['name'];
+            $posttype = $args ['posttype'];
+            $metaboxes = json_decode (get_post_meta ($posttype->ID, 'fuse_builder_metaboxes', true));
+            
+            foreach ($metaboxes as $metabox) {
+                if ($metabox->name == $name) {
+                    $fields = $metabox->fields;
+                    ?>
+                        <?php if (count ($fields) > 0): ?>
+                        
+                            <table class="form-table">
+                                
+                                <?php foreach ($fields as $field): ?>
+                                
+                                    <tr>
+                                        <th><?php echo $field->name; ?></th>
+                                        <td>
+                                            <?php
+                                                $this->_showField ($post->ID, $field);
+                                            ?>
+                                        </td>
+                                    </tr>
+                                
+                                <?php endforeach; ?>
+                                
+                            </table>
+                        
+                        <?php else: ?>
+                        
+                            <p><?php _e ('There are no settings for this post type', 'fuse'); ?></p>
+                        
+                        <?php endif; ?>
+                    <?php
+                } // if ()
+            } // foreach ()
+        } // metabox ()
         
         
         
@@ -108,5 +186,77 @@
             
             return $formatted;
         } // labels ()
+        
+        
+        
+        
+        /**
+         *  Show a metabox field.
+         */
+        protected function _showField ($post_id, $field) {
+            switch ($field->type) {
+                case 'number':
+                    $this->_showNumberField ($post_id, $field);
+                    break;
+                case 'select':
+                    $this->_showSelectField ($post_id, $field);
+                    break;
+                default:
+                    $this->_showTextField ($post_id, $field);
+            } // switch ()
+        } // _showField ()
+        
+        /**
+         *  Show a text field.
+         */
+        protected function _showTextField ($post_id, $field) {
+            ?>
+                <input type="<?php esc_attr_e ($field->type); ?>" name="<?php esc_attr_e ($field->key); ?>" value="<?php esc_attr_e (get_post_meta ($post_id, $field->key, true)); ?>" class="large-text" />
+            <?php
+        } // _showTextField ()
+        
+        /**
+         *  Show a number field.
+         */
+        public function _showNumberField ($post_id, $field) {
+            $atts = array ();
+            $att_keys = array ('min', 'max', 'step');
+            
+            foreach ((array) $field->settings as $key => $val) {
+                if (in_array ($key, $att_keys) === true) {
+                    $atts [] = $key.'="'.$val.'"';
+                } // if ()
+            } // foreach ()
+            ?>
+                <input type="number" name="<?php esc_attr_e ($field->key); ?>" value="<?php esc_attr_e (get_post_meta ($post_id, $field->key, true)); ?>" class="regular-text" <?php echo implode (' ', $atts); ?> />
+            <?php
+        } // _showNumberField ()
+        
+        /**
+         *  Show a select field.
+         */
+        protected function _showSelectField ($post_id, $field) {
+            $options = explode ("\n", $field->settings->options);
+            $selected = get_post_meta ($post_id, $field->key, true);
+            $multiple = $field->settings->selecttype == 'multi' ? ' multiple' : '';
+            ?>
+                <select name="<?php esc_attr_e ($field->key); ?>"<?php echo $multiple; ?>>
+                    <?php if ($multiple == ''): ?>
+                        <option value="">&nbsp;</option>
+                    <?php endif; ?>
+                    <?php
+                        foreach ($options as $option) {
+                            $option = explode ('|', $option);
+                            
+                            if (count ($option) == 1) {
+                                $option [1] = $option [0];
+                            } // if ()
+                            
+                            echo '    <option value="'.esc_attr (trim ($option [0])).'"'.selected ($selected, trim ($option [0])).'>'.trim ($option [1]).'</option>'.PHP_EOL;
+                        } // foreach ()
+                    ?>
+                </select>
+            <?php
+        } // _showSelectField ()
         
     } // class Builder
