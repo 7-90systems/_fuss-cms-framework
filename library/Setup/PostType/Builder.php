@@ -23,6 +23,8 @@
             add_action ('init', array ($this, 'registerPostTypes'));
             
             add_action ('add_meta_boxes', array ($this, 'addMetaBoxes'));
+            
+            add_action ('save_post', array ($this, 'savePost'), 10, 2);
         } // _init ()
         
         
@@ -126,6 +128,42 @@
                 } // if ()
             } // foreach ()
         } // metabox ()
+        
+        
+        
+        
+        /**
+         *  Save the posts values.
+         */
+        public function savePost ($post_id, $post) {
+            $post_types = get_posts (array (
+                'numberposts' => -1,
+                'post_type' => 'fuse_posttype'
+            ));
+// \Fuse\Debug::dump ($post_types, 'Post types lsit');
+            
+            foreach ($post_types as $post_type) {
+                $slug = get_post_meta ($post_type->ID, 'fuse_posttype_builder_slug', true);
+// echo "<p>Checking post type '".$post_type->post_title."' (".$slug.") against '".$post->post_type."'</p>";
+                
+                if ($slug == $post->post_type) {
+// echo "<p>Correct post type, so get the metaboxes...</p>";
+                    $metaboxes = json_decode (get_post_meta ($post_type->ID, 'fuse_builder_metaboxes', true));
+                    
+                    if (is_array ($metaboxes)) {
+                        foreach ($metaboxes as $metabox) {
+                            foreach ($metabox->fields as $field) {
+// echo "<p>&nbsp;&nbsp; - Setting value for '".$field->name."' - '".$field->key."' with value '".$_POST [$field->key]."'</p>";
+                                update_post_meta ($post_id, $field->key, $_POST [$field->key]);
+                            } // foreach ()
+                        } // foreach ()
+                    } // if ()
+                } // if ()
+            } // foreach ()
+// echo "<p>Done!</p>";
+// \Fuse\Debug::dump ($_POST);
+// die ();
+        } // savePost ()
         
         
         
@@ -252,10 +290,8 @@
                 if (count ($option) == 1) {
                     $option [1] = $option [0];
                 } // if ()
-                            
-                $option = array_filter ($option, 'trim');
                 
-                $field_options [$option [0]] = $option [1];
+                $field_options [trim ($option [0])] = trim ($option [1]);
             } // foreach ()
             
             if ($field->settings->selecttype == 'multi') {
@@ -335,7 +371,7 @@
                 $values = array ();
             } // if 
             ?>
-                <select name="<?php esc_attr_e ($name); ?>" class="widefat" multiple>
+                <select name="<?php esc_attr_e ($name); ?>[]" class="widefat" multiple>
                     <?php
                         foreach ($options as $key => $val) {
                             $selected = in_array ($key, $values) ? ' selected="selected"' : '';
