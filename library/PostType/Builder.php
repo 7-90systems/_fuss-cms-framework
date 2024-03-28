@@ -425,6 +425,7 @@
             
             $field_types = array (
                 'text' => __ ('Text field', 'fuse'),
+                'textarea' => __ ('Text area field', 'fuse'),
                 'number' => __ ('Number field', 'fuse'),
                 'email' => __ ('Email address', 'fuse'),
                 'url' => __ ('Website/page URL', 'fuse'),
@@ -480,6 +481,14 @@
                                                 <option value="<?php esc_attr_e ($key); ?>"<?php selected ($key, $type); ?>><?php echo $label; ?></option>
                                             <?php endforeach; ?>
                                         </select>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Textarea field options -->
+                                <tr class="fuse_field_options fuse_field_option_textarea"<?php if ($type != 'textarea') echo ' style="display: none;"'; ?>>
+                                    <th><?php _e ('Rows to display', 'fuse'); ?></th>
+                                    <td>
+                                        <input type="number" name="rows" class="widefat" value="<?php echo $this->_getFieldValue ('rows', $settings, 4); ?>" />
                                     </td>
                                 </tr>
                                 
@@ -574,8 +583,8 @@
         /**
          *  get the value for a field from the settings.
          */
-        protected function _getFieldValue ($name, $settings) {
-            $value = '';
+        protected function _getFieldValue ($name, $settings, $default = '') {
+            $value = $default;
             $settings = (array) $settings;
             
             if (array_key_exists ($name, $settings)) {

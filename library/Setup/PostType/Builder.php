@@ -140,29 +140,24 @@
                 'numberposts' => -1,
                 'post_type' => 'fuse_posttype'
             ));
-// \Fuse\Debug::dump ($post_types, 'Post types lsit');
             
             foreach ($post_types as $post_type) {
                 $slug = get_post_meta ($post_type->ID, 'fuse_posttype_builder_slug', true);
-// echo "<p>Checking post type '".$post_type->post_title."' (".$slug.") against '".$post->post_type."'</p>";
                 
                 if ($slug == $post->post_type) {
-// echo "<p>Correct post type, so get the metaboxes...</p>";
                     $metaboxes = json_decode (get_post_meta ($post_type->ID, 'fuse_builder_metaboxes', true));
                     
                     if (is_array ($metaboxes)) {
                         foreach ($metaboxes as $metabox) {
                             foreach ($metabox->fields as $field) {
-// echo "<p>&nbsp;&nbsp; - Setting value for '".$field->name."' - '".$field->key."' with value '".$_POST [$field->key]."'</p>";
-                                update_post_meta ($post_id, $field->key, $_POST [$field->key]);
+                                if (array_key_exists ($field->key, $_POST)) {
+                                    update_post_meta ($post_id, $field->key, $_POST [$field->key]);
+                                } // if ()
                             } // foreach ()
                         } // foreach ()
                     } // if ()
                 } // if ()
             } // foreach ()
-// echo "<p>Done!</p>";
-// \Fuse\Debug::dump ($_POST);
-// die ();
         } // savePost ()
         
         
@@ -232,22 +227,27 @@
          *  Show a metabox field.
          */
         protected function _showField ($post_id, $field) {
-            switch ($field->type) {
-                case 'number':
-                    $this->_showNumberField ($post_id, $field);
-                    break;
-                case 'select':
-                    $this->_showSelectField ($post_id, $field);
-                    break;
-                case 'posttype':
-                    $this->_showPostTypeField ($post_id, $field);
-                    break;
-                case 'taxonomy':
-                    $this->_showTaxonomyField ($post_id, $field);
-                    break;
-                default:
-                    $this->_showTextField ($post_id, $field);
-            } // switch ()
+            if (strlen ($field->key) > 0) {
+                switch ($field->type) {
+                    case 'textarea':
+                        $this->_showTextAreaField ($post_id, $field);
+                        break;
+                    case 'number':
+                        $this->_showNumberField ($post_id, $field);
+                        break;
+                    case 'select':
+                        $this->_showSelectField ($post_id, $field);
+                        break;
+                    case 'posttype':
+                        $this->_showPostTypeField ($post_id, $field);
+                        break;
+                    case 'taxonomy':
+                        $this->_showTaxonomyField ($post_id, $field);
+                        break;
+                    default:
+                        $this->_showTextField ($post_id, $field);
+                } // switch ()
+            } // if ()
         } // _showField ()
         
         /**
@@ -258,6 +258,20 @@
                 <input type="<?php esc_attr_e ($field->type); ?>" name="<?php esc_attr_e ($field->key); ?>" value="<?php esc_attr_e (get_post_meta ($post_id, $field->key, true)); ?>" class="large-text" />
             <?php
         } // _showTextField ()
+        
+        /**
+         *  Show a textarea field.
+         */
+        protected function _showTextAreaField ($post_id, $field) {
+            $rows = 4;
+            
+            if (property_exists ($field->settings, $rows) && is_numeric ($field->settings->rows) && $field->settings->rows > 0) {
+                $rows = $field->settings->rows;
+            } // if ()
+            ?>
+                <textarea name="<?php esc_attr_e ($field->key); ?>" class="large-text" rows="<?php echo intval ($rows); ?>"><?php echo stripslashes (get_post_meta ($post_id, $field->key, true)); ?></textarea>
+            <?php
+        } // _showTextAreaField ()
         
         /**
          *  Show a number field.
