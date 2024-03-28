@@ -10,6 +10,7 @@ jQuery (document).ready (function () {
     
     fuseFormsSetup ();
     fuseFormRequired ();
+    fuseCheckFormSubmission ();
 
 });
 
@@ -22,9 +23,9 @@ jQuery (document).ready (function () {
 function fuseFormsSetup () {
     // Set up our container display
     jQuery ('.fuse-forms-container').each (function () {
-        var container = jQuery (this);
-        var tab_buttons = container.find ('.fuse-form-panel-tabs li a');
-        var panels = container.find ('.fuse-forms-panel');
+        let container = jQuery (this);
+        let tab_buttons = container.find ('.fuse-form-panel-tabs li a');
+        let panels = container.find ('.fuse-forms-panel');
         
         tab_buttons.removeClass ('active').first ().addClass ('active');
         panels.hide ().first ().show ();
@@ -33,8 +34,8 @@ function fuseFormsSetup () {
     jQuery ('.fuse-forms-container').on ('click', '.fuse-form-panel-tabs li a', function (e) {
         e.preventDefault ();
         
-        var btn = jQuery (this);
-        var container = btn.closest ('.fuse-forms-container');
+        let btn = jQuery (this);
+        let container = btn.closest ('.fuse-forms-container');
         
         container.find ('.fuse-forms-panel').hide ();
         container.find ('.fuse-form-panel-tabs li a').removeClass ('active');
@@ -73,9 +74,9 @@ function _checkFuseFormFieldConditions () {
      *  Check field visibility.
      */
     jQuery ('.fuse-forms-container').find ('input, select, textarea, .fuse-field-group').each (function () {
-        var element = jQuery (this);
-        var container = element.closest ('.fuse-forms-panel-field-container, .fuse-field-group-column');
-        var conditions = element.data ('conditions');
+        let element = jQuery (this);
+        let container = element.closest ('.fuse-forms-panel-field-container, .fuse-field-group-column');
+        let conditions = element.data ('conditions');
 // console.log ("Checking field conditions '" + conditions + "'...");
         
         if (typeof conditions !== 'undefined' && conditions.length > 0) {
@@ -94,14 +95,14 @@ function _checkFuseFormFieldConditions () {
      *  Check panel visibility.
      */
     jQuery ('.fuse-forms-panel').each (function () {
-        var panel = jQuery (this);
+        let panel = jQuery (this);
         
-        var conditions = panel.data ('conditions');
+        let conditions = panel.data ('conditions');
 // console.log ("Checking panel conditions...");
         
         if (typeof conditions !== 'undefined' && conditions.length > 0) {
 // console.log (" - Panel has conditions!");
-            var panel_link = jQuery ('.fuse-form-panel-tabs').find ('a[href$=#' + panel.attr ('id') + ']').closest ('li');
+            let panel_link = jQuery ('.fuse-form-panel-tabs').find ('a[href$=#' + panel.attr ('id') + ']').closest ('li');
             
             if (_checkFieldConditions (conditions) !== true) {
                 panel.hide ();
@@ -125,12 +126,12 @@ function _fuseFormsSetupToggleFields () {
     jQuery ('.fuse-forms-container').on ('click', '.fuse-forms-field-toggle li', function (e) {
         e.preventDefault ();
 // confirm ("Clicked on option '" + jQuery (this).data ('value') + "'");
-        var btn = jQuery (this);
+        let btn = jQuery (this);
         
         if (btn.hasClass ('selected') === false) {
-            var container = btn.closest ('.fuse-forms-field-toggle');
-            var fields = container.find ('li');
-            var value = btn.data ('value');
+            let container = btn.closest ('.fuse-forms-field-toggle');
+            let fields = container.find ('li');
+            let value = btn.data ('value');
             
             fields.removeClass ('selected');
             btn.addClass ('selected');
@@ -142,7 +143,7 @@ function _fuseFormsSetupToggleFields () {
     
     // Check for a default value
     jQuery ('.fuse-forms-field-toggle').each (function () {
-        var set_value = jQuery (this).data ('value');
+        let set_value = jQuery (this).data ('value');
         
         if (set_value.length == 0) {
             jQuery (this).find ('li').first ().trigger ('click');
@@ -157,25 +158,24 @@ function _fuseFormsSetupToggleFields () {
  *  Check a field value for a comparison
  */
 function _checkFieldConditions (conditions) {
-    var condition_met = true;
+    let condition_met = true;
     
-    var field_id;
-    var comparison_value;
-    var comparison;
-    var field_value;
+    let field_id;
+    let comparison_value;
+    let comparison;
+    let field_value;
             
-    var display = true;
+    let display = true;
             
-    for (var i in conditions) {
+    for (let i in conditions) {
         field_id = conditions [i].field;
         comparison_value = conditions [i].value;
         comparison = conditions [i].comparison;
                 
-        var field = jQuery ('#fuse-form-field-' + field_id);
+        let field = jQuery ('#fuse-form-field-' + field_id);
                 
         if (typeof field !== 'undefined') {
             field_value = field.val ();
-// console.log ("Comparison for '" + field_id + "': '" + comparison + "' (" + conditions [i].comparison + ") : '" + field_value + "' -> '" + comparison_value + "'");
                     
             if (comparison == '=' || comparison == 'equals') {
                 if (field_value != comparison_value) {
@@ -224,14 +224,14 @@ function _checkFieldConditions (conditions) {
  *  Note that it the value is an array we will search for all array values.
  */
 function _isValueInList (value, value_list) {
-    var in_list = false;
-    var i;
+    let in_list = false;
+    let i;
     
     if (typeof (value == 'array')) {
-        var in_list_count = 0;
+        let in_list_count = 0;
         
         for (i in value) {
-            for (var j in value_list) {
+            for (let j in value_list) {
                 if (values_list [j] == value [i]) {
                     in_list_count++;
                 } // if ()
@@ -261,8 +261,8 @@ function _isValueInList (value, value_list) {
  */
 function _fuseFormsSetupDateFields () {
     jQuery ('.fuse-datepicker').each (function () {
-        var field= jQuery (this);
-        var alt_field = '#' + field.attr ('id').substr (16);
+        let field= jQuery (this);
+        let alt_field = '#' + field.attr ('id').substr (16);
         
         field.datepicker ({
             dateFormat: 'd MM yy',
@@ -282,25 +282,127 @@ function _fuseFormsSetupDateFields () {
 
 
 /**
+ *  Check our forms on submission.
+ */
+function fuseCheckFormSubmission () {
+    jQuery ('.fuse-form-container input[type="submit"]').on ('click', function (e) {
+        let form = jQuery (this).closest ('form');
+        
+        form.find ('input, select, textarea').trigger ('keyup').trigger ('change');
+        
+        let invalid_fields = form.find ('label.invalid');
+        
+        if (invalid_fields.length > 0) {
+            e.preventDefault ();
+            
+            let field = jQuery (invalid_fields [0]);
+            let panel_id = field.closest ('.fuse-forms-panel').attr ('id');
+            
+            let btn = jQuery ('a[href="#' + panel_id + '"]');
+            btn.trigger ('click');
+        } // if ()
+
+    });
+}// fuseCheckFormSubmission ()
+
+
+
+
+/**
  *  Set up the functionality to show required fields.
  */
 function fuseFormRequired () {
     jQuery ('.fuse-forms-container input, .fuse-forms-container select, .fuse-forms-container textarea').on ('input', _fuseFormCheckRequired);
     jQuery ('.fuse-forms-container select').change (_fuseFormCheckRequired);
+    
+    jQuery ('.fuse-forms-container input, .fuse-forms-container textarea').on ('keyup', _fuseFormCheckValid);
+    jQuery ('.fuse-forms-container input').on ('change', _fuseFormCheckValid);
 } // fuseFormRequired ()
 
 function _fuseFormCheckRequired () {
-    var el = jQuery (this);
+    let el = jQuery (this);
     
     if (el.prop ('required')) {
-        var label = el.parent ().siblings ('label');
+        let label = el.parent ().siblings ('label');
         
         if (el.val ().length > 0) {
-            label.removeClass (['required-empty', 'admin-bold', 'admin-red']);
+            label.removeClass (['invalid', 'required-empty', 'admin-bold', 'admin-red']);
         } // if ()
         else {
-            label.addClass (['required-empty', 'admin-bold', 'admin-red']);
+            label.addClass (['invalid', 'required-empty', 'admin-bold', 'admin-red']);
         } // else
-
     } // if ()
 } // _fuseFormCheckRequired ()
+
+function _fuseFormCheckValid () {
+    let field = jQuery (this);
+    let label = field.parent ().siblings ('label');
+    let is_valid = false;
+    
+    switch (field.attr ('type')) {
+        case 'number':
+            is_valid = _fuseCheckNumberFieldValue (field);
+            break;
+        case 'url':
+            is_valid = _fuseCheckUrlFieldValue (field.val ());
+            break;
+        case 'email':
+            is_valid = _fuseCheckEmailFieldValue (field.val ());
+            break;
+        default:
+            if (field.prop ('required') === false || field.val ().length > 0) {
+                is_valid = true;
+            } // if ()
+    } // switch ()
+console.log (" - Result: '" + is_valid + "'");
+
+        
+    if (is_valid === true) {
+        label.removeClass (['invalid', 'admin-bold', 'admin-red']);
+    } // if ()
+    else {
+        label.addClass (['invalid', 'admin-bold', 'admin-red']);
+    } // else
+} // _fuseFormCheckValid ()
+
+function _fuseCheckEmailFieldValue (value) {
+    let checker = new RegExp ('^.+@.+$');
+    return checker.test (value);
+} // _fuseCheckEmailFieldValue ()
+
+function _fuseCheckUrlFieldValue (value) {
+    let is_valid = false;
+    let url;
+    
+    try {
+        url = new URL (value);
+        is_valid = true;
+    } // try
+    catch (_) {
+        is_valid = false;
+    } // catch ()
+    
+    return is_valid;
+} // _fuseCheckUrlFieldValue ()
+
+function _fuseCheckNumberFieldValue (field) {
+    let is_valid = true;
+    let value = Number (field.val ());
+    
+    // Check if required
+    if (field.prop ('required') === true && String (value).length == 0) {
+        is_valid = false;
+    } // if ()
+    
+    // check min value
+    if (field.attr ('min') !== false && field.attr ('min') > value) {
+        is_valid = false;
+    } // if ()
+    
+    // check max value
+    if (field.attr ('max') !== false && field.attr ('max') < value) {
+        is_valid = false;
+    } // if ()
+    
+    return is_valid;
+} // _fuseCheckNumberFieldValue ();

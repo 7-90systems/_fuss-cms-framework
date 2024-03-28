@@ -51,11 +51,11 @@ function fuseMaskSiteUrls () {
             
             if (btn.hasClass ('enable')) {
                 btn.text (fuse_admin.fuse_url_button_enabled);
-                field.removeProp ('readonly');
+                field.prop ('readonly', false);
             } // if ()
             else {
                 btn.text (fuse_admin.fuse_url_button_disabled);
-                field.prop ('readonly', 'readonly');
+                field.prop ('readonly', true);
             } // else
             
             btn.toggleClass ('enable');
