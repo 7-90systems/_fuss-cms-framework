@@ -109,6 +109,7 @@
                 $labels = array (
                     'name' => $this->_name_plural,
                     'singular_name' => $this->_name_singular,
+                    'add_new' => sprintf (__ ('Add a new %s', 'fuse'), $this->_name_singular),
                     'add_new_item' => sprintf (__ ('Add New %s', 'fuse'), $this->_name_singular),
                     'edit_item' => sprintf (__ ('Edit %s', 'fuse'), $this->_name_singular),
                     'new_item' => sprintf (__ ('New %s', 'fuse'), $this->_name_singular),
