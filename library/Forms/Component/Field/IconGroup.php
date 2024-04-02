@@ -27,7 +27,10 @@
          *
          *  @param string $name The fields name.
          *  @param string $label The fields label.
-         *  @param array $options The options for this field. This is an associive array with the keys being the field value options and the values being the image URL.
+         *  @param array $options The options for this field. This is an array of arrays with these values:
+         *      value:  The valeu for this option
+         *      label: The label to use for this option
+         *      image: The image URL for this option
          *  @param mixed $value The fields value.
          *  @param array $args The arguments for this field. See the parent
          *  class for valid argument values.
@@ -75,9 +78,9 @@
             ?>
                 <div class="fuse-form-field-icongroup">
                     
-                    <?php foreach ($this->_options as $val => $image): ?>
-                        <a href="#" class="fuse-form-field-icongroup-image<?php if ($val == $value) echo ' selected'; ?>" data-value="<?php esc_attr_e ($val); ?>">
-                            <span class="image" style="background-image: url('<?php echo esc_url ($image); ?>');">&nbsp;</span>
+                    <?php foreach ($this->_options as $option): ?>
+                        <a href="#" class="fuse-form-field-icongroup-image<?php if ($option ['value'] == $value) echo ' selected'; ?>" title="<?php esc_attr_e ($option ['label']); ?>" data-value="<?php esc_attr_e ($option ['value']); ?>">
+                            <span class="image" style="background-image: url('<?php echo esc_url ($option ['image']); ?>');">&nbsp;</span>
                         </a>
                     <?php endforeach; ?>
                     
