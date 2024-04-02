@@ -4,6 +4,7 @@ jQuery (document).ready (function () {
     fuseAdminFormFieldImage ();
     fuseAdminFormFieldFile ();
     fuseAdminFormFieldGallery ();
+    fuseAdminFormFieldIconGroup ();
 
 });
 
@@ -254,3 +255,22 @@ function _fuseAdminGallerySetIds (container) {
         
     container.find ('input').val (ids);
 } // _fuseAdminGallerySetIds ()
+
+
+
+
+/**
+ *  Set up the icon group form field.
+ */
+function fuseAdminFormFieldIconGroup () {
+    jQuery ('a.fuse-form-field-icongroup-image').on ('click', function (e) {
+        e.preventDefault ();
+        
+        let el = jQuery (this);
+        let container = el.closest ('.fuse-form-field-icongroup');
+        
+        container.find ('input').val (el.data ('value'));
+        container.find ('a.fuse-form-field-icongroup-image').removeClass ('selected');
+        el.blur ().addClass ('selected');
+    });
+} // fuseAdminFormFieldIconGroup ()

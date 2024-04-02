@@ -114,3 +114,30 @@
 .fuse-file-file:hover .dashicons {
     display: inherit;
 }
+
+
+
+
+/*  **********  Icon Group Fields  *********  */
+
+.fuse-form-field-icongroup {
+    display: flex;
+    gap: 10px;
+}
+.fuse-form-field-icongroup a.fuse-form-field-icongroup-image {
+    text-decoration: none;
+    border: 2px solid var(--fuse-admin-colour-light-grey);
+    border-radius: 3px;
+    padding: 10px;
+}
+.fuse-form-field-icongroup a.fuse-form-field-icongroup-image.selected {
+    border-color: var(--fuse-admin-colour-green);
+}
+.fuse-form-field-icongroup a.fuse-form-field-icongroup-image span {
+    display: block;
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
