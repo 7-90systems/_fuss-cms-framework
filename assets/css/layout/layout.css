@@ -155,25 +155,16 @@
 .wp-block-columns.fuse-grid-row {
     position: relative;
     display: flex;
-    gap: 0;
+    gap: var(--fuse-grid-gap);
     flex-wrap: wrap !important;
     align-items: flex-start;
     justify-content: flex-start;
     margin: 0;
     padding: 0;
 }
-.fuse-grid-row.spaced,
-.wp-block-columns.fuse-grid-row.spaced {
-    gap: var(--fuse-grid-gap);
-    margin-bottom: var(--fuse-grid-gap);
-}
 .fuse-grid-row.reverse,
 .wp-block-columns.fuse-grid-row.reverse {
     flex-direction: row-reverse;
-}
-.fuse-grid-row.spaced:last-of-type,
-.wp-block-columns.fuse-grid-row.spaced:last-of-type {
-    margin-bottom: 0;
 }
 .fuse-grid-row.align-center {
     justify-content: center;
@@ -246,45 +237,6 @@
 }
 .fuse-grid-cell.fuse-grid-cell-xs-11 {
     width: var(--fuse-grid-col-11);
-}
-
-
-
-
-/*  **********  Spaced grid cells  **********  */
-
-.fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xs-1 {
-    width: var(--fuse-grid-col-spaced-1);
-}
-.fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xs-2 {
-    width: var(--fuse-grid-col-spaced-2);
-}
-.fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xs-3 {
-    width: var(--fuse-grid-col-spaced-3);
-}
-.fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xs-4 {
-    width: var(--fuse-grid-col-spaced-4);
-}
-.fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xs-5 {
-    width: var(--fuse-grid-col-spaced-5);
-}
-.fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xs-6 {
-    width: var(--fuse-grid-col-spaced-6);
-}
-.fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xs-7 {
-    width: var(--fuse-grid-col-spaced-7);
-}
-.fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xs-8 {
-    width: var(--fuse-grid-col-spaced-8);
-}
-.fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xs-9 {
-    width: var(--fuse-grid-col-spaced-9);
-}
-.fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xs-10 {
-    width: var(--fuse-grid-col-spaced-10);
-}
-.fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xs-11 {
-    width: var(--fuse-grid-col-spaced-11);
 }
 
 
@@ -392,45 +344,6 @@
     }
     .fuse-grid-cell.fuse-grid-cell-s-11 {
         width: var(--fuse-grid-col-11);
-    }
-    
-    
-    
-    
-    /*  **********  Spaced grid cells  **********  */
-    
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-s-1 {
-        width: var(--fuse-grid-col-spaced-1);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-s-2 {
-        width: var(--fuse-grid-col-spaced-2);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-s-3 {
-        width: var(--fuse-grid-col-spaced-3);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-s-4 {
-        width: var(--fuse-grid-col-spaced-4);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-s-5 {
-        width: var(--fuse-grid-col-spaced-5);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-s-6 {
-        width: var(--fuse-grid-col-spaced-6);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-s-7 {
-        width: var(--fuse-grid-col-spaced-7);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-s-8 {
-        width: var(--fuse-grid-col-spaced-8);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-s-9 {
-        width: var(--fuse-grid-col-spaced-9);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-s-10 {
-        width: var(--fuse-grid-col-spaced-10);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-s-11 {
-        width: var(--fuse-grid-col-spaced-11);
     }
     
     
@@ -550,45 +463,6 @@
     
     
     
-    /*  **********  Spaced grid cells  **********  */
-    
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-m-1 {
-        width: var(--fuse-grid-col-spaced-1);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-m-2 {
-        width: var(--fuse-grid-col-spaced-2);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-m-3 {
-        width: var(--fuse-grid-col-spaced-3);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-m-4 {
-        width: var(--fuse-grid-col-spaced-4);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-m-5 {
-        width: var(--fuse-grid-col-spaced-5);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-m-6 {
-        width: var(--fuse-grid-col-spaced-6);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-m-7 {
-        width: var(--fuse-grid-col-spaced-7);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-m-8 {
-        width: var(--fuse-grid-col-spaced-8);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-m-9 {
-        width: var(--fuse-grid-col-spaced-9);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-m-10 {
-        width: var(--fuse-grid-col-spaced-10);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-m-11 {
-        width: var(--fuse-grid-col-spaced-11);
-    }
-    
-    
-    
-    
     /*  **********  Cell spacers  **********  */
     
     .fuse-grid-cell.fuse-grid-space-m-1 {
@@ -702,45 +576,6 @@
     
     
     
-    /*  **********  Spaced grid cells  **********  */
-    
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-l-1 {
-        width: var(--fuse-grid-col-spaced-1);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-l-2 {
-        width: var(--fuse-grid-col-spaced-2);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-l-3 {
-        width: var(--fuse-grid-col-spaced-3);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-l-4 {
-        width: var(--fuse-grid-col-spaced-4);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-l-5 {
-        width: var(--fuse-grid-col-spaced-5);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-l-6 {
-        width: var(--fuse-grid-col-spaced-6);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-l-7 {
-        width: var(--fuse-grid-col-spaced-7);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-l-8 {
-        width: var(--fuse-grid-col-spaced-8);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-l-9 {
-        width: var(--fuse-grid-col-spaced-9);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-l-10 {
-        width: var(--fuse-grid-col-spaced-10);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-l-11 {
-        width: var(--fuse-grid-col-spaced-11);
-    }
-    
-    
-    
-    
     /*  **********  Cell spacers  **********  */
     
     .fuse-grid-cell.fuse-grid-space-l-1 {
@@ -845,45 +680,6 @@
     
     
     
-    /*  **********  Spaced grid cells  **********  */
-    
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xl-1 {
-        width: var(--fuse-grid-col-spaced-1);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xl-2 {
-        width: var(--fuse-grid-col-spaced-2);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xl-3 {
-        width: var(--fuse-grid-col-spaced-3);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xl-4 {
-        width: var(--fuse-grid-col-spaced-4);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xl-5 {
-        width: var(--fuse-grid-col-spaced-5);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xl-6 {
-        width: var(--fuse-grid-col-spaced-6);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xl-7 {
-        width: var(--fuse-grid-col-spaced-7);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xl-8 {
-        width: var(--fuse-grid-col-spaced-8);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xl-9 {
-        width: var(--fuse-grid-col-spaced-9);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xl-10 {
-        width: var(--fuse-grid-col-spaced-10);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xl-11 {
-        width: var(--fuse-grid-col-spaced-11);
-    }
-    
-    
-    
-    
     /*  **********  Cell spacers  **********  */
     
     .fuse-grid-cell.fuse-grid-space-xl-1 {
@@ -983,45 +779,6 @@
     }
     .fuse-grid-cell.fuse-grid-cell-xxl-11 {
         width: var(--fuse-grid-col-11);
-    }
-    
-    
-    
-    
-    /*  **********  Spaced grid cells  **********  */
-    
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xxl-1 {
-        width: var(--fuse-grid-col-spaced-1);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xxl-2 {
-        width: var(--fuse-grid-col-spaced-2);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xxl-3 {
-        width: var(--fuse-grid-col-spaced-3);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xxl-4 {
-        width: var(--fuse-grid-col-spaced-4);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xxl-5 {
-        width: var(--fuse-grid-col-spaced-5);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xxl-6 {
-        width: var(--fuse-grid-col-spaced-6);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xxl-7 {
-        width: var(--fuse-grid-col-spaced-7);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xxl-8 {
-        width: var(--fuse-grid-col-spaced-8);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xxl-9 {
-        width: var(--fuse-grid-col-spaced-9);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xxl-10 {
-        width: var(--fuse-grid-col-spaced-10);
-    }
-    .fuse-grid-row.spaced .fuse-grid-cell.fuse-grid-cell-xxl-11 {
-        width: var(--fuse-grid-col-spaced-11);
     }
     
     

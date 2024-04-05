@@ -8,8 +8,6 @@
      *
      *  @filter fuse_load_functions_from Set the folder locations to load
      *  function files from.
-     *  @filter fuse_register_blocks Add the class names of your own custom
-     *  Gutenberg blocks using the Fuse\Editor\Block() class.
      *
      *  @action fuse_before_load_functions Run before function files are loaded.
      *  @action fuse_efter_load_functions Run after function files are loaded.
