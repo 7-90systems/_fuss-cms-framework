@@ -40,29 +40,17 @@
     
     --fuse-grid-gap: calc(var(--fuse-padding-base) * 3);
     
-    --fuse-grid-col-1: calc(100% / 12);
-    --fuse-grid-col-2: calc(100% / 12 * 2);
-    --fuse-grid-col-3: calc(100% / 12 * 3);
-    --fuse-grid-col-4: calc(100% / 12 * 4);
-    --fuse-grid-col-5: calc(100% / 12 * 5);
-    --fuse-grid-col-6: calc(100% / 12 * 6);
-    --fuse-grid-col-7: calc(100% / 12 * 7);
-    --fuse-grid-col-8: calc(100% / 12 * 8);
-    --fuse-grid-col-9: calc(100% / 12 * 9);
-    --fuse-grid-col-10: calc(100% / 12 * 10);
-    --fuse-grid-col-11: calc(100% / 12 * 11);
-    
-    --fuse-grid-col-spaced-1: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12));
-    --fuse-grid-col-spaced-2: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 2) + (var(--fuse-grid-gap) * 1));
-    --fuse-grid-col-spaced-3: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 3) + (var(--fuse-grid-gap) * 2));
-    --fuse-grid-col-spaced-4: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 4) + (var(--fuse-grid-gap) * 3));
-    --fuse-grid-col-spaced-5: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 5) + (var(--fuse-grid-gap) * 4));
-    --fuse-grid-col-spaced-6: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 6) + (var(--fuse-grid-gap) * 5));
-    --fuse-grid-col-spaced-7: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 7) + (var(--fuse-grid-gap) * 6));
-    --fuse-grid-col-spaced-8: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 8) + (var(--fuse-grid-gap) * 7));
-    --fuse-grid-col-spaced-9: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 9) + (var(--fuse-grid-gap) * 8));
-    --fuse-grid-col-spaced-10: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 10) + (var(--fuse-grid-gap) * 9));
-    --fuse-grid-col-spaced-11: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 11) + (var(--fuse-grid-gap) * 10));
+    --fuse-grid-col-1: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12));
+    --fuse-grid-col-2: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 2) + (var(--fuse-grid-gap) * 1));
+    --fuse-grid-col-3: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 3) + (var(--fuse-grid-gap) * 2));
+    --fuse-grid-col-4: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 4) + (var(--fuse-grid-gap) * 3));
+    --fuse-grid-col-5: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 5) + (var(--fuse-grid-gap) * 4));
+    --fuse-grid-col-6: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 6) + (var(--fuse-grid-gap) * 5));
+    --fuse-grid-col-7: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 7) + (var(--fuse-grid-gap) * 6));
+    --fuse-grid-col-8: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 8) + (var(--fuse-grid-gap) * 7));
+    --fuse-grid-col-9: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 9) + (var(--fuse-grid-gap) * 8));
+    --fuse-grid-col-10: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 10) + (var(--fuse-grid-gap) * 9));
+    --fuse-grid-col-11: calc(((100% - (var(--fuse-grid-gap) * 11)) / 12 * 11) + (var(--fuse-grid-gap) * 10));
     
 }
 
