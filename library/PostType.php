@@ -139,12 +139,9 @@
                 $args = array (
                     'labels' => $labels,
                     'public' => true,
-                    'publicly_queryable' => true,
                     'show_in_rest' => true,
                     'show_ui' => true,
-                    'query_var' => true,
                     'menu_icon' => FUSE_BASE_URL.'/assets/images/icons/fuse_16.png',
-                    'rewrite' => true,
                     'capability_type' => 'post',
                     'hierarchical' => false,
                     'menu_position' => null,
