@@ -88,6 +88,11 @@
                             $files [] = substr ($file->getPathname (), $path_string_length);
                         } // if ()
                     } // foreach ()
+					
+					/**
+					 *	Don't trust the file system to get the order right... yes it has happened!
+					 */
+					sort ($files);
                     
                     /**
                      *  For JavaScript files, the .js file is found after the .dep file, so reverse the array.
